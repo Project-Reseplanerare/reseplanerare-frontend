@@ -1,7 +1,7 @@
-import { MapContainer, TileLayer, Marker } from "react-leaflet";
-import "leaflet/dist/leaflet.css"; 
-import { LatLngExpression } from "leaflet";
-import { useEffect, useState } from "react";
+import { MapContainer, TileLayer, Marker } from 'react-leaflet';
+import 'leaflet/dist/leaflet.css';
+import { LatLngExpression } from 'leaflet';
+import { useEffect, useState } from 'react';
 
 function Map() {
   const [center, setCenter] = useState<LatLngExpression | null>(null);
@@ -11,16 +11,16 @@ function Map() {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          setCenter([latitude, longitude]); 
+          setCenter([latitude, longitude]);
         },
         (error) => {
-          console.error("Error getting location:", error);
-          setCenter([57.7089, 11.9746]); 
+          console.error('Error getting location:', error);
+          setCenter([57.7089, 11.9746]);
         }
       );
     } else {
-      console.error("Geolocation is not supported by this browser.");
-      setCenter([57.7089, 11.9746]); 
+      console.error('Geolocation is not supported by this browser.');
+      setCenter([57.7089, 11.9746]);
     }
   }, []);
 
@@ -29,11 +29,7 @@ function Map() {
   }
 
   return (
-    <MapContainer
-      center={center}
-      zoom={13}
-      className="h-[50vh] w-[50%]"
-    >
+    <MapContainer center={center} zoom={13} className=" h-[1fr] w-[100%]">
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

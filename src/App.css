@@ -7,3 +7,43 @@
   margin: 0;
   padding: 0;
 }
+
+/* App.css */
+.app-container {
+  padding: 20px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 2fr; /* Default: Widget (1 fraction), Map (2 fractions) */
+  gap: 16px; /* Space between items */
+  height: 100vh; /* Full viewport height */
+}
+
+.map-container {
+  height: 100%; /* Ensure the map takes full height */
+  display: flex;
+}
+
+.map-container > div {
+  flex: 1; /* Allow the Leaflet map to fill the container */
+  height: 100%; /* Required for Leaflet to render properly */
+}
+
+/* Media query for small screens */
+@media (max-width: 768px) {
+  .grid-container {
+    grid-template-columns: 1fr; /* Single-column layout */
+    grid-template-rows: auto auto; /* Stack rows */
+    height: auto; /* Allow content to flow naturally */
+  }
+
+  .widget-container,
+  .map-container {
+    height: auto; /* Adjust height to fit content */
+  }
+
+  .map-container > div {
+    height: 400px; /* Set a specific height for the map to render properly */
+  }
+}
