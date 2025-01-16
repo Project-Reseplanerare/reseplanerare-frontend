@@ -1,7 +1,9 @@
-import React from 'react';
-
 function WidgetHeader() {
-  return <div>WidgetHeader</div>;
+  return (
+    <div className=" flex h-[min-content] text-black text-xl font-bold ">
+      WidgetHeader
+    </div>
+  );
 }
 
 export default WidgetHeader;

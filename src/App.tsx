@@ -1,6 +1,6 @@
 import './App.css';
-import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
+// import Header from './components/Header/Header';
+// import Footer from './components/Footer/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReseWidget from './components/Reseplanerare/ReseWidget';
 import Map from './components/Map/Map';
@@ -8,19 +8,26 @@ import Map from './components/Map/Map';
 function App() {
   return (
     <Router>
-      <Header />
-      <main className="h-auto p-10 flex flex-col gap-4 items-center">
-        <ReseWidget />
-        <Map/>
-
+      {/* <Header /> */}
+      <main className="app-container">
         <Routes>
-          <Route path="/" element={<div>Home Page</div>} />
-          <Route path="/Reseplanerare" element={<div>Reseplanerare</div>} />
-          <Route path="/services" element={<div>Services Page</div>} />
-          <Route path="/contact" element={<div>Contact Page</div>} />
+          <Route
+            path="/"
+            element={
+              <div className="grid-container">
+                <div className="widget-container">
+                  <ReseWidget />
+                </div>
+                <div className="map-container">
+                  <Map />
+                </div>
+              </div>
+            }
+          />
+          <Route path="/about" element={<div>About</div>} />
         </Routes>
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </Router>
   );
 }

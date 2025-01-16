@@ -5,20 +5,19 @@ import WidgetHeader from './WidgetHeader';
 
 function ReseWidget() {
   return (
-    <>
-      <section
-        className="p-5 border rounded-md bg-slate-500 w-[500px] gap-5 grid grid-cols-1"
-        style={{
-          gridTemplateRows: 'auto auto auto',
-          gridGap: '1rem',
-        }}
-      >
-        <WidgetHeader />
+    <section
+      className=" p-6 border border-gray-300 rounded-lg bg-gray-100 grid grid-cols-1 gap-6"
+      style={{
+        gridTemplateRows: 'h-[min-content] h-[min-content] h-[min-content]',
+      }}
+    >
+      <WidgetHeader />
+      <div className="flex flex-col">
         <TripInput />
         <TravelOptions />
-        <DatePickerComponent />
-      </section>
-    </>
+      </div>
+      <DatePickerComponent />
+    </section>
   );
 }
 
