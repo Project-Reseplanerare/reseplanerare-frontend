@@ -3,6 +3,7 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReseWidget from './components/Reseplanerare/ReseWidget';
+import Map from './components/Map/Map';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Header />
       <main className="h-auto p-10 flex flex-col gap-4 items-center">
         <ReseWidget />
+        <Map/>
 
         <Routes>
           <Route path="/" element={<div>Home Page</div>} />
