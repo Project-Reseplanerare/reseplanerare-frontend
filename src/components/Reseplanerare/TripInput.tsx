@@ -1,17 +1,51 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const TripInput: React.FC = () => {
   const [from, setFrom] = React.useState('Nolbygatan 654 62 Karlstad');
   const [to, setTo] = React.useState('Sundsta-Norrstrand Karlstad');
+  const [currentLocation, setCurrentLocation] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
 
   const swapLocations = () => {
     setFrom(to);
     setTo(from);
   };
 
+  const getCurrentLocation = () => {
+    setError(null);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const location = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+          setCurrentLocation(location);
+          setFrom(location);
+        },
+        (error) => {
+          const errorMessage =
+            error.code === 1
+              ? 'Permission denied. Please allow location access.'
+              : error.code === 2
+              ? 'Position unavailable. Try again later.'
+              : 'Request timed out.';
+          console.error('Error fetching geolocation:', error.message);
+          setError(errorMessage);
+          setFrom('Unable to fetch current location');
+        }
+      );
+    } else {
+      setError('Geolocation is not supported by your browser.');
+      setFrom('Geolocation not supported');
+    }
+  };
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
+
   return (
     <div className="grid grid-cols-3 grid-rows-2 gap-4 w-full items-center rounded-lg p-4 ">
-      {/* From Input */}
+
       <div className="col-span-2 row-span-1 flex items-center p-3 border border-gray-300 rounded-md bg-gray-50">
         <div className="flex items-center justify-center w-8 h-8 bg-teal-500 text-white rounded-md font-bold">
           A
@@ -25,7 +59,6 @@ const TripInput: React.FC = () => {
         />
       </div>
 
-      {/* Swap Button */}
       <button
         className="col-span-1 row-span-2 flex items-center justify-center bg-white rounded-full h-12 w-12 border border-gray-300 shadow-md focus:outline-none hover:bg-gray-100"
         onClick={swapLocations}
@@ -48,7 +81,6 @@ const TripInput: React.FC = () => {
         </svg>
       </button>
 
-      {/* To Input */}
       <div className="col-span-2 row-span-1 flex items-center p-3 border border-gray-300 rounded-md bg-gray-50">
         <div className="flex items-center justify-center w-8 h-8 bg-orange-500 text-white rounded-md font-bold">
           B
