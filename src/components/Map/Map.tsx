@@ -8,7 +8,8 @@ import {
 } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocationStore } from '../../store/useLocationStore'; // import the zustand store
 
 function Map() {
   const [center, setCenter] = useState<LatLngExpression | null>(null);
@@ -16,16 +17,21 @@ function Map() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
+  const setToLocation = useLocationStore((state) => state.setToLocation); // Access the setToLocation function from the store
+  const setFromLocation = useLocationStore((state) => state.setFromLocation);
+
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           setCenter([latitude, longitude]);
+          setFromLocation([latitude, longitude]);
         },
         (error) => {
           console.error('Error getting location:', error);
           setCenter([57.7089, 11.9746]); // Default fallback location
+          setFromLocation([57.7089, 11.9746]);
         }
       );
     } else {
@@ -37,11 +43,9 @@ function Map() {
   const getRoute = async (start: LatLngExpression, end: LatLngExpression) => {
     setLoading(true);
     try {
-      // Ensure start and end are arrays of numbers
       const startCoords = Array.isArray(start) ? start : [start.lat, start.lng];
       const endCoords = Array.isArray(end) ? end : [end.lat, end.lng];
 
-      // Extract lat/lng in reversed order for OSRM API
       const startCoord = `${startCoords[1]},${startCoords[0]}`;
       const endCoord = `${endCoords[1]},${endCoords[0]}`;
 
@@ -95,6 +99,7 @@ function Map() {
       click(e) {
         const { lat, lng } = e.latlng;
         setMarkers((prevMarkers) => [...prevMarkers, [lat, lng]]);
+        setToLocation([lat, lng]); // Update the "to" field with the latest clicked coordinates
       },
     });
     return null;

@@ -33,7 +33,8 @@ function ReseWidget() {
 
       {/* Trip Input and Travel Options */}
       <div className="flex flex-col">
-        <TripInput from={from} to={to} onInputChange={handleInputChange} />
+        {/* <TripInput from={from} to={to} onInputChange={handleInputChange} /> */}
+        <TripInput onInputChange={handleInputChange} />
         <TravelOptions />
       </div>
 
