@@ -1,7 +1,6 @@
 import { useEffect, useCallback, useState } from 'react';
 import { useLocationStore } from '../../store/useLocationStore'; // import the zustand store
 
-
 interface TripInputProps {
   // from: string;
   // to: string;
@@ -12,12 +11,10 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   const [currentLocation, setCurrentLocation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const fromLocation = useLocationStore((state) => state.from); 
+  const fromLocation = useLocationStore((state) => state.from);
   const toLocation = useLocationStore((state) => state.to);
-  const setFromLocation = useLocationStore((state) => state.setFromLocation); 
-  const setToLocation = useLocationStore((state) => state.setToLocation); 
-
-  
+  const setFromLocation = useLocationStore((state) => state.setFromLocation);
+  const setToLocation = useLocationStore((state) => state.setToLocation);
 
   const swapLocations = () => {
     // Swap locations by parsing the string values into LatLngExpression (arrays of numbers)
@@ -29,7 +26,6 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     setToLocation(fromCoords);
   };
 
-
   const getCurrentLocation = useCallback(() => {
     setError(null);
     if (navigator.geolocation) {
@@ -38,7 +34,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           const { latitude, longitude } = position.coords;
           const location = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
           setCurrentLocation(location);
-          onInputChange('from', location); // Set current location to 'from'
+          onInputChange('from', location);
         },
         (error) => {
           const errorMessage =
@@ -68,7 +64,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
         </div>
         <input
           type="text"
-          value={fromLocation } // Use "fromLocation" from the store if available, otherwise use the prop
+          value={fromLocation} // Use "fromLocation" from the store if available, otherwise use the prop
           onChange={(e) => onInputChange('from', e.target.value)}
           className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
         />

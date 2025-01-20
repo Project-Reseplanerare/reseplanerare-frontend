@@ -17,7 +17,7 @@ function Map() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const setToLocation = useLocationStore((state) => state.setToLocation); // Access the setToLocation function from the store
+  const setToLocation = useLocationStore((state) => state.setToLocation);
   const setFromLocation = useLocationStore((state) => state.setFromLocation);
 
   useEffect(() => {
@@ -26,19 +26,19 @@ function Map() {
         (position) => {
           const { latitude, longitude } = position.coords;
           setCenter([latitude, longitude]);
-          setFromLocation([latitude, longitude]);
+          setFromLocation([latitude, longitude]); // Dependency here
         },
         (error) => {
           console.error('Error getting location:', error);
-          setCenter([57.7089, 11.9746]); // Default fallback location
-          setFromLocation([57.7089, 11.9746]);
+          setCenter([57.7089, 11.9746]);
+          setFromLocation([57.7089, 11.9746]); // Dependency here
         }
       );
     } else {
       console.error('Geolocation is not supported by this browser.');
       setCenter([57.7089, 11.9746]);
     }
-  }, []);
+  }, [setFromLocation]);
 
   const getRoute = async (start: LatLngExpression, end: LatLngExpression) => {
     setLoading(true);
