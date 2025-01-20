@@ -1,21 +1,34 @@
-import React, { useEffect, useCallback } from 'react';
+import { useEffect, useCallback, useState } from 'react';
+import { useLocationStore } from '../../store/useLocationStore'; // import the zustand store
+
 
 interface TripInputProps {
-  from: string;
-  to: string;
+  // from: string;
+  // to: string;
   onInputChange: (inputType: 'from' | 'to', value: string) => void;
 }
 
-const TripInput: React.FC<TripInputProps> = ({ from, to, onInputChange }) => {
-  const [currentLocation, setCurrentLocation] = React.useState<string | null>(
-    null
-  );
-  const [error, setError] = React.useState<string | null>(null);
+const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
+  const [currentLocation, setCurrentLocation] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  const fromLocation = useLocationStore((state) => state.from); 
+  const toLocation = useLocationStore((state) => state.to);
+  const setFromLocation = useLocationStore((state) => state.setFromLocation); 
+  const setToLocation = useLocationStore((state) => state.setToLocation); 
+
+  
 
   const swapLocations = () => {
-    onInputChange('from', to);
-    onInputChange('to', from);
+    // Swap locations by parsing the string values into LatLngExpression (arrays of numbers)
+    const fromCoords = fromLocation.split(', ').map(Number) as [number, number];
+    const toCoords = toLocation.split(', ').map(Number) as [number, number];
+
+    // Now pass the coordinates as LatLngExpression
+    setFromLocation(toCoords);
+    setToLocation(fromCoords);
   };
+
 
   const getCurrentLocation = useCallback(() => {
     setError(null);
@@ -25,7 +38,7 @@ const TripInput: React.FC<TripInputProps> = ({ from, to, onInputChange }) => {
           const { latitude, longitude } = position.coords;
           const location = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
           setCurrentLocation(location);
-          onInputChange('from', location);
+          onInputChange('from', location); // Set current location to 'from'
         },
         (error) => {
           const errorMessage =
@@ -55,7 +68,7 @@ const TripInput: React.FC<TripInputProps> = ({ from, to, onInputChange }) => {
         </div>
         <input
           type="text"
-          value={from}
+          value={fromLocation } // Use "fromLocation" from the store if available, otherwise use the prop
           onChange={(e) => onInputChange('from', e.target.value)}
           className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
         />
@@ -89,7 +102,7 @@ const TripInput: React.FC<TripInputProps> = ({ from, to, onInputChange }) => {
         </div>
         <input
           type="text"
-          value={to}
+          value={toLocation} // Use "toLocation" from the store if available
           onChange={(e) => onInputChange('to', e.target.value)}
           className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
         />
