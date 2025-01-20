@@ -1,17 +1,54 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 
-const TripInput: React.FC = () => {
-  const [from, setFrom] = React.useState('Nolbygatan 654 62 Karlstad');
-  const [to, setTo] = React.useState('Sundsta-Norrstrand Karlstad');
+interface TripInputProps {
+  from: string;
+  to: string;
+  onInputChange: (inputType: 'from' | 'to', value: string) => void;
+}
+
+const TripInput: React.FC<TripInputProps> = ({ from, to, onInputChange }) => {
+  const [currentLocation, setCurrentLocation] = React.useState<string | null>(
+    null
+  );
+  const [error, setError] = React.useState<string | null>(null);
 
   const swapLocations = () => {
-    setFrom(to);
-    setTo(from);
+    onInputChange('from', to);
+    onInputChange('to', from);
   };
 
+  const getCurrentLocation = useCallback(() => {
+    setError(null);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          const location = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
+          setCurrentLocation(location);
+          onInputChange('from', location);
+        },
+        (error) => {
+          const errorMessage =
+            error.code === 1
+              ? 'Permission denied. Please allow location access.'
+              : error.code === 2
+              ? 'Position unavailable. Try again later.'
+              : 'Request timed out.';
+          console.error('Error fetching geolocation:', error.message);
+          setError(errorMessage);
+        }
+      );
+    } else {
+      setError('Geolocation is not supported by your browser.');
+    }
+  }, [onInputChange]);
+
+  useEffect(() => {
+    getCurrentLocation();
+  }, [getCurrentLocation]);
+
   return (
-    <div className="grid grid-cols-3 grid-rows-2 gap-4 w-full items-center rounded-lg p-4 ">
-      {/* From Input */}
+    <div className="grid grid-cols-3 grid-rows-2 gap-4 w-full items-center rounded-lg p-4">
       <div className="col-span-2 row-span-1 flex items-center p-3 border border-gray-300 rounded-md bg-gray-50">
         <div className="flex items-center justify-center w-8 h-8 bg-teal-500 text-white rounded-md font-bold">
           A
@@ -19,13 +56,11 @@ const TripInput: React.FC = () => {
         <input
           type="text"
           value={from}
-          onChange={(e) => setFrom(e.target.value)}
-          className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none placeholder-gray-400"
-          placeholder="Enter starting location"
+          onChange={(e) => onInputChange('from', e.target.value)}
+          className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
         />
       </div>
 
-      {/* Swap Button */}
       <button
         className="col-span-1 row-span-2 flex items-center justify-center bg-white rounded-full h-12 w-12 border border-gray-300 shadow-md focus:outline-none hover:bg-gray-100"
         onClick={swapLocations}
@@ -48,7 +83,6 @@ const TripInput: React.FC = () => {
         </svg>
       </button>
 
-      {/* To Input */}
       <div className="col-span-2 row-span-1 flex items-center p-3 border border-gray-300 rounded-md bg-gray-50">
         <div className="flex items-center justify-center w-8 h-8 bg-orange-500 text-white rounded-md font-bold">
           B
@@ -56,11 +90,18 @@ const TripInput: React.FC = () => {
         <input
           type="text"
           value={to}
-          onChange={(e) => setTo(e.target.value)}
-          className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none placeholder-gray-400"
-          placeholder="Enter destination"
+          onChange={(e) => onInputChange('to', e.target.value)}
+          className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
         />
       </div>
+
+      {currentLocation && (
+        <div className="col-span-3 text-green-500">
+          Current Location: {currentLocation}
+        </div>
+      )}
+
+      {error && <div className="col-span-3 text-red-500">Error: {error}</div>}
     </div>
   );
 };
