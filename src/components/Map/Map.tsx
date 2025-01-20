@@ -1,4 +1,11 @@
-import { MapContainer, TileLayer, Marker, useMapEvents, Polyline } from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMapEvents,
+  Polyline,
+  Popup,
+} from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
 import { useEffect, useState } from 'react';
@@ -18,25 +25,26 @@ function Map() {
         },
         (error) => {
           console.error('Error getting location:', error);
-          setCenter([57.7089, 11.9746]); 
+          setCenter([57.7089, 11.9746]); // Default fallback location
         }
       );
     } else {
       console.error('Geolocation is not supported by this browser.');
-      setCenter([57.7089, 11.9746]); 
+      setCenter([57.7089, 11.9746]);
     }
   }, []);
-
 
   const getRoute = async (start: LatLngExpression, end: LatLngExpression) => {
     setLoading(true);
     try {
-      const startArr = Array.isArray(start) ? start : [start.lat, start.lng];
-      const endArr = Array.isArray(end) ? end : [end.lat, end.lng];
+      // Ensure start and end are arrays of numbers
+      const startCoords = Array.isArray(start) ? start : [start.lat, start.lng];
+      const endCoords = Array.isArray(end) ? end : [end.lat, end.lng];
 
-      const startCoord = `${startArr[1]},${startArr[0]}`;
-      const endCoord = `${endArr[1]},${endArr[0]}`;
-      
+      // Extract lat/lng in reversed order for OSRM API
+      const startCoord = `${startCoords[1]},${startCoords[0]}`;
+      const endCoord = `${endCoords[1]},${endCoords[0]}`;
+
       const response = await fetch(
         `https://router.project-osrm.org/route/v1/driving/${startCoord};${endCoord}?overview=full&geometries=geojson`
       );
@@ -49,7 +57,7 @@ function Map() {
 
       if (data.routes && data.routes.length > 0) {
         const geoJsonCoords = data.routes[0].geometry.coordinates;
-        return geoJsonCoords.map((coord: number[]) => [coord[1], coord[0]]);
+        return geoJsonCoords.map(([lng, lat]: [number, number]) => [lat, lng]);
       }
       return [];
     } catch (error) {
@@ -62,14 +70,12 @@ function Map() {
 
   useEffect(() => {
     const updateRoute = async () => {
-      if (center && markers.length >= 1) {
+      if (center && markers.length > 0) {
         let routeData: LatLngExpression[] = [];
-
 
         const firstSegment = await getRoute(center, markers[0]);
         routeData = [...routeData, ...firstSegment];
 
-  
         for (let i = 0; i < markers.length - 1; i++) {
           const segmentRoute = await getRoute(markers[i], markers[i + 1]);
           routeData = [...routeData, ...segmentRoute];
@@ -77,7 +83,7 @@ function Map() {
 
         setRoute(routeData);
       } else {
-        setRoute([]); 
+        setRoute([]);
       }
     };
 
@@ -88,7 +94,7 @@ function Map() {
     useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng;
-        setMarkers((prevMarkers) => [...prevMarkers, [lat, lng]]); 
+        setMarkers((prevMarkers) => [...prevMarkers, [lat, lng]]);
       },
     });
     return null;
@@ -108,27 +114,34 @@ function Map() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <Marker position={center} />
+      <Marker position={center}>
+        <Popup>Your current location</Popup>
+      </Marker>
 
       <MapClickHandler />
 
-      {markers.map((position, index) => (
-        <Marker
-          key={index}
-          position={position}
-          eventHandlers={{
-            click: () => handleRemoveMarker(index),
-          }}
-        />
-      ))}
+      {markers.map((position, index) => {
+        const latLngArray = position as [number, number];
+        return (
+          <Marker
+            key={index}
+            position={latLngArray}
+            eventHandlers={{
+              click: () => handleRemoveMarker(index),
+              mouseover: (e) => e.target.openPopup(),
+              mouseout: (e) => e.target.closePopup(),
+            }}
+          >
+            <Popup>
+              Latitude: {latLngArray[0].toFixed(4)}, Longitude:{' '}
+              {latLngArray[1].toFixed(4)}
+            </Popup>
+          </Marker>
+        );
+      })}
 
       {route.length > 0 && (
-        <Polyline
-          positions={route}
-          color="blue"
-          weight={3}
-          opacity={0.7}
-        />
+        <Polyline positions={route} color="blue" weight={3} opacity={0.7} />
       )}
 
       {loading && <p>Loading route...</p>}
