@@ -9,20 +9,31 @@ import {
 import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
 import { useState, useEffect } from 'react';
-import { useLocationStore } from '../../store/useLocationStore'; // import the zustand store
+import { useLocationStore } from '../../store/useLocationStore';
 
-const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse'; // Example API endpoint
+const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse'; 
+
 
 function Map() {
   const [center, setCenter] = useState<LatLngExpression | null>(null);
-  const [markers, setMarkers] = useState<LatLngExpression[]>([]);
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const setToLocation = useLocationStore((state) => state.setToLocation);
   const setFromLocation = useLocationStore((state) => state.setFromLocation);
-  const setFromAddress = useLocationStore((state) => state.setFromAddress); // Store address for "from"
-  const setToAddress = useLocationStore((state) => state.setToAddress); // Store address for "to"
+  const setFromAddress = useLocationStore((state) => state.setFromAddress);
+  const setToAddress = useLocationStore((state) => state.setToAddress);
+  const lineDrawn = useLocationStore((state) => state.lineDrawn);
+  const setLineDrawn = useLocationStore((state) => state.setLineDrawn);
+  const markers = useLocationStore((state) => state.markers);
+  const setMarkersState = useLocationStore((state) => state.setMarkers); 
+
+  useEffect(() => {
+   
+    if (!lineDrawn) {
+      setMarkersState([]);
+    }
+  }, [lineDrawn, setMarkersState]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -98,7 +109,7 @@ function Map() {
 
   useEffect(() => {
     const updateRoute = async () => {
-      if (center && markers.length > 0) {
+      if (center && markers.length > 0 && lineDrawn) {
         let routeData: LatLngExpression[] = [];
 
         const firstSegment = await getRoute(center, markers[0]);
@@ -116,24 +127,31 @@ function Map() {
     };
 
     updateRoute();
-  }, [markers, center]);
+  }, [markers, center, lineDrawn]);
 
   const MapClickHandler = () => {
     useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng;
-        setMarkers((prevMarkers) => [...prevMarkers, [lat, lng]]);
+     
+        setMarkersState([[lat, lng]]);
         setToLocation([lat, lng]);
-        fetchAddress(lat, lng, 'to'); // Fetch address for clicked marker
+        fetchAddress(lat, lng, 'to');
       },
     });
     return null;
   };
 
   const handleRemoveMarker = (index: number) => {
-    setMarkers((prevMarkers) => prevMarkers.filter((_, i) => i !== index));
-  };
+    if (!lineDrawn) {
 
+      setMarkersState((prevMarkers) => prevMarkers.filter((_, i) => i !== index));
+    } else {
+      setLineDrawn(false); 
+      setMarkersState([]); 
+    }
+  };
+  
   if (!center) {
     return <p>Loading map...</p>;
   }
@@ -150,27 +168,32 @@ function Map() {
 
       <MapClickHandler />
 
-      {markers.map((position, index) => {
-        const latLngArray = position as [number, number];
-        return (
-          <Marker
-            key={index}
-            position={latLngArray}
-            eventHandlers={{
-              click: () => handleRemoveMarker(index),
-              mouseover: (e) => e.target.openPopup(),
-              mouseout: (e) => e.target.closePopup(),
-            }}
-          >
-            <Popup>
-              Latitude: {latLngArray[0].toFixed(4)}, Longitude:{' '}
-              {latLngArray[1].toFixed(4)}
-            </Popup>
-          </Marker>
-        );
-      })}
+      {Array.isArray(markers) && 
+        markers.map((position, index) => {
+        
+          if (Array.isArray(position) && position.length === 2) {
+            const [lat, lng] = position; 
+            return (
+              <Marker
+                key={index}
+                position={position}
+                eventHandlers={{
+                  click: () => handleRemoveMarker(index),
+                  mouseover: (e) => e.target.openPopup(),
+                  mouseout: (e) => e.target.closePopup(),
+                }}
+              >
+                <Popup>
+                  Latitude: {lat.toFixed(4)}, Longitude: {lng.toFixed(4)}
+                </Popup>
+              </Marker>
+            );
+          }
+          return null; 
+        })
+      }
 
-      {route.length > 0 && (
+      {route.length > 0 && lineDrawn && (
         <Polyline positions={route} color="blue" weight={3} opacity={0.7} />
       )}
 
