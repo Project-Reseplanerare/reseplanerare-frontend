@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 const TravelOptions: React.FC = () => {
   const [selectedOption, setSelectedOption] = useState<string>('Buss');
 
-  const options = ['Gång', 'Cykel', 'Buss', 'Tåg'];
+  const options = ['Buss', 'Tåg'];
 
   return (
     <div className="flex flex-col items-start gap-4 font-sans">
