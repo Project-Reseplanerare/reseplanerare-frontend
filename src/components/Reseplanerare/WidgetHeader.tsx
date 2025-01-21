@@ -1,9 +1,11 @@
 function WidgetHeader() {
   return (
-    <div className=" flex  text-black text-xl font-bold ">
-      <h1>WidgetHeader</h1>
-      <p>Drtta är en widget </p>
-    </div>
+    <>
+      <div className="flex flex-col text-black text-xl font-bold p-4">
+        <h1>WidgetHeader</h1>
+        <p>Detta är en widget</p>
+      </div>
+    </>
   );
 }
 

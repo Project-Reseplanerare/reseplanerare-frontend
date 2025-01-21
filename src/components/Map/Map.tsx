@@ -26,12 +26,12 @@ function Map() {
         (position) => {
           const { latitude, longitude } = position.coords;
           setCenter([latitude, longitude]);
-          setFromLocation([latitude, longitude]); // Dependency here
+          setFromLocation([latitude, longitude]);
         },
         (error) => {
           console.error('Error getting location:', error);
           setCenter([57.7089, 11.9746]);
-          setFromLocation([57.7089, 11.9746]); // Dependency here
+          setFromLocation([57.7089, 11.9746]);
         }
       );
     } else {
