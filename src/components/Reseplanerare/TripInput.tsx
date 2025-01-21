@@ -8,74 +8,43 @@ interface TripInputProps {
 }
 
 const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
-  const [currentLocation, setCurrentLocation] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  const fromLocation = useLocationStore((state) => state.from);
-  const toLocation = useLocationStore((state) => state.to);
-  const setFromLocation = useLocationStore((state) => state.setFromLocation);
-  const setToLocation = useLocationStore((state) => state.setToLocation);
+  const fromAddress = useLocationStore((state) => state.fromAddress);
+  const toAddress = useLocationStore((state) => state.toAddress);
+  const setFromAddress = useLocationStore((state) => state.setFromAddress);
+  const setToAddress = useLocationStore((state) => state.setToAddress);
 
-  const swapLocations = () => {
-    const fromCoords = fromLocation.split(', ').map(Number) as [number, number];
-    const toCoords = toLocation.split(', ').map(Number) as [number, number];
-
-    setFromLocation(toCoords);
-    setToLocation(fromCoords);
+  const swapAddresses = () => {
+    setFromAddress(toAddress);
+    setToAddress(fromAddress);
   };
-
-  const getCurrentLocation = useCallback(() => {
-    setError(null);
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          const location = `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`;
-          setCurrentLocation(location);
-          onInputChange('from', location);
-        },
-        (error) => {
-          const errorMessage =
-            error.code === 1
-              ? 'Permission denied. Please allow location access.'
-              : error.code === 2
-              ? 'Position unavailable. Try again later.'
-              : 'Request timed out.';
-          console.error('Error fetching geolocation:', error.message);
-          setError(errorMessage);
-        }
-      );
-    } else {
-      setError('Geolocation is not supported by your browser.');
-    }
-  }, [onInputChange]);
-
-  useEffect(() => {
-    getCurrentLocation();
-  }, [getCurrentLocation]);
 
   return (
     <>
       <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
-        {/* From Location Input */}
+        {/* From Address Input */}
         <div className="flex items-center p-3 border border-gray-300 rounded-md bg-gray-50">
           <div className="flex items-center justify-center w-8 h-8 bg-teal-500 text-white rounded-md font-bold">
             A
           </div>
           <input
             type="text"
-            value={fromLocation}
-            onChange={(e) => onInputChange('from', e.target.value)}
+            value={fromAddress}
+            onChange={(e) => {
+              setFromAddress(e.target.value);
+              onInputChange('from', e.target.value);
+            }}
             className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
           />
         </div>
 
-        {/* Switch Button */}
+        {/* Swap Button */}
         <button
           className="flex items-center justify-center bg-white rounded-full h-12 w-12 border border-gray-300 shadow-md focus:outline-none hover:bg-gray-100"
-          onClick={swapLocations}
-          aria-label="Swap locations"
-          title="Swap locations"
+          onClick={swapAddresses}
+          aria-label="Swap addresses"
+          title="Swap addresses"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -88,24 +57,29 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
               strokeLinecap="round"
               strokeLinejoin="round"
               strokeWidth={2}
-              d="M4 4v6h6M20 20v-6h-6M4 10l7-7m0 0l7 7M4 14l7 7m0 0l7-7"
+              d="M17 13l4-4m0 0l-4-4m4 4H3"
             />
           </svg>
         </button>
 
-        {/* To Location Input */}
+        {/* To Address Input */}
         <div className="flex items-center p-3 border border-gray-300 rounded-md bg-gray-50">
-          <div className="flex items-center justify-center w-8 h-8 bg-orange-500 text-white rounded-md font-bold">
+          <div className="flex items-center justify-center w-8 h-8 bg-teal-500 text-white rounded-md font-bold">
             B
           </div>
           <input
             type="text"
-            value={toLocation}
-            onChange={(e) => onInputChange('to', e.target.value)}
+            value={toAddress}
+            onChange={(e) => {
+              setToAddress(e.target.value);
+              onInputChange('to', e.target.value);
+            }}
             className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
           />
         </div>
       </div>
+
+      {error && <p className="text-red-500 mt-4">{error}</p>}
     </>
   );
 };
