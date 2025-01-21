@@ -11,6 +11,8 @@ import { LatLngExpression } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { useLocationStore } from '../../store/useLocationStore'; // import the zustand store
 
+const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse'; // Example API endpoint
+
 function Map() {
   const [center, setCenter] = useState<LatLngExpression | null>(null);
   const [markers, setMarkers] = useState<LatLngExpression[]>([]);
@@ -19,6 +21,8 @@ function Map() {
 
   const setToLocation = useLocationStore((state) => state.setToLocation);
   const setFromLocation = useLocationStore((state) => state.setFromLocation);
+  const setFromAddress = useLocationStore((state) => state.setFromAddress); // Store address for "from"
+  const setToAddress = useLocationStore((state) => state.setToAddress); // Store address for "to"
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -27,18 +31,38 @@ function Map() {
           const { latitude, longitude } = position.coords;
           setCenter([latitude, longitude]);
           setFromLocation([latitude, longitude]);
+          fetchAddress(latitude, longitude, 'from');
         },
         (error) => {
           console.error('Error getting location:', error);
           setCenter([57.7089, 11.9746]);
           setFromLocation([57.7089, 11.9746]);
+          fetchAddress(57.7089, 11.9746, 'from');
         }
       );
     } else {
       console.error('Geolocation is not supported by this browser.');
       setCenter([57.7089, 11.9746]);
+      fetchAddress(57.7089, 11.9746, 'from');
     }
   }, [setFromLocation]);
+
+  const fetchAddress = async (lat: number, lng: number, type: 'from' | 'to') => {
+    try {
+      const response = await fetch(`${REVERSE_GEOCODE_API}?lat=${lat}&lon=${lng}&format=json`);
+      if (response.ok) {
+        const data = await response.json();
+        const address = data.display_name || 'Unknown address';
+        if (type === 'from') {
+          setFromAddress(address);
+        } else {
+          setToAddress(address);
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching address:', error);
+    }
+  };
 
   const getRoute = async (start: LatLngExpression, end: LatLngExpression) => {
     setLoading(true);
@@ -99,7 +123,8 @@ function Map() {
       click(e) {
         const { lat, lng } = e.latlng;
         setMarkers((prevMarkers) => [...prevMarkers, [lat, lng]]);
-        setToLocation([lat, lng]); // Update the "to" field with the latest clicked coordinates
+        setToLocation([lat, lng]);
+        fetchAddress(lat, lng, 'to'); // Fetch address for clicked marker
       },
     });
     return null;
