@@ -144,14 +144,20 @@ function Map() {
 
   const handleRemoveMarker = (index: number) => {
     if (!lineDrawn) {
-
-      setMarkersState((prevMarkers) => prevMarkers.filter((_, i) => i !== index));
+      setMarkersState((prevMarkers) => {
+        const newMarkers = prevMarkers.filter((_, i) => i !== index);
+        if (newMarkers.length === 0) {
+          // Reset the "To" field if no markers are left
+          setToAddress('');
+        }
+        return newMarkers;
+      });
     } else {
-      setLineDrawn(false); 
-      setMarkersState([]); 
+      setLineDrawn(false);
+      setMarkersState([]);
+      setToAddress(''); 
     }
   };
-  
   if (!center) {
     return <p>Loading map...</p>;
   }

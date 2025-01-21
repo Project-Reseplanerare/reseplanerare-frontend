@@ -1,21 +1,22 @@
 import { useLocationStore } from '../../store/useLocationStore';
 
 const TriggerActionBtn = () => {
-  const { lineDrawn, setLineDrawn, toAddress } = useLocationStore(); 
+  const { lineDrawn, setLineDrawn, setMarkers, setToAddress } = useLocationStore(); 
 
   const handleClick = () => {
     console.log('Button clicked. Line drawn:', lineDrawn);
-    if (!lineDrawn) {
-
+    if (lineDrawn) {
+      setLineDrawn(false);
+      setMarkers([]); 
+      setToAddress(''); 
+      console.log('Line removed.');
+    } else {
       setLineDrawn(true);
       console.log('Line drawn.');
-    } else {
-
-      setLineDrawn(false);
-      console.log('Line removed.');
     }
   };
 
+  const { toAddress } = useLocationStore(); 
   const isDisabled = !toAddress; 
 
   return (
