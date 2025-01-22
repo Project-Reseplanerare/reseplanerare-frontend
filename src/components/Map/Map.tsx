@@ -13,6 +13,7 @@ import { useLocationStore } from '../../store/useLocationStore';
 
 const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse'; 
 
+console.log("testingtesting123");
 
 function Map() {
   const [center, setCenter] = useState<LatLngExpression | null>(null);
