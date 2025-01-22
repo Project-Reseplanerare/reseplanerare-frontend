@@ -1,27 +1,59 @@
-interface TriggerActionBtnProps {
-  onClick: () => void; // Function to execute on click
-  className?: string; // Optional custom CSS classes
-  disabled?: boolean; // Disable the button if true
-}
+import { useLocationStore } from '../../store/useLocationStore';
 
-function TriggerActionBtn({
-  onClick,
-  className,
-  disabled = false,
-}: TriggerActionBtnProps) {
+const TriggerActionBtn = () => {
+  const { lineDrawn, setLineDrawn, setMarkers, toAddress } = useLocationStore();
+
+  const parseCoordinates = (address: string) => {
+    if (!address) return null;
+    
+    const coords = address.split(',').map(str => str.trim());
+    if (coords.length === 2 && !isNaN(Number(coords[0])) && !isNaN(Number(coords[1]))) {
+      return coords.map(coord => Number(coord)) as [number, number];
+    }
+
+    return null;
+  };
+
+ 
+  const toCoordinates = parseCoordinates(toAddress);
+  
+  const handleClick = () => {
+    console.log('Button clicked. Line drawn:', lineDrawn);
+    
+    if (toCoordinates) {
+      console.log('Using "To" address coordinates:', toCoordinates);
+    } else {
+      console.log('Invalid coordinates for "To" address.');
+    }
+
+    if (lineDrawn) {
+      setLineDrawn(false);
+      setMarkers([]); 
+      console.log('Line and markers removed.');
+    } else {
+      setLineDrawn(true);
+      if (toCoordinates) {
+        setMarkers([toCoordinates]);
+        console.log('Marker added at "To" address coordinates.');
+      } else {
+        console.log('No valid coordinates to set markers.');
+      }
+    }
+  };
+
+  const isDisabled = !toAddress; 
+
   return (
     <button
-      onClick={onClick}
-      className={`px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${
-        disabled
-          ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-          : 'bg-blue-500 text-white hover:bg-blue-600'
-      } ${className}`}
-      disabled={disabled}
+      onClick={handleClick}
+      className={`px-4 py-2 rounded-md text-white 
+        ${lineDrawn ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'}
+        ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+      disabled={isDisabled} 
     >
-      Sök resa
+      {lineDrawn ? 'Sluta sök' : 'Sök'}
     </button>
   );
-}
+};
 
 export default TriggerActionBtn;

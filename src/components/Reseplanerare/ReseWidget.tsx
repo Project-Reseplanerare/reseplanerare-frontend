@@ -18,9 +18,9 @@ function ReseWidget() {
     []
   );
 
-  const handleButtonClick = () => {
-    console.log({ from, to });
-  };
+  // const handleButtonClick = () => {
+  //   console.log({ from, to });
+  // };
 
   return (
     <section className="p-6 border border-gray-300 rounded-lg bg-gray-100 grid grid-cols-1 gap-5">
@@ -28,7 +28,7 @@ function ReseWidget() {
       <div className="flex flex-col">
         <TripInput onInputChange={handleInputChange} />
       </div>
-      <TriggerActionBtn onClick={handleButtonClick} />
+      <TriggerActionBtn/> 
     </section>
   );
 }
