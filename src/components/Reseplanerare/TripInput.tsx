@@ -10,17 +10,40 @@ interface TripInputProps {
 const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   const [error, setError] = useState<string | null>(null);
 
-  const fromAddress = useLocationStore((state) => state.fromAddress);
-  const toAddress = useLocationStore((state) => state.toAddress);
-  const setFromAddress = useLocationStore((state) => state.setFromAddress);
-  const setToAddress = useLocationStore((state) => state.setToAddress);
+  const { fromAddress, toAddress, setFromAddress, setToAddress } = useLocationStore();
 
   const swapAddresses = () => {
     setFromAddress(toAddress);
     setToAddress(fromAddress);
   };
 
-  const isSwapDisabled = !fromAddress || !toAddress; 
+  const isSwapDisabled = !fromAddress || !toAddress;
+
+
+  const parseCoordinates = (address: string) => {
+    if (!address) return null;
+    
+    const coords = address.split(',').map(str => str.trim());
+    if (coords.length === 2 && !isNaN(Number(coords[0])) && !isNaN(Number(coords[1]))) {
+      return coords.map(coord => Number(coord)) as [number, number];
+    }
+
+    return null;
+  };
+
+  const handleToAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setToAddress(value);
+    onInputChange('to', value);
+
+ 
+    const parsedCoords = parseCoordinates(value);
+    if (parsedCoords) {
+      setError(null);  
+    } else {
+      setError('Invalid coordinates format. Please enter latitude,longitude.');
+    }
+  };
 
   return (
     <>
@@ -51,7 +74,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           onClick={swapAddresses}
           aria-label="Swap addresses"
           title="Swap addresses"
-          disabled={isSwapDisabled} 
+          disabled={isSwapDisabled}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -77,16 +100,13 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           <input
             type="text"
             value={toAddress}
-            onChange={(e) => {
-              setToAddress(e.target.value);
-              onInputChange('to', e.target.value);
-            }}
+            onChange={handleToAddressChange}
             className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
           />
         </div>
       </div>
 
-      {error && <p className="text-red-500 mt-4">{error}</p>}
+      {/* {error && <p className="text-red-500 mt-4">{error}</p>} */}
     </>
   );
 };

@@ -1,22 +1,46 @@
 import { useLocationStore } from '../../store/useLocationStore';
 
 const TriggerActionBtn = () => {
-  const { lineDrawn, setLineDrawn, setMarkers, setToAddress } = useLocationStore(); 
+  const { lineDrawn, setLineDrawn, setMarkers, toAddress } = useLocationStore();
 
+  const parseCoordinates = (address: string) => {
+    if (!address) return null;
+    
+    const coords = address.split(',').map(str => str.trim());
+    if (coords.length === 2 && !isNaN(Number(coords[0])) && !isNaN(Number(coords[1]))) {
+      return coords.map(coord => Number(coord)) as [number, number];
+    }
+
+    return null;
+  };
+
+ 
+  const toCoordinates = parseCoordinates(toAddress);
+  
   const handleClick = () => {
     console.log('Button clicked. Line drawn:', lineDrawn);
+    
+    if (toCoordinates) {
+      console.log('Using "To" address coordinates:', toCoordinates);
+    } else {
+      console.log('Invalid coordinates for "To" address.');
+    }
+
     if (lineDrawn) {
       setLineDrawn(false);
       setMarkers([]); 
-      setToAddress(''); 
-      console.log('Line removed.');
+      console.log('Line and markers removed.');
     } else {
       setLineDrawn(true);
-      console.log('Line drawn.');
+      if (toCoordinates) {
+        setMarkers([toCoordinates]);
+        console.log('Marker added at "To" address coordinates.');
+      } else {
+        console.log('No valid coordinates to set markers.');
+      }
     }
   };
 
-  const { toAddress } = useLocationStore(); 
   const isDisabled = !toAddress; 
 
   return (
