@@ -1,33 +1,41 @@
 import './App.css';
-// import Header from './components/Header/Header';
-// import Footer from './components/Footer/Footer';
+import Header from './components/Header/Header';
+import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import ReseWidget from './components/Reseplanerare/ReseWidget';
 import Map from './components/Map/Map';
+import WidgetHeader from './components/Reseplanerare/WidgetHeader';
+import SearchInput from './components/Reseplanerare/SearchInput';
 
 function App() {
   return (
     <Router>
-      {/* <Header /> */}
       <main className="app-container">
         <Routes>
           <Route
             path="/"
             element={
               <div className="grid-container">
-                <div className="widget-container">
-                  <ReseWidget />
-                </div>
+                <aside className="aside-container">
+                <Header />
+                  <Breadcrumbs 
+                      crumbs={[
+                        { label: 'Startsida', link: '/' },
+                        { label: 'Reseplaneraren' },
+                      ]}
+                    />
+                      <WidgetHeader />
+                      <SearchInput />
+                      <ReseWidget />
+                </aside>
                 <div className="map-container">
                   <Map />
                 </div>
               </div>
             }
           />
-          <Route path="/about" element={<div>About</div>} />
         </Routes>
       </main>
-      {/* <Footer /> */}
     </Router>
   );
 }

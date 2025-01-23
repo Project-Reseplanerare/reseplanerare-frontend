@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import TripInput from './TripInput';
-import WidgetHeader from './WidgetHeader';
 import TriggerActionBtn from './TriggerActionBtn';
 
 function ReseWidget() {
@@ -24,7 +23,6 @@ function ReseWidget() {
 
   return (
     <section className="p-6 border border-gray-300 rounded-lg bg-gray-100 grid grid-cols-1 gap-5">
-      <WidgetHeader />
       <div className="flex flex-col">
         <TripInput onInputChange={handleInputChange} />
       </div>
