@@ -8,6 +8,8 @@ import WidgetHeader from './components/Reseplanerare/WidgetHeader';
 import SearchInput from './components/Reseplanerare/SearchInput';
 import TravelStop from './components/DropdownList/TravelStop';
 import TravelOptions from './components/DropdownList/Traveloptions';
+import DatePickerComponent from './components/DropdownList/DatePicker';
+import AttractionList from './components/DropdownList/AttractionList';
 
 function App() {
   return (
@@ -32,8 +34,10 @@ function App() {
                   <div className="h-60 border border-gray-300 rounded-lg overflow-hidden flex flex-grow">
                       <Map />
                   </div>
+                  <DatePickerComponent />
                   <ReseWidget />
                   <TravelOptions />
+                  <AttractionList />
                   <TravelStop />
                   
                 </aside>
