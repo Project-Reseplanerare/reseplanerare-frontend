@@ -1,6 +1,6 @@
 import './App.css';
 import Header from './components/Header/Header';
-import BreadCrumbs from './components/Breadcrumbs/Breadcrumbs';
+import BreadCrumbs from './components/BreadCrumbs/BreadCrumbs';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TravelPlannerWrapper from './components/TravelPlanner.tsx/TravelPlannerWrapper';
 import Map from './components/Map/Map';

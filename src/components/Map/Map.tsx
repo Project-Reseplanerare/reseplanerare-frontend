@@ -1,16 +1,10 @@
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  useMapEvents,
-  Polyline,
-  Popup,
-} from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, Polyline, Popup } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { useLocationStore } from '../../store/useLocationStore';
+import MapCenterUpdater from './MapCenterUpdater';
 
 const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse';
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
@@ -48,7 +42,7 @@ function Map() {
           fetchAddress(latitude, longitude, 'from');
         },
         () => {
-          const fallbackCenter = [59.378, 13.499];
+          const fallbackCenter: LatLngExpression = [59.378, 13.499];
           setCenter(fallbackCenter);
           setFromLocation(fallbackCenter);
           fetchAddress(fallbackCenter[0], fallbackCenter[1], 'from');
@@ -182,7 +176,6 @@ function Map() {
       click(e) {
         const { lat, lng } = e.latlng;
 
-        // Reset the markers array to only contain the new marker
         setMarkers([[lat, lng]]);
         setToLocation([lat, lng]);
         fetchAddress(lat, lng, 'to');
@@ -213,6 +206,9 @@ function Map() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+      <MapCenterUpdater/>
+  
+    
       <Marker position={center}>
         <Popup>Your current location</Popup>
       </Marker>
@@ -248,7 +244,7 @@ function Map() {
       </MarkerClusterGroup>
 
       {markers.map((position, index) => {
-        const [lat, lng] = position;
+        const [lat, lng]: [number, number] = position as [number, number]; 
         return (
           <Marker
             key={index}
