@@ -6,11 +6,11 @@ interface Crumb {
   link?: string;
 }
 
-interface BreadcrumbsProps {
+interface BreadCrumbsProps {
   crumbs: Crumb[];
 }
 
-function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
+function BreadCrumbs({ crumbs }: BreadCrumbsProps) {
   return (
     <nav
       className="breadcrumbs flex justify-center items-center space-x-2 text-sm "
@@ -42,4 +42,4 @@ function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
   );
 }
 
-export default Breadcrumbs;
+export default BreadCrumbs;

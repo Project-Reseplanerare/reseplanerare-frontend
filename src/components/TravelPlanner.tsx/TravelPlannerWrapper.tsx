@@ -1,9 +1,9 @@
 import { useState, useCallback } from 'react';
 import TripInput from './TripInput';
 import TriggerActionBtn from './TriggerActionBtn';
-import Map from '../Map/Map';
 
-function ReseWidget() {
+
+function TravelPlannerWrapper() {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
 
@@ -30,4 +30,4 @@ function ReseWidget() {
   );
 }
 
-export default ReseWidget;
+export default TravelPlannerWrapper;
