@@ -1,37 +1,35 @@
 import './App.css';
 import Header from './components/Header/Header';
-import Breadcrumbs from './components/Breadcrumbs/Breadcrumbs';
+import BreadCrumbs from './components/BreadCrumbs/Breadcrumbs';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import ReseWidget from './components/Reseplanerare/ReseWidget';
+import TravelPlannerWrapper from './components/TravelPlanner.tsx/TravelPlannerWrapper';
 import Map from './components/Map/Map';
-import WidgetHeader from './components/Reseplanerare/WidgetHeader';
-import SearchInput from './components/Reseplanerare/SearchInput';
+import GeneralInformation from './components/GenaralInformation/GeneralInformation';
+import SearchInput from './components/SearchInput/SearchInput';
 
 function App() {
   return (
     <Router>
       <main className="app-container">
+        <Header />
         <Routes>
           <Route
             path="/"
             element={
-              <div className="grid-container">
-                <aside className="aside-container">
-                <Header />
-                  <Breadcrumbs 
-                      crumbs={[
-                        { label: 'Startsida', link: '/' },
-                        { label: 'Reseplaneraren' },
-                      ]}
-                    />
-                      <WidgetHeader />
-                      <SearchInput />
-                      <ReseWidget />
-                </aside>
-                <div className="map-container">
+              <section className="grid-container px-6">
+                <BreadCrumbs
+                  crumbs={[
+                    { label: 'Visit Värmland', link: '/' },
+                    { label: 'Reseplaneraren', link: '/reseplaneraren' },
+                  ]}
+                />
+                <GeneralInformation />
+                <SearchInput />
+                <div className="h-60 border border-gray-300 rounded-lg overflow-hidden flex flex-grow">
                   <Map />
                 </div>
-              </div>
+                <TravelPlannerWrapper />
+              </section>
             }
           />
         </Routes>

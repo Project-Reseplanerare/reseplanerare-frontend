@@ -1,4 +1,4 @@
-function WidgetHeader() {
+function GeneralInformation() {
   return (
     <div className="flex flex-col items-center justify-center bg-white text-center p-4 border border-gray-300 rounded-lg">
       <h1
@@ -27,4 +27,4 @@ function WidgetHeader() {
   );
 }
 
-export default WidgetHeader;
+export default GeneralInformation;

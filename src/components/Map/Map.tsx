@@ -6,35 +6,37 @@ import {
   Polyline,
   Popup,
 } from 'react-leaflet';
+import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { useLocationStore } from '../../store/useLocationStore';
 
-const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse'; 
-
-console.log("testingtesting123");
+const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse';
+const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
 function Map() {
   const [center, setCenter] = useState<LatLngExpression | null>(null);
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [events, setEvents] = useState<any[]>([]);
 
-  const setToLocation = useLocationStore((state) => state.setToLocation);
-  const setFromLocation = useLocationStore((state) => state.setFromLocation);
-  const setFromAddress = useLocationStore((state) => state.setFromAddress);
-  const setToAddress = useLocationStore((state) => state.setToAddress);
-  const lineDrawn = useLocationStore((state) => state.lineDrawn);
-  const setLineDrawn = useLocationStore((state) => state.setLineDrawn);
-  const markers = useLocationStore((state) => state.markers);
-  const setMarkersState = useLocationStore((state) => state.setMarkers); 
+  const {
+    setToLocation,
+    setFromLocation,
+    setFromAddress,
+    setToAddress,
+    lineDrawn,
+    setLineDrawn,
+    markers,
+    setMarkers,
+  } = useLocationStore();
 
   useEffect(() => {
-   
     if (!lineDrawn) {
-      setMarkersState([]);
+      setMarkers([]);
     }
-  }, [lineDrawn, setMarkersState]);
+  }, [lineDrawn, setMarkers]);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -45,17 +47,13 @@ function Map() {
           setFromLocation([latitude, longitude]);
           fetchAddress(latitude, longitude, 'from');
         },
-        (error) => {
-          console.error('Error getting location:', error);
-          setCenter([57.7089, 11.9746]);
-          setFromLocation([57.7089, 11.9746]);
-          fetchAddress(57.7089, 11.9746, 'from');
+        () => {
+          const fallbackCenter = [59.3780, 13.4990];
+          setCenter(fallbackCenter);
+          setFromLocation(fallbackCenter);
+          fetchAddress(fallbackCenter[0], fallbackCenter[1], 'from');
         }
       );
-    } else {
-      console.error('Geolocation is not supported by this browser.');
-      setCenter([57.7089, 11.9746]);
-      fetchAddress(57.7089, 11.9746, 'from');
     }
   }, [setFromLocation]);
 
@@ -65,16 +63,57 @@ function Map() {
       if (response.ok) {
         const data = await response.json();
         const address = data.display_name || 'Unknown address';
-        if (type === 'from') {
-          setFromAddress(address);
-        } else {
-          setToAddress(address);
-        }
+        if (type === 'from') setFromAddress(address);
+        else setToAddress(address);
       }
     } catch (error) {
       console.error('Error fetching address:', error);
     }
   };
+
+  const fetchEvents = async () => {
+    try {
+      const limit = 10;
+      const totalEvents = 30;
+      let eventsFetched = 0;
+      let page = 1;
+      const allEvents: any[] = [];
+
+      setLoading(true);
+
+      while (eventsFetched < totalEvents) {
+        const response = await fetch(`${EVENTS_API}?limit=${limit}&page=${page}`);
+        if (!response.ok) break;
+
+        const data = await response.json();
+        const eventMarkers = data.data.map((event: any) => {
+          const place = event.places?.[0] || {};
+          return {
+            lat: parseFloat(place.latitude) || 0,
+            lng: parseFloat(place.longitude) || 0,
+            title: event.title || 'Unknown Event',
+            description: event.sales_text || 'No description available',
+          };
+        });
+
+        allEvents.push(...eventMarkers);
+        eventsFetched += eventMarkers.length;
+        page += 1;
+
+        if (eventMarkers.length < limit) break; // End loop if no more events
+      }
+
+      setEvents(allEvents);
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const getRoute = async (start: LatLngExpression, end: LatLngExpression) => {
     setLoading(true);
@@ -134,34 +173,32 @@ function Map() {
     useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng;
-     
-        setMarkersState([[lat, lng]]);
+        
+        // Reset the markers array to only contain the new marker
+        setMarkers([[lat, lng]]);
         setToLocation([lat, lng]);
         fetchAddress(lat, lng, 'to');
       },
     });
     return null;
   };
+  
 
   const handleRemoveMarker = (index: number) => {
     if (!lineDrawn) {
-      setMarkersState((prevMarkers) => {
-        const newMarkers = prevMarkers.filter((_, i) => i !== index);
-        if (newMarkers.length === 0) {
-          // Reset the "To" field if no markers are left
-          setToAddress('');
-        }
+      setMarkers((prev) => {
+        const newMarkers = prev.filter((_, i) => i !== index);
+        if (newMarkers.length === 0) setToAddress('');
         return newMarkers;
       });
     } else {
       setLineDrawn(false);
-      setMarkersState([]);
-      setToAddress(''); 
+      setMarkers([]);
+      setToAddress('');
     }
   };
-  if (!center) {
-    return <p>Loading map...</p>;
-  }
+
+  if (!center) return <p>Loading map...</p>;
 
   return (
     <MapContainer center={center} zoom={13} className="h-[1fr] w-[100%]">
@@ -175,30 +212,52 @@ function Map() {
 
       <MapClickHandler />
 
-      {Array.isArray(markers) && 
-        markers.map((position, index) => {
-        
-          if (Array.isArray(position) && position.length === 2) {
-            const [lat, lng] = position; 
-            return (
-              <Marker
-                key={index}
-                position={position}
-                eventHandlers={{
-                  click: () => handleRemoveMarker(index),
-                  mouseover: (e) => e.target.openPopup(),
-                  mouseout: (e) => e.target.closePopup(),
-                }}
-              >
-                <Popup>
-                  Latitude: {lat.toFixed(4)}, Longitude: {lng.toFixed(4)}
-                </Popup>
-              </Marker>
-            );
-          }
-          return null; 
-        })
-      }
+      <MarkerClusterGroup>
+  {events.map((event, index) => {
+    const { lat, lng, title, description } = event;
+    return (
+      <Marker
+        key={index}
+        position={[lat, lng]}
+        eventHandlers={{
+          click: async () => {
+            setMarkers((prev) => [...prev, [lat, lng]]);
+            setToLocation([lat, lng]);
+            fetchAddress(lat, lng, 'to');
+            setLineDrawn(true); 
+          },
+          mouseover: (e) => e.target.openPopup(),
+          mouseout: (e) => e.target.closePopup(),
+        }}
+      >
+        <Popup>
+          <strong>{title}</strong>
+          <br />
+          {description}
+        </Popup>
+      </Marker>
+    );
+  })}
+</MarkerClusterGroup>
+
+      {markers.map((position, index) => {
+        const [lat, lng] = position;
+        return (
+          <Marker
+            key={index}
+            position={[lat, lng]}
+            eventHandlers={{
+              click: () => handleRemoveMarker(index),
+              mouseover: (e) => e.target.openPopup(),
+              mouseout: (e) => e.target.closePopup(),
+            }}
+          >
+            <Popup>
+              Latitude: {lat.toFixed(4)}, Longitude: {lng.toFixed(4)}
+            </Popup>
+          </Marker>
+        );
+      })}
 
       {route.length > 0 && lineDrawn && (
         <Polyline positions={route} color="blue" weight={3} opacity={0.7} />

@@ -6,29 +6,35 @@ interface Crumb {
   link?: string;
 }
 
-interface BreadcrumbsProps {
+interface BreadCrumbsProps {
   crumbs: Crumb[];
 }
 
-function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
+function BreadCrumbs({ crumbs }: BreadCrumbsProps) {
   return (
-    <nav className="breadcrumbs flex justify-center items-center space-x-2 text-sm mb-6">
+    <nav
+      className="breadcrumbs flex justify-center items-center space-x-2 text-sm "
+      aria-label="Breadcrumb"
+    >
       {crumbs.map((crumb: Crumb, index: number) => (
         <React.Fragment key={index}>
           {crumb.link ? (
             <Link
               to={crumb.link}
-              className="breadcrumb-link text-gray-400 hover:text-blue-700 transition"
+              className="breadcrumb-link text-gray-500 hover:text-blue-600 transition duration-200"
             >
               {crumb.label}
             </Link>
           ) : (
-            <span className="breadcrumb-current font-bold text-blue-700">
+            <span
+              className="breadcrumb-current font-semibold text-blue-700"
+              aria-current="page"
+            >
               {crumb.label}
             </span>
           )}
           {index < crumbs.length - 1 && (
-            <span className="breadcrumb-separator text-gray-400">{'>'}</span>
+            <span className="breadcrumb-separator text-gray-400">{'/'}</span>
           )}
         </React.Fragment>
       ))}
@@ -36,4 +42,4 @@ function Breadcrumbs({ crumbs }: BreadcrumbsProps) {
   );
 }
 
-export default Breadcrumbs;
+export default BreadCrumbs;
