@@ -48,7 +48,7 @@ function Map() {
           fetchAddress(latitude, longitude, 'from');
         },
         () => {
-          const fallbackCenter = [59.3780, 13.4990];
+          const fallbackCenter = [59.378, 13.499];
           setCenter(fallbackCenter);
           setFromLocation(fallbackCenter);
           fetchAddress(fallbackCenter[0], fallbackCenter[1], 'from');
@@ -57,9 +57,15 @@ function Map() {
     }
   }, [setFromLocation]);
 
-  const fetchAddress = async (lat: number, lng: number, type: 'from' | 'to') => {
+  const fetchAddress = async (
+    lat: number,
+    lng: number,
+    type: 'from' | 'to'
+  ) => {
     try {
-      const response = await fetch(`${REVERSE_GEOCODE_API}?lat=${lat}&lon=${lng}&format=json`);
+      const response = await fetch(
+        `${REVERSE_GEOCODE_API}?lat=${lat}&lon=${lng}&format=json`
+      );
       if (response.ok) {
         const data = await response.json();
         const address = data.display_name || 'Unknown address';
@@ -82,7 +88,9 @@ function Map() {
       setLoading(true);
 
       while (eventsFetched < totalEvents) {
-        const response = await fetch(`${EVENTS_API}?limit=${limit}&page=${page}`);
+        const response = await fetch(
+          `${EVENTS_API}?limit=${limit}&page=${page}`
+        );
         if (!response.ok) break;
 
         const data = await response.json();
@@ -173,7 +181,7 @@ function Map() {
     useMapEvents({
       click(e) {
         const { lat, lng } = e.latlng;
-        
+
         // Reset the markers array to only contain the new marker
         setMarkers([[lat, lng]]);
         setToLocation([lat, lng]);
@@ -182,7 +190,6 @@ function Map() {
     });
     return null;
   };
-  
 
   const handleRemoveMarker = (index: number) => {
     if (!lineDrawn) {
@@ -213,32 +220,32 @@ function Map() {
       <MapClickHandler />
 
       <MarkerClusterGroup>
-  {events.map((event, index) => {
-    const { lat, lng, title, description } = event;
-    return (
-      <Marker
-        key={index}
-        position={[lat, lng]}
-        eventHandlers={{
-          click: async () => {
-            setMarkers((prev) => [...prev, [lat, lng]]);
-            setToLocation([lat, lng]);
-            fetchAddress(lat, lng, 'to');
-            setLineDrawn(true); 
-          },
-          mouseover: (e) => e.target.openPopup(),
-          mouseout: (e) => e.target.closePopup(),
-        }}
-      >
-        <Popup>
-          <strong>{title}</strong>
-          <br />
-          {description}
-        </Popup>
-      </Marker>
-    );
-  })}
-</MarkerClusterGroup>
+        {events.map((event, index) => {
+          const { lat, lng, title, description } = event;
+          return (
+            <Marker
+              key={index}
+              position={[lat, lng]}
+              eventHandlers={{
+                click: async () => {
+                  setMarkers((prev) => [...prev, [lat, lng]]);
+                  setToLocation([lat, lng]);
+                  fetchAddress(lat, lng, 'to');
+                  setLineDrawn(true);
+                },
+                mouseover: (e) => e.target.openPopup(),
+                mouseout: (e) => e.target.closePopup(),
+              }}
+            >
+              <Popup>
+                <strong>{title}</strong>
+                <br />
+                {description}
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MarkerClusterGroup>
 
       {markers.map((position, index) => {
         const [lat, lng] = position;

@@ -25,7 +25,7 @@ function App() {
                 />
                 <GeneralInformation />
                 <SearchInput />
-                <div className="h-60 border border-gray-300 rounded-lg overflow-hidden flex flex-grow">
+                <div className="h-80 border z-10 border-gray-300 rounded-lg overflow-hidden flex flex-grow">
                   <Map />
                 </div>
                 <TravelPlannerWrapper />

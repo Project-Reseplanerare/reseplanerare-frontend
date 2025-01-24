@@ -5,11 +5,11 @@ import { useState } from 'react';
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
 function SearchInput() {
-  const [query, setQuery] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [query, setQuery] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchSuggestions = async (searchQuery) => {
+  const fetchSuggestions = async (searchQuery: string) => {
     if (!searchQuery) {
       setSuggestions([]);
       return;
@@ -21,7 +21,7 @@ function SearchInput() {
       );
       if (response.ok) {
         const data = await response.json();
-        const titles = data.data.map((event) => event.title);
+        const titles = data.data.map((event: { title: string }) => event.title);
         setSuggestions(titles);
       } else {
         setSuggestions([]);
@@ -35,7 +35,7 @@ function SearchInput() {
   };
 
   // Handle input change
-  const handleInputChange = (e) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
     fetchSuggestions(value);
@@ -80,14 +80,14 @@ function SearchInput() {
 
         {/* Dropdown Suggestions */}
         {suggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-10">
+          <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50">
             {suggestions.map((title, index) => (
               <li
                 key={index}
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-cyan-100 cursor-pointer"
                 onClick={() => {
-                  setQuery(title); // Set the clicked suggestion as the input value
-                  setSuggestions([]); // Clear suggestions
+                  setQuery(title);
+                  setSuggestions([]);
                 }}
               >
                 {title}
