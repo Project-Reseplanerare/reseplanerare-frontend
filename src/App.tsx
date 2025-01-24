@@ -7,6 +7,7 @@ import Map from './components/Map/Map';
 import WidgetHeader from './components/Reseplanerare/WidgetHeader';
 import SearchInput from './components/Reseplanerare/SearchInput';
 import TravelStop from './components/DropdownList/TravelStop';
+import TravelOptions from './components/DropdownList/Traveloptions';
 
 function App() {
   return (
@@ -32,7 +33,9 @@ function App() {
                       <Map />
                   </div>
                   <ReseWidget />
+                  <TravelOptions />
                   <TravelStop />
+                  
                 </aside>
               </div>
             }
