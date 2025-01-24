@@ -213,27 +213,32 @@ function Map() {
       <MapClickHandler />
 
       <MarkerClusterGroup>
-        {events.map((event, index) => {
-          const { lat, lng, title, description } = event;
-          return (
-            <Marker
-              key={index}
-              position={[lat, lng]}
-              eventHandlers={{
-                click: () => handleRemoveMarker(index),
-                mouseover: (e) => e.target.openPopup(),
-                mouseout: (e) => e.target.closePopup(),
-              }}
-            >
-              <Popup>
-                <strong>{title}</strong>
-                <br />
-                {description}
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MarkerClusterGroup>
+  {events.map((event, index) => {
+    const { lat, lng, title, description } = event;
+    return (
+      <Marker
+        key={index}
+        position={[lat, lng]}
+        eventHandlers={{
+          click: async () => {
+            setMarkers((prev) => [...prev, [lat, lng]]);
+            setToLocation([lat, lng]);
+            fetchAddress(lat, lng, 'to');
+            setLineDrawn(true); 
+          },
+          mouseover: (e) => e.target.openPopup(),
+          mouseout: (e) => e.target.closePopup(),
+        }}
+      >
+        <Popup>
+          <strong>{title}</strong>
+          <br />
+          {description}
+        </Popup>
+      </Marker>
+    );
+  })}
+</MarkerClusterGroup>
 
       {markers.map((position, index) => {
         const [lat, lng] = position;
