@@ -1,6 +1,6 @@
 import './App.css';
 import Header from './components/Header/Header';
-import BreadCrumbs from './components/BreadCrumbs/Breadcrumbs';
+import BreadCrumbs from './components/Breadcrumbs/Breadcrumbs';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TravelPlannerWrapper from './components/TravelPlanner.tsx/TravelPlannerWrapper';
 import Map from './components/Map/Map';
@@ -16,7 +16,7 @@ function App() {
           <Route
             path="/"
             element={
-              <section className="grid-container px-6">
+              <section className="content-wrapper container px-5">
                 <BreadCrumbs
                   crumbs={[
                     { label: 'Visit Värmland', link: '/' },
