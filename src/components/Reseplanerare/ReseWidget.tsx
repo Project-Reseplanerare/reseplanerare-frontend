@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import TripInput from './TripInput';
 import TriggerActionBtn from './TriggerActionBtn';
+import Map from '../Map/Map';
 
 function ReseWidget() {
   const [from, setFrom] = useState('');
@@ -17,16 +18,14 @@ function ReseWidget() {
     []
   );
 
-  // const handleButtonClick = () => {
-  //   console.log({ from, to });
-  // };
-
   return (
-    <section className="p-6 border border-gray-300 rounded-lg bg-gray-100 grid grid-cols-1 gap-5">
+    <section className="p-6 border border-gray-300 rounded-lg bg-gray-100 flex flex-col gap-5 flex-grow">
       <div className="flex flex-col">
         <TripInput onInputChange={handleInputChange} />
       </div>
-      <TriggerActionBtn/> 
+    
+      <TriggerActionBtn />
+     
     </section>
   );
 }

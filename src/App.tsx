@@ -17,20 +17,21 @@ function App() {
             element={
               <div className="grid-container">
                 <aside className="aside-container">
-                <Header />
+                  <Header />
                   <Breadcrumbs 
-                      crumbs={[
-                        { label: 'Startsida', link: '/' },
-                        { label: 'Reseplaneraren' },
-                      ]}
-                    />
-                      <WidgetHeader />
-                      <SearchInput />
-                      <ReseWidget />
+                    crumbs={[
+                      { label: 'Startsida', link: '/' },
+                      { label: 'Reseplaneraren' },
+                    ]}
+                  />
+                    
+                  <WidgetHeader />
+                  <SearchInput />
+                  <div className="h-60 border border-gray-300 rounded-lg overflow-hidden flex flex-grow">
+                      <Map />
+                  </div>
+                  <ReseWidget />
                 </aside>
-                <div className="map-container">
-                  <Map />
-                </div>
               </div>
             }
           />
