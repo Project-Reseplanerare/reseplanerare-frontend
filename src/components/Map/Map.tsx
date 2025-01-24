@@ -48,7 +48,7 @@ function Map() {
           fetchAddress(latitude, longitude, 'from');
         },
         () => {
-          const fallbackCenter = [57.7089, 11.9746];
+          const fallbackCenter = [59.3780, 13.4990];
           setCenter(fallbackCenter);
           setFromLocation(fallbackCenter);
           fetchAddress(fallbackCenter[0], fallbackCenter[1], 'from');

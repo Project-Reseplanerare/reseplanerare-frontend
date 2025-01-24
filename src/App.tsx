@@ -9,19 +9,21 @@ import SearchInput from './components/Reseplanerare/SearchInput';
 
 function App() {
   return (
+
     <Router>
       <main className="app-container">
+      <Header />
         <Routes>
           <Route
             path="/"
             element={
-              <div className="grid-container">
-                <aside className="aside-container">
-                  <Header />
+              <section className="grid-container px-6">
+
+           
                   <Breadcrumbs 
                     crumbs={[
-                      { label: 'Startsida', link: '/' },
-                      { label: 'Reseplaneraren' },
+                      { label: 'Visist Värmland', link: '/' },
+                      { label: 'Reseplaneraren', link: '/reseplaneraren' },
                     ]}
                   />
                     
@@ -31,8 +33,7 @@ function App() {
                       <Map />
                   </div>
                   <ReseWidget />
-                </aside>
-              </div>
+              </section>
             }
           />
         </Routes>
