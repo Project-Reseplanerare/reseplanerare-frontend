@@ -14,9 +14,8 @@ function SearchInput() {
   const [query, setQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const { setTempCenter, tempCenter } = useLocationStore();
+  const { setTempCenter } = useLocationStore();
 
-  // Fetch event suggestions based on search query
   const fetchSuggestions = async (searchQuery: string) => {
       if (!searchQuery) {
           setSuggestions([]);
@@ -40,20 +39,17 @@ function SearchInput() {
       }
   };
 
-  // Handle input change and fetch event suggestions
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       const value = e.target.value;
       setQuery(value);
       fetchSuggestions(value);
   };
 
-  // Clear input and suggestions
   const clearInput = () => {
       setQuery('');
       setSuggestions([]);
   };
 
-  // Fetch the event location (latitude & longitude) based on event title
   const fetchEventCoordinates = async (eventTitle: string) => {
     try {
         const response = await fetch(`${EVENTS_API}?search=${eventTitle}&limit=1`);
@@ -65,12 +61,11 @@ function SearchInput() {
             if (place && place.latitude && place.longitude) {
                 const { latitude, longitude } = place;
 
-                // Log the coordinates for debugging
                 console.log('Event Coordinates:', { latitude, longitude });
 
-                // Store the coordinates directly in tempCenter
+                
                 const latlng: [number, number] = [parseFloat(latitude), parseFloat(longitude)];
-                setTempCenter(latlng);  // Store the coordinates in tempCenter
+                setTempCenter(latlng); 
             } else {
                 console.error('Coordinates not found for the event.');
             }
@@ -122,7 +117,6 @@ function SearchInput() {
                                   setQuery(title);
                                   setSuggestions([]);
                                   fetchEventCoordinates(title); 
-                                   // Fetch coordinates and store in tempCenter
                               }}
                           >
                               {title}
