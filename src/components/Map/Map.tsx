@@ -5,15 +5,16 @@ import { LatLngExpression } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { useLocationStore } from '../../store/useLocationStore';
 import MapCenterUpdater from './MapCenterUpdater';
-
-const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse';
-const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
+import { fetchEvents } from '../../utils/api/fetchEvents';
+import FilterEventsByBounds from './FilterEventsByBounds';
+import { fetchAddress } from '../../utils/api/fetchAdress';
 
 function Map() {
   const [center, setCenter] = useState<LatLngExpression | null>(null);
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [events, setEvents] = useState<any[]>([]);
+  const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
 
   const {
     setToLocation,
@@ -39,83 +40,21 @@ function Map() {
           const { latitude, longitude } = position.coords;
           setCenter([latitude, longitude]);
           setFromLocation([latitude, longitude]);
-          fetchAddress(latitude, longitude, 'from');
+          fetchAddress(latitude, longitude, 'from', setFromAddress, setToAddress); 
         },
         () => {
           const fallbackCenter: LatLngExpression = [59.378, 13.499];
           setCenter(fallbackCenter);
           setFromLocation(fallbackCenter);
-          fetchAddress(fallbackCenter[0], fallbackCenter[1], 'from');
+          fetchAddress(fallbackCenter[0], fallbackCenter[1], 'from', setFromAddress, setToAddress);
         }
       );
     }
   }, [setFromLocation]);
 
-  const fetchAddress = async (
-    lat: number,
-    lng: number,
-    type: 'from' | 'to'
-  ) => {
-    try {
-      const response = await fetch(
-        `${REVERSE_GEOCODE_API}?lat=${lat}&lon=${lng}&format=json`
-      );
-      if (response.ok) {
-        const data = await response.json();
-        const address = data.display_name || 'Unknown address';
-        if (type === 'from') setFromAddress(address);
-        else setToAddress(address);
-      }
-    } catch (error) {
-      console.error('Error fetching address:', error);
-    }
-  };
-
-  const fetchEvents = async () => {
-    try {
-      const limit = 10;
-      const totalEvents = 30;
-      let eventsFetched = 0;
-      let page = 1;
-      const allEvents: any[] = [];
-
-      setLoading(true);
-
-      while (eventsFetched < totalEvents) {
-        const response = await fetch(
-          `${EVENTS_API}?limit=${limit}&page=${page}`
-        );
-        if (!response.ok) break;
-
-        const data = await response.json();
-        const eventMarkers = data.data.map((event: any) => {
-          const place = event.places?.[0] || {};
-          return {
-            lat: parseFloat(place.latitude) || 0,
-            lng: parseFloat(place.longitude) || 0,
-            title: event.title || 'Unknown Event',
-            description: event.sales_text || 'No description available',
-          };
-        });
-
-        allEvents.push(...eventMarkers);
-        eventsFetched += eventMarkers.length;
-        page += 1;
-
-        if (eventMarkers.length < limit) break; // End loop if no more events
-      }
-
-      setEvents(allEvents);
-    } catch (error) {
-      console.error('Error fetching events:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    fetchEvents(50, 100, 1, setLoading, setEvents);
+  }, []); 
 
   const getRoute = async (start: LatLngExpression, end: LatLngExpression) => {
     setLoading(true);
@@ -178,7 +117,7 @@ function Map() {
 
         setMarkers([[lat, lng]]);
         setToLocation([lat, lng]);
-        fetchAddress(lat, lng, 'to');
+        fetchAddress(lat, lng, 'to', setFromAddress, setToAddress); 
       },
     });
     return null;
@@ -206,9 +145,12 @@ function Map() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <MapCenterUpdater/>
-  
-    
+      <MapCenterUpdater />
+      <FilterEventsByBounds
+        events={events}
+        setFilteredEvents={setFilteredEvents}
+      />
+
       <Marker position={center}>
         <Popup>Your current location</Popup>
       </Marker>
@@ -216,7 +158,7 @@ function Map() {
       <MapClickHandler />
 
       <MarkerClusterGroup>
-        {events.map((event, index) => {
+        {filteredEvents.map((event, index) => {
           const { lat, lng, title, description } = event;
           return (
             <Marker
@@ -226,7 +168,7 @@ function Map() {
                 click: async () => {
                   setMarkers((prev) => [...prev, [lat, lng]]);
                   setToLocation([lat, lng]);
-                  fetchAddress(lat, lng, 'to');
+                  fetchAddress(lat, lng, 'to', setFromAddress, setToAddress); 
                   setLineDrawn(true);
                 },
                 mouseover: (e) => e.target.openPopup(),
@@ -244,7 +186,7 @@ function Map() {
       </MarkerClusterGroup>
 
       {markers.map((position, index) => {
-        const [lat, lng]: [number, number] = position as [number, number]; 
+        const [lat, lng]: [number, number] = position as [number, number];
         return (
           <Marker
             key={index}

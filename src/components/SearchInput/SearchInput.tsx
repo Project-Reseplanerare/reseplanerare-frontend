@@ -2,7 +2,7 @@ import search from '../../assets/search.svg';
 import close from '../../assets/close.svg';
 import { useState } from 'react';
 import { useLocationStore } from '../../store/useLocationStore';
-import { data } from 'react-router-dom';
+//import { data } from 'react-router-dom';
 
 // TODO: jag vi ha coordinaterna från klickat event in i en array som passeras till setToLocation store ../../store/useLocationStore
 
