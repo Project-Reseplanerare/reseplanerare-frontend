@@ -1,4 +1,4 @@
-import { MapContainer, TileLayer, Marker, useMapEvents, Polyline, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
@@ -8,6 +8,9 @@ import MapCenterUpdater from './MapCenterUpdater';
 import { fetchEvents } from '../../utils/api/fetchEvents';
 import FilterEventsByBounds from './FilterEventsByBounds';
 import { fetchAddress } from '../../utils/api/fetchAdress';
+import MapClickHandler from './MapClickHandler';
+import { handleRemoveMarker } from '../../utils/mapUtils/handleRemoveMarker';
+import { getRoute } from '../../utils/api/getRoute';
 
 function Map() {
   const [center, setCenter] = useState<LatLngExpression | null>(null);
@@ -56,48 +59,17 @@ function Map() {
     fetchEvents(50, 100, 1, setLoading, setEvents);
   }, []); 
 
-  const getRoute = async (start: LatLngExpression, end: LatLngExpression) => {
-    setLoading(true);
-    try {
-      const startCoords = Array.isArray(start) ? start : [start.lat, start.lng];
-      const endCoords = Array.isArray(end) ? end : [end.lat, end.lng];
-
-      const startCoord = `${startCoords[1]},${startCoords[0]}`;
-      const endCoord = `${endCoords[1]},${endCoords[0]}`;
-
-      const response = await fetch(
-        `https://router.project-osrm.org/route/v1/driving/${startCoord};${endCoord}?overview=full&geometries=geojson`
-      );
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const data = await response.json();
-
-      if (data.routes && data.routes.length > 0) {
-        const geoJsonCoords = data.routes[0].geometry.coordinates;
-        return geoJsonCoords.map(([lng, lat]: [number, number]) => [lat, lng]);
-      }
-      return [];
-    } catch (error) {
-      console.error('Error fetching route:', error);
-      return [];
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     const updateRoute = async () => {
       if (center && markers.length > 0 && lineDrawn) {
         let routeData: LatLngExpression[] = [];
 
-        const firstSegment = await getRoute(center, markers[0]);
+        const firstSegment =  await getRoute(center, markers[0], setLoading);
         routeData = [...routeData, ...firstSegment];
 
         for (let i = 0; i < markers.length - 1; i++) {
-          const segmentRoute = await getRoute(markers[i], markers[i + 1]);
+          const segmentRoute = await getRoute(center, markers[0], setLoading);
           routeData = [...routeData, ...segmentRoute];
         }
 
@@ -110,33 +82,6 @@ function Map() {
     updateRoute();
   }, [markers, center, lineDrawn]);
 
-  const MapClickHandler = () => {
-    useMapEvents({
-      click(e) {
-        const { lat, lng } = e.latlng;
-
-        setMarkers([[lat, lng]]);
-        setToLocation([lat, lng]);
-        fetchAddress(lat, lng, 'to', setFromAddress, setToAddress); 
-      },
-    });
-    return null;
-  };
-
-  const handleRemoveMarker = (index: number) => {
-    if (!lineDrawn) {
-      setMarkers((prev) => {
-        const newMarkers = prev.filter((_, i) => i !== index);
-        if (newMarkers.length === 0) setToAddress('');
-        return newMarkers;
-      });
-    } else {
-      setLineDrawn(false);
-      setMarkers([]);
-      setToAddress('');
-    }
-  };
-
   if (!center) return <p>Loading map...</p>;
 
   return (
@@ -145,7 +90,10 @@ function Map() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
+
       <MapCenterUpdater />
+      <MapClickHandler />
+
       <FilterEventsByBounds
         events={events}
         setFilteredEvents={setFilteredEvents}
@@ -155,7 +103,6 @@ function Map() {
         <Popup>Your current location</Popup>
       </Marker>
 
-      <MapClickHandler />
 
       <MarkerClusterGroup>
         {filteredEvents.map((event, index) => {
@@ -192,7 +139,7 @@ function Map() {
             key={index}
             position={[lat, lng]}
             eventHandlers={{
-              click: () => handleRemoveMarker(index),
+              click: () => handleRemoveMarker(index, lineDrawn, setMarkers, setToAddress, setLineDrawn),
               mouseover: (e) => e.target.openPopup(),
               mouseout: (e) => e.target.closePopup(),
             }}
