@@ -7,13 +7,13 @@ import { useLocationStore } from '../../store/useLocationStore';
 import MapCenterUpdater from './MapCenterUpdater';
 import { fetchEvents } from '../../utils/api/fetchEvents';
 import FilterEventsByBounds from './FilterEventsByBounds';
-import { fetchAddress } from '../../utils/api/fetchAdress';
 import MapClickHandler from './MapClickHandler';
 import { handleRemoveMarker } from '../../utils/mapUtils/handleRemoveMarker';
 import { getRoute } from '../../utils/api/getRoute';
+import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
+import { fetchAddress } from '../../utils/api/fetchAdress';
 
 function Map() {
-  const [center, setCenter] = useState<LatLngExpression | null>(null);
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [events, setEvents] = useState<any[]>([]);
@@ -30,6 +30,9 @@ function Map() {
     setMarkers,
   } = useLocationStore();
 
+  // Use the custom hook to handle geolocation
+  const center = useGeolocation(setFromLocation, setFromAddress, setToAddress);
+
   useEffect(() => {
     if (!lineDrawn) {
       setMarkers([]);
@@ -37,28 +40,8 @@ function Map() {
   }, [lineDrawn, setMarkers]);
 
   useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          setCenter([latitude, longitude]);
-          setFromLocation([latitude, longitude]);
-          fetchAddress(latitude, longitude, 'from', setFromAddress, setToAddress); 
-        },
-        () => {
-          const fallbackCenter: LatLngExpression = [59.378, 13.499];
-          setCenter(fallbackCenter);
-          setFromLocation(fallbackCenter);
-          fetchAddress(fallbackCenter[0], fallbackCenter[1], 'from', setFromAddress, setToAddress);
-        }
-      );
-    }
-  }, [setFromLocation]);
-
-  useEffect(() => {
     fetchEvents(50, 100, 1, setLoading, setEvents);
   }, []); 
-
 
   useEffect(() => {
     const updateRoute = async () => {
@@ -102,7 +85,6 @@ function Map() {
       <Marker position={center}>
         <Popup>Your current location</Popup>
       </Marker>
-
 
       <MarkerClusterGroup>
         {filteredEvents.map((event, index) => {
