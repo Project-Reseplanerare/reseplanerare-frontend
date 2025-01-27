@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { fetchAddress } from '../../utils/api/fetchAdress';
 import { LatLngExpression } from 'leaflet';
+import { useLocationStore } from '../../store/useLocationStore';
 
-export function useGeolocation(setFromLocation, setFromAddress, setToAddress) {
+export function useGeolocation() {
+  const setFromLocation = useLocationStore((state) => state.setFromLocation);
+  const setFromAddress = useLocationStore((state) => state.setFromAddress);
+  const setToAddress = useLocationStore((state) => state.setToAddress);
+
   const [center, setCenter] = useState<LatLngExpression | null>(null);
 
   useEffect(() => {

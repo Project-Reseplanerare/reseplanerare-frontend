@@ -11,7 +11,6 @@ import MapClickHandler from './MapClickHandler';
 import { handleRemoveMarker } from '../../utils/mapUtils/handleRemoveMarker';
 import { getRoute } from '../../utils/api/getRoute';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
-import { fetchAddress } from '../../utils/api/fetchAdress';
 
 function Map() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
@@ -21,8 +20,8 @@ function Map() {
 
   const {
     setToLocation,
-    setFromLocation,
-    setFromAddress,
+    // setFromLocation,
+    // setFromAddress,
     setToAddress,
     lineDrawn,
     setLineDrawn,
@@ -31,7 +30,7 @@ function Map() {
   } = useLocationStore();
 
   // Use the custom hook to handle geolocation
-  const center = useGeolocation(setFromLocation, setFromAddress, setToAddress);
+  const center = useGeolocation();
 
   useEffect(() => {
     if (!lineDrawn) {
@@ -97,7 +96,7 @@ function Map() {
                 click: async () => {
                   setMarkers((prev) => [...prev, [lat, lng]]);
                   setToLocation([lat, lng]);
-                  fetchAddress(lat, lng, 'to', setFromAddress, setToAddress); 
+                  //fetchAddress(lat, lng, 'to', setFromAddress, setToAddress);  already handled in  hook
                   setLineDrawn(true);
                 },
                 mouseover: (e) => e.target.openPopup(),
