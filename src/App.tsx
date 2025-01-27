@@ -6,11 +6,12 @@ import TravelPlannerWrapper from './components/TravelPlanner.tsx/TravelPlannerWr
 import Map from './components/Map/Map';
 import GeneralInformation from './components/GenaralInformation/GeneralInformation';
 import SearchInput from './components/SearchInput/SearchInput';
+import Footer from './components/Footer';
 
 function App() {
   return (
     <Router>
-      <main className="app-container">
+      <main className="app-container min-h-screen">
         <Header />
         <Routes>
           <Route
@@ -33,6 +34,7 @@ function App() {
             }
           />
         </Routes>
+        <Footer />
       </main>
     </Router>
   );
