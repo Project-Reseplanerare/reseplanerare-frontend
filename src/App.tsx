@@ -8,6 +8,9 @@ import GeneralInformation from './components/GenaralInformation/GeneralInformati
 import SearchInput from './components/SearchInput/SearchInput';
 import Footer from './components/Footer';
 import TravelOptions from './components/TravelOptions/TravelOptions';
+import DatePickerComponent from './components/DatePickerComponent/DatePickerComponent';
+import AttractionList from './components/Dropdown/Attractionlist';
+import TravelStop from './components/TravelStop/TravelStop';
 
 function App() {
   return (
@@ -28,6 +31,9 @@ function App() {
                 <GeneralInformation />
                 <SearchInput />
                 <TravelOptions/>
+                <DatePickerComponent/>
+                <AttractionList/>
+                <TravelStop/>
                 <div className="h-80 border z-10 border-gray-300 rounded-lg overflow-hidden flex flex-grow">
                   <Map />
                 </div>

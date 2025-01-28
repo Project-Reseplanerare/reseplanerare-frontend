@@ -1,48 +1,215 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 
-const DatePickerComponent: React.FC = () => {
-  const [startDate, setStartDate] = useState<string>("2024-01-20");
-  const [endDate, setEndDate] = useState<string>("2024-02-09");
-  const [isRoundTrip, setIsRoundTrip] = useState<boolean>(false);
+import DateIcon from "../../assets/close.svg"; 
 
-  return (
-    <div className="flex flex-col items-start gap-4 font-sans">
-      <label className="text-sm font-bold">Ska du vara iväg en längre period?</label>
+ 
 
-      <div className="flex flex-col gap-2 w-full">
-        <div className="flex items-center gap-2">
-          <span className="material-icons text-gray-500">event</span>
-          <input
-            type="date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
+const DatePickerComponent: React.FC = () => { 
 
-        <div className="flex items-center gap-2">
-          <span className="material-icons text-gray-500">event</span>
-          <input
-            type="date"
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-            disabled={!isRoundTrip}
-          />
-        </div>
-      </div>
+  const [isOpen, setIsOpen] = useState(false); 
 
-      <div className="flex items-center gap-2">
-        <input
-          type="checkbox"
-          checked={isRoundTrip}
-          onChange={() => setIsRoundTrip(!isRoundTrip)}
-          className="form-checkbox h-4 w-4 text-blue-500 border-gray-300 focus:ring-blue-500"
-        />
-        <label className="text-sm">Sök för tur och retur</label>
-      </div>
-    </div>
-  );
-};
+  const [selectedTime, setSelectedTime] = useState(""); // State för tid 
 
-export default DatePickerComponent;
+ 
+
+  const toggleDropdown = () => { 
+
+    setIsOpen(!isOpen); 
+
+  }; 
+
+ 
+
+  // Hämta dagens datum i rätt format (YYYY-MM-DD) 
+
+  const today = new Date().toISOString().split("T")[0]; 
+
+ 
+
+  // Funktion för att hämta och sätta aktuell tid 
+
+  const setCurrentTime = () => { 
+
+    const now = new Date(); 
+
+    const formattedTime = now.toTimeString().split(" ")[0].slice(0, 5); // HH:MM-format 
+
+    setSelectedTime(formattedTime); 
+
+  }; 
+
+ 
+
+  return ( 
+
+    <div className="flex flex-col bg-white border border-gray-300 rounded-lg p-4 max-w-screen-lg w-full mx-auto shadow-md"> 
+
+      <div 
+
+        className="flex items-center justify-between w-full cursor-pointer" 
+
+        onClick={toggleDropdown} 
+
+      > 
+
+        <div className="flex items-center gap-2"> 
+
+          {/* Almanacka-ikonen */} 
+
+          <img src={DateIcon} alt="Date Icon" className="w-6 h-6" /> 
+
+          <h2 
+
+            className="text-xl font-bold" 
+
+            style={{ fontFamily: "Noto Serif, serif" }} 
+
+          > 
+
+            När planerar du att resa? 
+
+          </h2> 
+
+        </div> 
+
+        <div className="flex items-center space-x-2"> 
+
+          <div 
+
+            className={`transform transition-transform ${ 
+
+              isOpen ? "rotate-180" : "rotate-0" 
+
+            }`} 
+
+          > 
+
+            <svg 
+
+              xmlns="http://www.w3.org/2000/svg" 
+
+              fill="none" 
+
+              viewBox="0 0 24 24" 
+
+              stroke="currentColor" 
+
+              className="w-6 h-6 text-gray-600" 
+
+            > 
+
+              <path 
+
+                strokeLinecap="round" 
+
+                strokeLinejoin="round" 
+
+                strokeWidth={2} 
+
+                d="M19 9l-7 7-7-7" 
+
+              /> 
+
+            </svg> 
+
+          </div> 
+
+          <span className="text-sm cursor-pointer text-black"></span> 
+
+        </div> 
+
+      </div> 
+
+ 
+
+      {isOpen && ( 
+
+        <div className="mt-4 flex flex-col items-center gap-6"> 
+
+           
+
+          {/* Gemensam div för almanacka och tid-väljare */} 
+
+          <div className="flex flex-col items-center gap-4 w-full max-w-md"> 
+
+ 
+
+            {/* Almanacka */} 
+
+            <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 w-full text-center"> 
+
+              <h3 className="text-lg font-semibold mb-2">Välj datum</h3> 
+
+              <input 
+
+                type="date" 
+
+                className="w-full p-2 border border-gray-400 rounded" 
+
+                min={today} /> 
+
+            </div> 
+
+ 
+
+            {/* Tid-väljare */} 
+
+            <div className="bg-gray-100 border border-gray-300 rounded-lg p-4 w-full text-center"> 
+
+              <h3 className="text-lg font-semibold mb-2">Välj tid</h3> 
+
+ 
+
+              {/* Knapp för att välja aktuell tid */} 
+
+              <button 
+
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600" 
+
+                onClick={setCurrentTime}> 
+
+                Välj vad klockan är nu 
+
+              </button> 
+
+              <div className="mt-4"> 
+
+                <label htmlFor="time" className="block mb-2"> 
+
+                  Eller välj en tid själv: 
+
+                </label> 
+
+                <input 
+
+                  type="time" 
+
+                  id="time" 
+
+                  className="w-full p-2 border border-gray-400 rounded" 
+
+                  value={selectedTime} 
+
+                  onChange={(e) => setSelectedTime(e.target.value)}  
+
+                /> 
+
+              </div> 
+
+            </div> 
+
+          </div> 
+
+        </div> 
+
+      )} 
+
+    </div> 
+
+  ); 
+
+}; 
+
+ 
+
+export default DatePickerComponent; 
