@@ -1,30 +1,31 @@
-import { useState } from 'react';
+import { useTravelOptionsStore } from '../../../store/useTravelOptionsStore';
 import { FaTrain, FaBus, FaCar, FaChevronDown } from 'react-icons/fa';
+import { useState } from 'react';
 
-function TravelOptions() {
+const TravelOptions: React.FC = () => {
+  const { selectedOption, setSelectedOption } = useTravelOptionsStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [activeIndex, setActiveIndex] = useState<string | null>('car'); // Default to 'car'
 
   const travelOptions = [
     {
-      id: 'train',
-      label: 'Tåg',
-      icon: <FaTrain className="text-3xl text-slate-700" />,
+      id: 'Bil',
+      label: 'Bil',
+      icon: <FaCar className="text-3xl text-slate-700" />,
     },
     {
-      id: 'bus',
+      id: 'Buss',
       label: 'Buss',
       icon: <FaBus className="text-3xl text-slate-700" />,
     },
     {
-      id: 'car',
-      label: 'Bil',
-      icon: <FaCar className="text-3xl text-slate-700" />,
+      id: 'Tåg',
+      label: 'Tåg',
+      icon: <FaTrain className="text-3xl text-slate-700" />,
     },
   ];
 
-  const handleItemClick = (id: string) => {
-    setActiveIndex(id);
+  const handleOptionClick = (id: string) => {
+    setSelectedOption(id);
   };
 
   return (
@@ -52,11 +53,11 @@ function TravelOptions() {
             <div
               key={option.id}
               className={`flex flex-col items-center justify-center gap-2 p-4 rounded-md cursor-pointer transition ${
-                activeIndex === option.id
+                selectedOption === option.id
                   ? 'bg-blue-100 text-blue-600'
                   : 'bg-slate-50 text-slate-700'
               }`}
-              onClick={() => handleItemClick(option.id)}
+              onClick={() => handleOptionClick(option.id)}
             >
               {option.icon}
               <span className="text-sm">{option.label}</span>
@@ -66,6 +67,6 @@ function TravelOptions() {
       )}
     </div>
   );
-}
+};
 
 export default TravelOptions;
