@@ -1,6 +1,3 @@
-// FRÅN OCH TILL!!
-
-import { useState } from 'react';
 import { useLocationStore } from '../../store/useLocationStore';
 
 interface TripInputProps {
@@ -8,9 +5,8 @@ interface TripInputProps {
 }
 
 const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
-  const [error, setError] = useState<string | null>(null);
-
-  const { fromAddress, toAddress, setFromAddress, setToAddress } = useLocationStore();
+  const { fromAddress, toAddress, setFromAddress, setToAddress } =
+    useLocationStore();
 
   const swapAddresses = () => {
     setFromAddress(toAddress);
@@ -19,38 +15,18 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
 
   const isSwapDisabled = !fromAddress || !toAddress;
 
-
-  const parseCoordinates = (address: string) => {
-    if (!address) return null;
-    
-    const coords = address.split(',').map(str => str.trim());
-    if (coords.length === 2 && !isNaN(Number(coords[0])) && !isNaN(Number(coords[1]))) {
-      return coords.map(coord => Number(coord)) as [number, number];
-    }
-
-    return null;
-  };
-
   const handleToAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setToAddress(value);
     onInputChange('to', value);
-
- 
-    const parsedCoords = parseCoordinates(value);
-    if (parsedCoords) {
-      setError(null);  
-    } else {
-      setError('Invalid coordinates format. Please enter latitude,longitude.');
-    }
   };
 
   return (
     <>
       <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
         {/* From Address Input */}
-        <div className="flex items-center p-3 border border-gray-300 rounded-md bg-gray-50">
-          <div className="flex items-center justify-center w-8 h-8 bg-teal-500 text-white rounded-md font-bold">
+        <div className="flex items-center p-3 border border-slate-300 rounded-md bg-slate-50">
+          <div className="flex items-center justify-center w-8 h-8 bg-slate-500 text-white rounded-md font-bold">
             A
           </div>
           <input
@@ -60,16 +36,16 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
               setFromAddress(e.target.value);
               onInputChange('from', e.target.value);
             }}
-            className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
+            className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
           />
         </div>
 
         {/* Swap Button */}
         <button
-          className={`flex items-center justify-center rounded-full h-12 w-12 border shadow-md focus:outline-none hover:bg-gray-100 ${
+          className={`flex items-center justify-center rounded-full h-12 w-12 border focus:outline-none hover:bg-slate-100 ${
             isSwapDisabled
-              ? 'bg-gray-300 text-gray-500 border-gray-300 cursor-not-allowed'
-              : 'bg-white text-gray-500 border-gray-300 hover:bg-gray-100'
+              ? 'bg-slate-300 text-slate-500 border-slate-300 cursor-not-allowed'
+              : 'bg-white text-slate-500 border-slate-300 hover:bg-slate-100'
           }`}
           onClick={swapAddresses}
           aria-label="Swap addresses"
@@ -93,20 +69,18 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
         </button>
 
         {/* To Address Input */}
-        <div className="flex items-center p-3 border border-gray-300 rounded-md bg-gray-50">
-          <div className="flex items-center justify-center w-8 h-8 bg-teal-500 text-white rounded-md font-bold">
+        <div className="flex items-center p-3 border border-slate-300 rounded-md bg-slate-50">
+          <div className="flex items-center justify-center w-8 h-8 bg-slate-500 text-white rounded-md font-bold">
             B
           </div>
           <input
             type="text"
             value={toAddress}
             onChange={handleToAddressChange}
-            className="ml-3 flex-grow text-gray-700 bg-transparent border-none outline-none"
+            className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
           />
         </div>
       </div>
-
-      {/* {error && <p className="text-red-500 mt-4">{error}</p>} */}
     </>
   );
 };

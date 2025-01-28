@@ -6,38 +6,73 @@ import TravelPlannerWrapper from './components/TravelPlanner.tsx/TravelPlannerWr
 import Map from './components/Map/Map';
 import GeneralInformation from './components/GenaralInformation/GeneralInformation';
 import SearchInput from './components/SearchInput/SearchInput';
-import Footer from './components/Footer';
-import TravelOptions from './components/TravelOptions/TravelOptions';
-import DatePickerComponent from './components/DatePickerComponent/DatePickerComponent';
-import AttractionList from './components/Dropdown/Attractionlist';
-import TravelStop from './components/TravelStop/TravelStop';
+import Footer from './components/Footer/Footer';
+import TravelOptions from './components/Dropdown/TravelOptions/TravelOptions';
+import DatePickerComponent from './components/Dropdown/DatePickerComponent/DatePickerComponent';
+import AttractionList from './components/Dropdown/AttractionList/AttractionList';
+import TravelStop from './components/Dropdown/TravelStop/TravelStop';
 
 function App() {
   return (
     <Router>
-      <main className="app-container min-h-screen">
+      <main className="app-container min-h-screen grid grid-rows-layout gap-4">
         <Header />
         <Routes>
           <Route
             path="/"
             element={
-              <section className="content-wrapper container px-5">
-                <BreadCrumbs
-                  crumbs={[
-                    { label: 'Visit Värmland', link: '/' },
-                    { label: 'Reseplaneraren', link: '/reseplaneraren' },
-                  ]}
-                />
-                <GeneralInformation />
-                <SearchInput />
-                <TravelOptions/>
-                <DatePickerComponent/>
-                <AttractionList/>
-                <TravelStop/>
-                <div className="h-80 border z-10 border-gray-300 rounded-lg overflow-hidden flex flex-grow">
-                  <Map />
+              <section className="px-5 grid grid-cols-1 ">
+                {/* Breadcrumbs */}
+                <div>
+                  <BreadCrumbs
+                    crumbs={[
+                      { label: 'Visit Värmland', link: '/' },
+                      { label: 'Reseplaneraren', link: '/reseplaneraren' },
+                    ]}
+                  />
                 </div>
-                <TravelPlannerWrapper />
+
+                {/* General Information */}
+                <div>
+                  <GeneralInformation />
+                </div>
+
+                {/* Search Input */}
+                <div>
+                  <SearchInput />
+                </div>
+
+                {/* Map Component */}
+                <div className="grid grid-cols-1 h-80">
+                  <div className="border z-10 border-gray-300 rounded-lg overflow-hidden flex flex-grow">
+                    <Map />
+                  </div>
+                </div>
+
+                {/* Travel Planner Wrapper */}
+                <div>
+                  <TravelPlannerWrapper />
+                </div>
+
+                {/* Travel Options */}
+                <div>
+                  <TravelOptions />
+                </div>
+
+                {/* Date Picker */}
+                <div>
+                  <DatePickerComponent />
+                </div>
+
+                {/* Attraction List */}
+                <div>
+                  <AttractionList />
+                </div>
+
+                {/* Travel Stop */}
+                <div>
+                  <TravelStop />
+                </div>
               </section>
             }
           />

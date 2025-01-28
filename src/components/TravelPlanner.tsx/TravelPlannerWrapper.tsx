@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react';
 import TripInput from './TripInput';
 import TriggerActionBtn from './TriggerActionBtn';
 
-
 function TravelPlannerWrapper() {
   const [from, setFrom] = useState('');
   const [to, setTo] = useState('');
@@ -11,7 +10,7 @@ function TravelPlannerWrapper() {
     (inputType: 'from' | 'to', value: string) => {
       if (inputType === 'from') {
         setFrom(value);
-      } else {
+      } else if (inputType === 'to') {
         setTo(value);
       }
     },
@@ -19,13 +18,17 @@ function TravelPlannerWrapper() {
   );
 
   return (
-    <section className="p-6 border border-gray-300 rounded-lg bg-gray-100 flex flex-col gap-5 flex-grow">
-      <div className="flex flex-col">
+    <section className="p-8 bg-slate-100 border border-slate-300 rounded-md grid gap-6">
+      {/* Input Section */}
+      <div className="grid gap-4">
+        <h2 className="text-2xl font-bold text-slate-700">Planera din resa</h2>
         <TripInput onInputChange={handleInputChange} />
       </div>
-    
-      <TriggerActionBtn />
-     
+
+      {/* Button Section */}
+      <div className="grid">
+        <TriggerActionBtn from={from} to={to} />
+      </div>
     </section>
   );
 }
