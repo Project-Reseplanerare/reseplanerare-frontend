@@ -1,11 +1,12 @@
-import logo from "../../assets/logotyp-visitvarmland.svg";
+import { Link } from 'react-router-dom';
+import logo from '../../assets/logotyp-visitvarmland.svg';
 
-function Header() {
-  return (
-    <header className=" w-full bg-gray-100 border-b flex items-center justify-start h-20">
-    <img src={logo} alt='logo-Visit' className="h-10"/>
-    </header>
-  );
-}
+const Header = () => (
+  <header className="w-full bg-gray-100 border-b grid items-center">
+    <Link to="/" className="grid place-items-center">
+      <img src={logo} alt="Visit Värmland Logo" className="h-12" />
+    </Link>
+  </header>
+);
 
 export default Header;
