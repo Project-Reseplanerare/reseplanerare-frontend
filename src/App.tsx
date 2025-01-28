@@ -7,6 +7,7 @@ import Map from './components/Map/Map';
 import GeneralInformation from './components/GenaralInformation/GeneralInformation';
 import SearchInput from './components/SearchInput/SearchInput';
 import Footer from './components/Footer';
+import TravelOptions from './components/TravelOptions/TravelOptions';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
                 />
                 <GeneralInformation />
                 <SearchInput />
+                <TravelOptions/>
                 <div className="h-80 border z-10 border-gray-300 rounded-lg overflow-hidden flex flex-grow">
                   <Map />
                 </div>

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 
 const TravelOptions: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState<string>('Buss');
+  const { selectedOption, setSelectedOption } = useTravelOptionsStore();
 
-  const options = ['Buss', 'Tåg'];
+  const options = [ 'Bil', 'Buss', 'Tåg'];
 
   return (
     <div className="flex flex-col items-start gap-4 font-sans">
