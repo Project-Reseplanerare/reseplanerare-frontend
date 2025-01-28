@@ -80,8 +80,12 @@ const TriggerActionBtn = () => {
     <button
       onClick={handleClick}
       className={`px-4 py-2 rounded-md text-white  
-${lineDrawn ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-500 hover:bg-blue-600'} 
-${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+    ${
+      lineDrawn
+        ? 'bg-slate-500 hover:bg-slate-600'
+        : 'bg-slate-700 hover:bg-slate-800'
+    } 
+    ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       disabled={isDisabled}
     >
       {lineDrawn ? 'Sluta sök' : 'Sök'}
