@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
 import { useState, useEffect } from 'react';
 import { useLocationStore } from '../../store/useLocationStore';
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import MapCenterUpdater from './MapCenterUpdater';
 import { fetchEvents } from '../../utils/api/fetchEvents';
 import FilterEventsByBounds from './FilterEventsByBounds';
@@ -12,12 +13,14 @@ import { handleRemoveMarker } from '../../utils/mapUtils/handleRemoveMarker';
 import { getRoute } from '../../utils/api/getRoute';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 import L from 'leaflet';
+import { fetchNearbyBusStops, fetchNearbyTrains } from '../../utils/api/fetchNearbyStops';
 
 function Map() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [events, setEvents] = useState<any[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
+  const [stops, setStops] = useState<any[]>([]);
 
   const {
     setToLocation,
@@ -30,6 +33,8 @@ function Map() {
     setMarkers,
   } = useLocationStore();
 
+  const { selectedOption } = useTravelOptionsStore();
+
   // Use the custom hook to handle geolocation
   const center = useGeolocation();
 
@@ -39,9 +44,6 @@ function Map() {
     }
   }, [lineDrawn, setMarkers]);
 
-  useEffect(() => {
-    fetchEvents(50, 100, 1, setLoading, setEvents);
-  }, []); 
 
   useEffect(() => {
     const updateRoute = async () => {
@@ -88,6 +90,34 @@ function Map() {
   }, [route]);
 
 
+  useEffect(() => {
+ 
+    if (selectedOption === 'Bil') {
+      fetchEvents(50, 100, 1, setLoading, setEvents);
+    }
+  }, [selectedOption]);
+
+
+  useEffect(() => {
+    if (selectedOption === "Buss") {
+      if (Array.isArray(center) && center.length === 2) {
+        fetchNearbyBusStops(center as [number, number], setLoading, setStops); 
+      }
+    } else {
+      setStops([]); 
+    }
+  }, [center, selectedOption]);
+
+  useEffect(() => {
+    if (selectedOption === "Tåg") {
+      if (Array.isArray(center) && center.length === 2) {
+        fetchNearbyTrains(center as [number, number], setLoading, setStops); 
+      }
+    } else {
+      setStops([]); 
+    }
+  }, [center, selectedOption]);
+
   if (!center) return <p>Loading map...</p>;
 
   return (
@@ -109,34 +139,82 @@ function Map() {
         <Popup>Your current location</Popup>
       </Marker>
 
+       {/* Bus markers */}
       <MarkerClusterGroup>
-        {filteredEvents.map((event, index) => {
-          const { lat, lng, title, description } = event;
-          return (
+        {selectedOption === "Buss" &&
+          stops.map((stop, index) => (
             <Marker
               key={index}
-              position={[lat, lng]}
-              eventHandlers={{
-                click: async () => {
-                  setMarkers((prev) => [...prev, [lat, lng]]);
-                  setToLocation([lat, lng]);
-                  //fetchAddress(lat, lng, 'to', setFromAddress, setToAddress);  already handled in  hook
-                  setLineDrawn(true);
-                },
-                mouseover: (e) => e.target.openPopup(),
-                mouseout: (e) => e.target.closePopup(),
-              }}
+              position={[stop.lat, stop.lon] as LatLngExpression}
+              icon={L.icon({
+                iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+              })}
             >
               <Popup>
-                <strong>{title}</strong>
-                <br />
-                {description}
+                <strong>{stop.name}</strong>
+                <p>{stop.lat}, {stop.lon}</p>
+                <p>Distance: {stop.dist} meters</p>
               </Popup>
             </Marker>
-          );
-        })}
+          ))}
       </MarkerClusterGroup>
 
+
+      {/* Tåg markers */}
+      <MarkerClusterGroup>
+        {selectedOption === "Tåg" &&
+          stops.map((stop, index) => (
+            <Marker
+              key={index}
+              position={[stop.lat, stop.lon] as LatLngExpression}
+              icon={L.icon({
+                iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+              })}
+            >
+              <Popup>
+                <strong>{stop.name}</strong>
+                <p>{stop.lat}, {stop.lon}</p>
+                <p>Distance: {stop.dist} meters</p>
+              </Popup>
+            </Marker>
+          ))}
+      </MarkerClusterGroup>
+
+       {/* Bil no api markers */}
+      {selectedOption === "Bil" && 
+        <MarkerClusterGroup>
+          {filteredEvents.map((event, index) => {
+            const { lat, lng, title, description } = event;
+            return (
+              <Marker
+                key={index}
+                position={[lat, lng]}
+                eventHandlers={{
+                  click: async () => {
+                    setMarkers((prev) => [...prev, [lat, lng]]);
+                    setToLocation([lat, lng]);
+                    setLineDrawn(true);
+                  },
+                  mouseover: (e) => e.target.openPopup(),
+                  mouseout: (e) => e.target.closePopup(),
+                }}
+              >
+                <Popup>
+                  <strong>{title}</strong>
+                  <br />
+                  {description}
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MarkerClusterGroup>
+      }
+
+      {/* Marker you add by clicking */}
       {markers.map((position, index) => {
         const [lat, lng]: [number, number] = position as [number, number];
         return (
