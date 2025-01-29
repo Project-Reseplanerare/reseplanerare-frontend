@@ -1,12 +1,10 @@
 import { useLocationStore } from '../../store/useLocationStore';
 
 const TriggerActionBtn = () => {
-  const { lineDrawn, setLineDrawn, setMarkers, toAddress } = useLocationStore();
+  const { lineDrawn, setLineDrawn, setMarkers, toAddress, setToAddress } = useLocationStore();
 
-  // Function to parse coordinates from the string (latitude,longitude format)
   const parseCoordinates = (address: string) => {
     if (!address) return null;
-
     const coords = address.split(',').map((str) => str.trim());
     if (
       coords.length === 2 &&
@@ -15,11 +13,9 @@ const TriggerActionBtn = () => {
     ) {
       return coords.map((coord) => Number(coord)) as [number, number];
     }
-
     return null;
   };
 
-  // Geocoding function to get coordinates from an address
   const geocodeAddress = async (address: string) => {
     try {
       const response = await fetch(
@@ -62,6 +58,7 @@ const TriggerActionBtn = () => {
     if (lineDrawn) {
       setLineDrawn(false);
       setMarkers([]);
+      setToAddress('')
       console.log('Line and markers removed.');
     } else {
       setLineDrawn(true);
@@ -74,7 +71,7 @@ const TriggerActionBtn = () => {
     }
   };
 
-  const isDisabled = !toAddress;
+  const isDisabled = !toAddress && !lineDrawn;
 
   return (
     <button

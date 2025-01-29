@@ -14,6 +14,7 @@ import { getRoute } from '../../utils/api/getRoute';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 import L from 'leaflet';
 import { fetchNearbyBusStops, fetchNearbyTrains } from '../../utils/api/fetchNearbyStops';
+import { fetchAddress } from '../../utils/api/fetchAdress';
 
 function Map() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
@@ -118,6 +119,18 @@ function Map() {
     }
   }, [center, selectedOption]);
 
+  const handleEventMarkerClick = async (lat: number, lng: number) => {
+    setToLocation([lat, lng]);
+    await fetchAddress(lat, lng, 'to', setToAddress, setToAddress);
+
+    // Check if there's a user marker, then create the route
+    if (markers.length > 0) {
+      const userMarker = markers[markers.length - 1]; // Last marker placed by user
+      setRoute([userMarker, [lat, lng]]);
+      setLineDrawn(true);
+    }
+  };
+
   if (!center) return <p>Loading map...</p>;
 
   return (
@@ -185,8 +198,8 @@ function Map() {
       </MarkerClusterGroup>
 
        {/* Bil no api markers */}
-      {selectedOption === "Bil" && 
-        <MarkerClusterGroup>
+       {selectedOption === "Bil" &&
+         <MarkerClusterGroup>
           {filteredEvents.map((event, index) => {
             const { lat, lng, title, description } = event;
             return (
@@ -194,11 +207,7 @@ function Map() {
                 key={index}
                 position={[lat, lng]}
                 eventHandlers={{
-                  click: async () => {
-                    setMarkers((prev) => [...prev, [lat, lng]]);
-                    setToLocation([lat, lng]);
-                    setLineDrawn(true);
-                  },
+                  click: () => handleEventMarkerClick(lat, lng),
                   mouseover: (e) => e.target.openPopup(),
                   mouseout: (e) => e.target.closePopup(),
                 }}
