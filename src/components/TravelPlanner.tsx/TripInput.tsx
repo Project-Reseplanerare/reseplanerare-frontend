@@ -21,6 +21,12 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     onInputChange('to', value);
   };
 
+  const handleFromAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setFromAddress(value);
+    onInputChange('from', value);
+  };
+
   return (
     <>
       <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
@@ -32,10 +38,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           <input
             type="text"
             value={fromAddress}
-            onChange={(e) => {
-              setFromAddress(e.target.value);
-              onInputChange('from', e.target.value);
-            }}
+            onChange={handleFromAddressChange}
             className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
           />
         </div>

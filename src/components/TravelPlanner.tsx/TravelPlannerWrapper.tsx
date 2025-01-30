@@ -1,21 +1,17 @@
-import { useState, useCallback } from 'react';
+import { useLocationStore } from '../../store/useLocationStore';
 import TripInput from './TripInput';
 import TriggerActionBtn from './TriggerActionBtn';
 
 function TravelPlannerWrapper() {
-  const [from, setFrom] = useState('');
-  const [to, setTo] = useState('');
+  const { setFromAddress, setToAddress } = useLocationStore();
 
-  const handleInputChange = useCallback(
-    (inputType: 'from' | 'to', value: string) => {
-      if (inputType === 'from') {
-        setFrom(value);
-      } else if (inputType === 'to') {
-        setTo(value);
-      }
-    },
-    []
-  );
+  const handleInputChange = (inputType: 'from' | 'to', value: string) => {
+    if (inputType === 'from') {
+      setFromAddress(value);
+    } else {
+      setToAddress(value);
+    }
+  };
 
   return (
     <section className="p-8 bg-slate-100 border border-slate-300 rounded-md grid gap-6">
@@ -27,7 +23,7 @@ function TravelPlannerWrapper() {
 
       {/* Button Section */}
       <div className="grid">
-        <TriggerActionBtn from={from} to={to} />
+        <TriggerActionBtn />
       </div>
     </section>
   );
