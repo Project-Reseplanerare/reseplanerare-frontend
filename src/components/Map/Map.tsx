@@ -1,4 +1,10 @@
-import { MapContainer, TileLayer, Marker, Polyline, Popup } from 'react-leaflet';
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Polyline,
+  Popup,
+} from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
@@ -13,8 +19,14 @@ import { handleRemoveMarker } from '../../utils/mapUtils/handleRemoveMarker';
 import { getRoute } from '../../utils/api/getRoute';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 import L from 'leaflet';
-import { fetchNearbyBusStops, fetchNearbyTrains } from '../../utils/api/fetchNearbyStops';
+import {
+  fetchNearbyBusStops,
+  fetchNearbyTrains,
+} from '../../utils/api/fetchNearbyStops';
 import { fetchAddress } from '../../utils/api/fetchAdress';
+import busIcon from './../../assets/bus-solid.svg';
+import trainIcon from './../../assets/train-solid.svg';
+import carIcon from './../../assets/car-solid.svg';
 
 function Map() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
@@ -45,13 +57,12 @@ function Map() {
     }
   }, [lineDrawn, setMarkers]);
 
-
   useEffect(() => {
     const updateRoute = async () => {
       if (center && markers.length > 0 && lineDrawn) {
         let routeData: LatLngExpression[] = [];
 
-        const firstSegment =  await getRoute(center, markers[0], setLoading);
+        const firstSegment = await getRoute(center, markers[0], setLoading);
         routeData = [...routeData, ...firstSegment];
 
         for (let i = 0; i < markers.length - 1; i++) {
@@ -68,54 +79,49 @@ function Map() {
     updateRoute();
   }, [markers, center, lineDrawn]);
 
-
   const calculatePolylineDistance = (route: LatLngExpression[]): number => {
     let totalDistance = 0;
 
     for (let i = 0; i < route.length - 1; i++) {
       const start = L.latLng(route[i]);
       const end = L.latLng(route[i + 1]);
-      
+
       totalDistance += start.distanceTo(end);
     }
 
-
-    return totalDistance / 1000; 
+    return totalDistance / 1000;
   };
 
   useEffect(() => {
     if (route.length > 0) {
       const polylineDistance = calculatePolylineDistance(route);
-      console.log("Polyline distance:", polylineDistance, "km");
+      console.log('Polyline distance:', polylineDistance, 'km');
     }
   }, [route]);
 
-
   useEffect(() => {
- 
     if (selectedOption === 'Bil') {
       fetchEvents(50, 100, 1, setLoading, setEvents);
     }
   }, [selectedOption]);
 
-
   useEffect(() => {
-    if (selectedOption === "Buss") {
+    if (selectedOption === 'Buss') {
       if (Array.isArray(center) && center.length === 2) {
-        fetchNearbyBusStops(center as [number, number], setLoading, setStops); 
+        fetchNearbyBusStops(center as [number, number], setLoading, setStops);
       }
     } else {
-      setStops([]); 
+      setStops([]);
     }
   }, [center, selectedOption]);
 
   useEffect(() => {
-    if (selectedOption === "Tåg") {
+    if (selectedOption === 'Tåg') {
       if (Array.isArray(center) && center.length === 2) {
-        fetchNearbyTrains(center as [number, number], setLoading, setStops); 
+        fetchNearbyTrains(center as [number, number], setLoading, setStops);
       }
     } else {
-      setStops([]); 
+      setStops([]);
     }
   }, [center, selectedOption]);
 
@@ -152,54 +158,88 @@ function Map() {
         <Popup>Your current location</Popup>
       </Marker>
 
-       {/* Bus markers */}
+      {/* Car markers */}
+      {selectedOption === 'Bil' && (
+        <MarkerClusterGroup>
+          {filteredEvents.map((event, index) => {
+            const { lat, lng, title, description } = event;
+            return (
+              <Marker
+                key={index}
+                position={[lat, lng]}
+                icon={L.icon({
+                  iconUrl: carIcon,
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                })}
+                eventHandlers={{
+                  click: () => handleEventMarkerClick(lat, lng),
+                  mouseover: (e) => e.target.openPopup(),
+                  mouseout: (e) => e.target.closePopup(),
+                }}
+              >
+                <Popup>
+                  <strong>{title}</strong>
+                  <br />
+                  {description}
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MarkerClusterGroup>
+      )}
+
+      {/* Bus markers */}
       <MarkerClusterGroup>
-        {selectedOption === "Buss" &&
+        {selectedOption === 'Buss' &&
           stops.map((stop, index) => (
             <Marker
               key={index}
               position={[stop.lat, stop.lon] as LatLngExpression}
               icon={L.icon({
-                iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+                iconUrl: busIcon,
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
               })}
             >
               <Popup>
                 <strong>{stop.name}</strong>
-                <p>{stop.lat}, {stop.lon}</p>
+                <p>
+                  {stop.lat}, {stop.lon}
+                </p>
                 <p>Distance: {stop.dist} meters</p>
               </Popup>
             </Marker>
           ))}
       </MarkerClusterGroup>
-
 
       {/* Tåg markers */}
       <MarkerClusterGroup>
-        {selectedOption === "Tåg" &&
+        {selectedOption === 'Tåg' &&
           stops.map((stop, index) => (
             <Marker
               key={index}
               position={[stop.lat, stop.lon] as LatLngExpression}
               icon={L.icon({
-                iconUrl: "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png",
+                iconUrl: trainIcon,
                 iconSize: [25, 41],
                 iconAnchor: [12, 41],
               })}
             >
               <Popup>
                 <strong>{stop.name}</strong>
-                <p>{stop.lat}, {stop.lon}</p>
+                <p>
+                  {stop.lat}, {stop.lon}
+                </p>
                 <p>Distance: {stop.dist} meters</p>
               </Popup>
             </Marker>
           ))}
       </MarkerClusterGroup>
 
-       {/* Bil no api markers */}
-       {selectedOption === "Bil" &&
-         <MarkerClusterGroup>
+      {/* Bil no api markers */}
+      {selectedOption === 'Bil' && (
+        <MarkerClusterGroup>
           {filteredEvents.map((event, index) => {
             const { lat, lng, title, description } = event;
             return (
@@ -221,7 +261,7 @@ function Map() {
             );
           })}
         </MarkerClusterGroup>
-      }
+      )}
 
       {/* Marker you add by clicking */}
       {markers.map((position, index) => {
@@ -231,7 +271,14 @@ function Map() {
             key={index}
             position={[lat, lng]}
             eventHandlers={{
-              click: () => handleRemoveMarker(index, lineDrawn, setMarkers, setToAddress, setLineDrawn),
+              click: () =>
+                handleRemoveMarker(
+                  index,
+                  lineDrawn,
+                  setMarkers,
+                  setToAddress,
+                  setLineDrawn
+                ),
               mouseover: (e) => e.target.openPopup(),
               mouseout: (e) => e.target.closePopup(),
             }}
