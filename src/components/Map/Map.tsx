@@ -60,16 +60,15 @@ function Map() {
   useEffect(() => {
     const updateRoute = async () => {
       if (center && markers.length > 0 && lineDrawn) {
-        let routeData: LatLngExpression[] = [];
-
         const firstSegment = await getRoute(center, markers[0], setLoading);
-        routeData = [...routeData, ...firstSegment];
 
-        for (let i = 0; i < markers.length - 1; i++) {
-          const segmentRoute = await getRoute(center, markers[0], setLoading);
-          routeData = [...routeData, ...segmentRoute];
-        }
+        const routes = await Promise.all(
+          markers
+            .slice(0, -1)
+            .map((marker) => getRoute(center, marker, setLoading))
+        );
 
+        const routeData = [...firstSegment, ...routes.flat()];
         setRoute(routeData);
       } else {
         setRoute([]);
