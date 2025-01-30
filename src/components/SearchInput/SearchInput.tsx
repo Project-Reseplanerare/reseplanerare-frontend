@@ -43,13 +43,17 @@ function SearchInput() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setQuery(value);
-    fetchSuggestions(value);
+
+    setQuery((prev) => (prev !== value ? value : prev));
+
+    if (value.trim()) {
+      fetchSuggestions(value);
+    }
   };
 
   const clearInput = () => {
-    setQuery('');
-    setSuggestions([]);
+    setQuery((prev) => (prev ? '' : prev));
+    setSuggestions((prev) => (prev.length ? [] : prev));
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
@@ -82,43 +86,45 @@ function SearchInput() {
   };
 
   return (
-    <div className="w-full grid gap-4 bg-white border border-gray-300 p-4 mt-6 rounded-md text-center">
+    <div className="w-full grid gap-4 bg-white text-gray-900 border border-gray-300 p-6 mt-6 rounded-md  text-center">
       {/* Intro Text */}
       <div className="grid gap-1">
-        <p className="text-sm text-gray-700 font-normal">
+        <p className="text-sm text-gray-600 font-normal">
           Vet du vad du vill upptäcka, men inte var det finns?
         </p>
-        <p className="text-sm text-gray-700 font-normal">
+        <p className="text-sm text-gray-600 font-normal">
           Sök här och hitta det snabbt!
         </p>
       </div>
 
       {/* Input Section */}
-      <div className="relative flex items-center justify-center w-full max-w-md mx-auto border border-cyan-600 rounded-md">
-        <div className="flex items-center justify-center px-3">
-          <FaSearch className="w-5 h-5 text-gray-500" />
+      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full max-w-md mx-auto border border-gray-300 rounded-md bg-gray-50">
+        <div className="px-3 text-gray-500">
+          <FaSearch className="w-5 h-5" />
         </div>
         <input
           type="text"
           value={query}
           onChange={handleInputChange}
           placeholder="Ange plats eller stad"
-          className="flex-1 h-10 text-sm font-normal text-black placeholder-gray-500 px-3 focus:ring-1 focus:ring-cyan-700 focus:outline-none"
+          className="h-10 w-full text-sm font-normal text-gray-900 placeholder-gray-400 px-3 bg-gray-50 focus:ring-1 focus:ring-gray-500 focus:outline-none"
         />
-        <button
-          onClick={clearInput}
-          className="flex items-center justify-center px-3"
-        >
-          <FaTimes className="w-4 h-4 text-gray-500" />
-        </button>
+        {query && (
+          <button
+            onClick={clearInput}
+            className="px-3 text-gray-500 hover:text-gray-700 transition"
+          >
+            <FaTimes className="w-4 h-4" />
+          </button>
+        )}
 
         {/* Dropdown Suggestions */}
         {suggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50">
+          <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
             {suggestions.map((title, index) => (
               <li
                 key={index}
-                className="px-4 py-2 text-sm text-gray-700 hover:bg-cyan-100 cursor-pointer"
+                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 cursor-pointer transition"
                 onClick={() => {
                   setQuery(title);
                   setSuggestions([]);
