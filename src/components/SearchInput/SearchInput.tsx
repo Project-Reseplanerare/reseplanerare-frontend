@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 import { useLocationStore } from '../../store/useLocationStore';
+import { fetchAddress } from '../../utils/api/fetchAdress';
 
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
@@ -14,7 +15,7 @@ function SearchInput() {
   const [query, setQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const { setTempCenter } = useLocationStore();
+  const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
 
   const fetchSuggestions = async (searchQuery: string) => {
     if (!searchQuery) {
@@ -58,24 +59,28 @@ function SearchInput() {
 
   const fetchEventCoordinates = async (eventTitle: string) => {
     try {
-      const response = await fetch(
-        `${EVENTS_API}?search=${eventTitle}&limit=1`
-      );
+      const response = await fetch(`${EVENTS_API}?search=${eventTitle}&limit=1`);
       if (response.ok) {
         const data = await response.json();
         const event = data.data[0];
-
+  
         const place = event.places && event.places[0];
         if (place && place.latitude && place.longitude) {
-          const { latitude, longitude } = place;
-
+          const { latitude, longitude, name } = place;
+  
           console.log('Event Coordinates:', { latitude, longitude });
-
+  
           const latlng: [number, number] = [
             parseFloat(latitude),
             parseFloat(longitude),
           ];
+  
           setTempCenter(latlng);
+
+          
+          await fetchAddress(latitude, longitude, 'to', setToAddress, setToAddress);
+
+          
         } else {
           console.error('Coordinates not found for the event.');
         }
@@ -106,7 +111,7 @@ function SearchInput() {
           type="text"
           value={query}
           onChange={handleInputChange}
-          placeholder="Ange plats eller stad"
+          placeholder="Browse events or locations..."
           className="h-10 w-full text-sm font-normal text-gray-900 placeholder-gray-400 px-3 bg-gray-50 focus:ring-1 focus:ring-gray-500 focus:outline-none"
         />
         {query && (
