@@ -3,8 +3,8 @@ import { useLocationStore } from '../../store/useLocationStore';
 const TriggerActionBtn = () => {
   const { 
     lineDrawn, setLineDrawn, setMarkers, 
-    fromAddress, setFromAddress, 
-    toAddress, setToAddress 
+    fromAddress, toAddress, 
+    setTempCenter 
   } = useLocationStore();
 
   const parseCoordinates = (address: string): [number, number] | null => {
@@ -48,6 +48,11 @@ const TriggerActionBtn = () => {
       if (fromCoordinates) newMarkers.push(fromCoordinates);
       if (toCoordinates) newMarkers.push(toCoordinates);
       setMarkers(newMarkers);
+
+      // Always set tempCenter to fromCoordinates (if available)
+      if (fromCoordinates) {
+        setTempCenter(fromCoordinates);
+      }
     }
   };
 
@@ -71,8 +76,6 @@ const TriggerActionBtn = () => {
 };
 
 export default TriggerActionBtn;
-
-
 
 // import { useLocationStore } from '../../store/useLocationStore';
 
