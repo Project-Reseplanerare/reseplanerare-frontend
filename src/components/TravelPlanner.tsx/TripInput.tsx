@@ -1,5 +1,7 @@
 import { useState } from 'react';
+import { FaTimes } from 'react-icons/fa';
 import { useLocationStore } from '../../store/useLocationStore';
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore'; 
 import { fetchStops } from '../../utils/api/fetchBusStopsVarm';
 
 interface TripInputProps {
@@ -8,6 +10,7 @@ interface TripInputProps {
 
 const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   const { fromAddress, toAddress, setFromAddress, setToAddress } = useLocationStore();
+  const { selectedOption } = useTravelOptionsStore();
   const [fromSuggestions, setFromSuggestions] = useState<string[]>([]);
   const [toSuggestions, setToSuggestions] = useState<string[]>([]);
 
@@ -18,13 +21,12 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
 
   const isSwapDisabled = !fromAddress || !toAddress;
 
-
   const handleFromAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFromAddress(value);
     onInputChange('from', value);
 
-    if (value.trim()) {
+    if (value.trim() && selectedOption === "Buss") { 
       const stops = await fetchStops(value);
       setFromSuggestions(stops.map((stop: { name: any; }) => stop.name));
     } else {
@@ -32,20 +34,28 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     }
   };
 
-
   const handleToAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setToAddress(value);
     onInputChange('to', value);
 
-    if (value.trim()) {
-      const stops = await fetchStops(value); 
+    if (value.trim() && selectedOption === "Buss") { 
+      const stops = await fetchStops(value);
       setToSuggestions(stops.map((stop: { name: any; }) => stop.name));
     } else {
       setToSuggestions([]);
     }
   };
 
+  const clearFromInput = () => {
+    setFromAddress('');
+    setFromSuggestions([]);
+  };
+
+  const clearToInput = () => {
+    setToAddress('');
+    setToSuggestions([]);
+  };
 
   return (
     <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
@@ -60,6 +70,15 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           onChange={handleFromAddressChange}
           className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
         />
+        {/* Clear button for From Address */}
+        {fromAddress && (
+          <button
+            onClick={clearFromInput}
+            className="absolute right-2 text-slate-500 hover:text-slate-700"
+          >
+            <FaTimes className="w-4 h-4" />
+          </button>
+        )}
         {/* From Address Suggestions Dropdown */}
         {fromSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
@@ -119,6 +138,15 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           onChange={handleToAddressChange}
           className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
         />
+        {/* Clear button for To Address */}
+        {toAddress && (
+          <button
+            onClick={clearToInput}
+            className="absolute right-2 text-slate-500 hover:text-slate-700"
+          >
+            <FaTimes className="w-4 h-4" />
+          </button>
+        )}
         {/* To Address Suggestions Dropdown */}
         {toSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
