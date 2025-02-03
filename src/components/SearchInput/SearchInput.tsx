@@ -96,7 +96,7 @@ function SearchInput() {
   };
 
   return (
-    <div className="w-full grid gap-4 bg-white text-gray-900 p-6 text-center">
+    <div className="w-full grid gap-4 bg-white p-6 text-gray-900 text-center">
       {/* Intro Text */}
       <div className="grid text-gray-700">
         <p className="text-sm font-medium prose prose-sm leading-relaxed">
