@@ -96,20 +96,14 @@ function SearchInput() {
   };
 
   return (
-    <div className="w-full grid gap-4 bg-white p-6 text-gray-900 text-center">
-      {/* Intro Text */}
-      <div className="grid text-gray-700">
-        <p className="text-sm font-medium prose prose-sm leading-relaxed">
-          Vet du vad du söker men inte var? Hitta det snabbt här!
-        </p>
-      </div>
-
+    <div className="max-w-[950px] grid gap-4 bg-white py-6 text-gray-900 text-center">
       {/* Input Section */}
-      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full max-w-md mx-auto border border-gray-300 rounded-lg bg-white ">
+      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-gray-300 rounded-lg bg-white">
         {/* Search Icon */}
         <div className="px-3 text-gray-500">
           <FaSearch />
         </div>
+
         {/* Input Field */}
         <input
           type="text"
@@ -118,6 +112,7 @@ function SearchInput() {
           placeholder="Vet du vad du söker men inte var? Hitta det snabbt här!"
           className="h-10 w-full text-sm text-gray-900 placeholder-gray-400 px-3 bg-transparent focus:ring-2 focus:ring-gray-500 focus:outline-none"
         />
+
         {query && (
           <button
             onClick={clearInput}
@@ -145,6 +140,7 @@ function SearchInput() {
             ))}
           </ul>
         )}
+
         {loading && (
           <p className="absolute top-full left-0 text-sm text-gray-500 px-4 py-2">
             Loading...
