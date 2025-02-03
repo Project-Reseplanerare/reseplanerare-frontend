@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useLocationStore } from '../../store/useLocationStore';
-import { useTravelOptionsStore } from '../../store/useTravelOptionsStore'; 
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import { fetchStops } from '../../utils/api/fetchBusStopsVarm';
 
 interface TripInputProps {
@@ -9,7 +9,8 @@ interface TripInputProps {
 }
 
 const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
-  const { fromAddress, toAddress, setFromAddress, setToAddress } = useLocationStore();
+  const { fromAddress, toAddress, setFromAddress, setToAddress } =
+    useLocationStore();
   const { selectedOption } = useTravelOptionsStore();
   const [fromSuggestions, setFromSuggestions] = useState<string[]>([]);
   const [toSuggestions, setToSuggestions] = useState<string[]>([]);
@@ -21,27 +22,31 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
 
   const isSwapDisabled = !fromAddress || !toAddress;
 
-  const handleFromAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFromAddressChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = e.target.value;
     setFromAddress(value);
     onInputChange('from', value);
 
-    if (value.trim() && selectedOption === "Buss") { 
+    if (value.trim() && selectedOption === 'Buss') {
       const stops = await fetchStops(value);
-      setFromSuggestions(stops.map((stop: { name: any; }) => stop.name));
+      setFromSuggestions(stops.map((stop: { name: any }) => stop.name));
     } else {
       setFromSuggestions([]);
     }
   };
 
-  const handleToAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleToAddressChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = e.target.value;
     setToAddress(value);
     onInputChange('to', value);
 
-    if (value.trim() && selectedOption === "Buss") { 
+    if (value.trim() && selectedOption === 'Buss') {
       const stops = await fetchStops(value);
-      setToSuggestions(stops.map((stop: { name: any; }) => stop.name));
+      setToSuggestions(stops.map((stop: { name: any }) => stop.name));
     } else {
       setToSuggestions([]);
     }
@@ -58,27 +63,33 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   };
 
   return (
-    <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
+    <div className="flex flex-col gap-4 w-full">
       {/* From Address Input */}
-      <div className="relative flex items-center p-3 border border-slate-300 rounded-md bg-slate-50">
-        <div className="flex items-center justify-center w-8 h-8 bg-slate-500 text-white rounded-md font-bold">
+      <div className="grid grid-cols-[auto,1fr,auto] items-center w-full border border-gray-300 rounded-lg bg-white p-2">
+        {/* Column 1: Address Icon */}
+        <div className="flex items-center justify-center w-10 h-10 bg-slate-500 text-white rounded-md font-bold">
           A
         </div>
+
+        {/* Column 2: Input Field */}
         <input
           type="text"
           value={fromAddress}
           onChange={handleFromAddressChange}
-          className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
+          placeholder="Enter departure address"
+          className="h-10 w-full text-sm text-gray-900 placeholder-gray-400 px-3 bg-transparent focus:ring-2 focus:ring-gray-500 focus:outline-none"
         />
-        {/* Clear button for From Address */}
+
+        {/* Column 3: Clear Button */}
         {fromAddress && (
           <button
             onClick={clearFromInput}
-            className="absolute right-2 text-slate-500 hover:text-slate-700"
+            className="px-3 text-gray-500 hover:text-gray-700 transition"
           >
             <FaTimes className="w-4 h-4" />
           </button>
         )}
+
         {/* From Address Suggestions Dropdown */}
         {fromSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
@@ -128,25 +139,31 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       </button>
 
       {/* To Address Input */}
-      <div className="relative flex items-center p-3 border border-slate-300 rounded-md bg-slate-50">
-        <div className="flex items-center justify-center w-8 h-8 bg-slate-500 text-white rounded-md font-bold">
+      <div className="grid grid-cols-[auto,1fr,auto] items-center w-full border border-gray-300 rounded-lg bg-white p-2">
+        {/* Column 1: Address Icon */}
+        <div className="flex items-center justify-center w-10 h-10 bg-slate-500 text-white rounded-md font-bold">
           B
         </div>
+
+        {/* Column 2: Input Field */}
         <input
           type="text"
           value={toAddress}
           onChange={handleToAddressChange}
-          className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
+          placeholder="Enter destination address"
+          className="h-10 w-full text-sm text-gray-900 placeholder-gray-400 px-3 bg-transparent focus:ring-2 focus:ring-gray-500 focus:outline-none"
         />
-        {/* Clear button for To Address */}
+
+        {/* Column 3: Clear Button */}
         {toAddress && (
           <button
             onClick={clearToInput}
-            className="absolute right-2 text-slate-500 hover:text-slate-700"
+            className="px-3 text-gray-500 hover:text-gray-700 transition"
           >
             <FaTimes className="w-4 h-4" />
           </button>
         )}
+
         {/* To Address Suggestions Dropdown */}
         {toSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
