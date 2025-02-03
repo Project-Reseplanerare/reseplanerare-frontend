@@ -70,7 +70,6 @@ function Map() {
           const segmentRoute = await getRoute(markers[i], markers[i + 1], setLoading);
           routeData = [...routeData, ...segmentRoute];
         }
-  
         setRoute(routeData);
       } else {
         setRoute([]);
