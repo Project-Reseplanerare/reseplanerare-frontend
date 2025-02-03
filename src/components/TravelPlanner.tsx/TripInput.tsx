@@ -63,33 +63,27 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   };
 
   return (
-    <div className="flex flex-col gap-4 w-full">
+    <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
       {/* From Address Input */}
-      <div className="grid grid-cols-[auto,1fr,auto] items-center w-full border border-gray-300 rounded-lg bg-white p-2">
-        {/* Column 1: Address Icon */}
-        <div className="flex items-center justify-center w-10 h-10 bg-slate-500 text-white rounded-md font-bold">
+      <div className="relative flex items-center p-3 border border-slate-300 rounded-md bg-slate-50">
+        <div className="flex items-center justify-center w-8 h-8 bg-slate-500 text-white rounded-md font-bold">
           A
         </div>
-
-        {/* Column 2: Input Field */}
         <input
           type="text"
           value={fromAddress}
           onChange={handleFromAddressChange}
-          placeholder="Enter departure address"
-          className="h-10 w-full text-sm text-gray-900 placeholder-gray-400 px-3 bg-transparent focus:ring-2 focus:ring-gray-500 focus:outline-none"
+          className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
         />
-
-        {/* Column 3: Clear Button */}
+        {/* Clear button for From Address */}
         {fromAddress && (
           <button
             onClick={clearFromInput}
-            className="px-3 text-gray-500 hover:text-gray-700 transition"
+            className="absolute right-2 text-slate-500 hover:text-slate-700"
           >
             <FaTimes className="w-4 h-4" />
           </button>
         )}
-
         {/* From Address Suggestions Dropdown */}
         {fromSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
@@ -139,31 +133,25 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       </button>
 
       {/* To Address Input */}
-      <div className="grid grid-cols-[auto,1fr,auto] items-center w-full border border-gray-300 rounded-lg bg-white p-2">
-        {/* Column 1: Address Icon */}
-        <div className="flex items-center justify-center w-10 h-10 bg-slate-500 text-white rounded-md font-bold">
+      <div className="relative flex items-center p-3 border border-slate-300 rounded-md bg-slate-50">
+        <div className="flex items-center justify-center w-8 h-8 bg-slate-500 text-white rounded-md font-bold">
           B
         </div>
-
-        {/* Column 2: Input Field */}
         <input
           type="text"
           value={toAddress}
           onChange={handleToAddressChange}
-          placeholder="Enter destination address"
-          className="h-10 w-full text-sm text-gray-900 placeholder-gray-400 px-3 bg-transparent focus:ring-2 focus:ring-gray-500 focus:outline-none"
+          className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
         />
-
-        {/* Column 3: Clear Button */}
+        {/* Clear button for To Address */}
         {toAddress && (
           <button
             onClick={clearToInput}
-            className="px-3 text-gray-500 hover:text-gray-700 transition"
+            className="absolute right-2 text-slate-500 hover:text-slate-700"
           >
             <FaTimes className="w-4 h-4" />
           </button>
         )}
-
         {/* To Address Suggestions Dropdown */}
         {toSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
