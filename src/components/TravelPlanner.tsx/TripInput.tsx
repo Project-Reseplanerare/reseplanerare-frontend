@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useLocationStore } from '../../store/useLocationStore';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
+import { useBusStopStore } from '../../store/useBusStopStore';
 import { fetchStops } from '../../utils/api/fetchBusStopsVarm';
 
 interface TripInputProps {
@@ -9,44 +10,34 @@ interface TripInputProps {
 }
 
 const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
-  const { fromAddress, toAddress, setFromAddress, setToAddress } =
-    useLocationStore();
+  const { fromAddress, toAddress, setFromAddress, setToAddress } = useLocationStore();
   const { selectedOption } = useTravelOptionsStore();
-  const [fromSuggestions, setFromSuggestions] = useState<string[]>([]);
-  const [toSuggestions, setToSuggestions] = useState<string[]>([]);
+  const { setFromStopId, setToStopId, fromStopId, toStopId } = useBusStopStore();
 
-  const swapAddresses = () => {
-    setFromAddress(toAddress);
-    setToAddress(fromAddress);
-  };
+  const [fromSuggestions, setFromSuggestions] = useState<{ name: string; extId: string }[]>([]);
+  const [toSuggestions, setToSuggestions] = useState<{ name: string; extId: string }[]>([]);
 
-  const isSwapDisabled = !fromAddress || !toAddress;
-
-  const handleFromAddressChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFromAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFromAddress(value);
     onInputChange('from', value);
 
     if (value.trim() && selectedOption === 'Buss') {
       const stops = await fetchStops(value);
-      setFromSuggestions(stops.map((stop: { name: any }) => stop.name));
+      setFromSuggestions(stops.map((stop: { name: any; extId: any; }) => ({ name: stop.name, extId: stop.extId })));
     } else {
       setFromSuggestions([]);
     }
   };
 
-  const handleToAddressChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleToAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setToAddress(value);
     onInputChange('to', value);
 
     if (value.trim() && selectedOption === 'Buss') {
       const stops = await fetchStops(value);
-      setToSuggestions(stops.map((stop: { name: any }) => stop.name));
+      setToSuggestions(stops.map((stop: { name: any; extId: any; }) => ({ name: stop.name, extId: stop.extId })));
     } else {
       setToSuggestions([]);
     }
@@ -55,12 +46,28 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   const clearFromInput = () => {
     setFromAddress('');
     setFromSuggestions([]);
+    setFromStopId('');
   };
 
   const clearToInput = () => {
     setToAddress('');
     setToSuggestions([]);
+    setToStopId('');
   };
+
+  const swapAddresses = () => {
+    setFromAddress(toAddress);
+    setToAddress(fromAddress);
+    setFromStopId(toStopId);
+    setToStopId(fromStopId);
+  };
+
+  const isSwapDisabled = !fromAddress || !toAddress;
+
+  useEffect(() => {
+    console.log("Updated fromStopId:", fromStopId);
+    console.log("Updated toStopId:", toStopId);
+  }, [fromStopId, toStopId]);
 
   return (
     <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
@@ -92,12 +99,13 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
                 key={index}
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 cursor-pointer transition"
                 onClick={() => {
-                  setFromAddress(suggestion);
+                  setFromAddress(suggestion.name);
+                  setFromStopId(suggestion.extId); // Store extId in Zustand
                   setFromSuggestions([]);
-                  onInputChange('from', suggestion);
+                  onInputChange('from', suggestion.name);
                 }}
               >
-                {suggestion}
+                {suggestion.name}
               </li>
             ))}
           </ul>
@@ -160,12 +168,13 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
                 key={index}
                 className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 cursor-pointer transition"
                 onClick={() => {
-                  setToAddress(suggestion);
+                  setToAddress(suggestion.name);
+                  setToStopId(suggestion.extId); // Store extId in Zustand
                   setToSuggestions([]);
-                  onInputChange('to', suggestion);
+                  onInputChange('to', suggestion.name);
                 }}
               >
-                {suggestion}
+                {suggestion.name}
               </li>
             ))}
           </ul>

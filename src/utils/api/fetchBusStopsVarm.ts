@@ -10,10 +10,15 @@ export const fetchStops = async (searchString: string, maxResults = 10, lang = '
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-        
-        const stopLocations = data.stopLocationOrCoordLocation.map((item: { StopLocation: any; }) => item.StopLocation);
 
-        return stopLocations || [];
+        return data.stopLocationOrCoordLocation
+            .filter((item: any) => item.StopLocation) 
+            .map((item: any) => ({
+                name: item.StopLocation.name,
+                extId: item.StopLocation.extId,
+                lon: item.StopLocation.lon,
+                lat: item.StopLocation.lat,
+            }));
     } catch (error) {
         console.error("Error fetching stops:", error);
         return [];

@@ -1,4 +1,5 @@
 import { useLocationStore } from '../../store/useLocationStore';
+import { useSearchBtnStore } from '../../store/useSearchBtnStore';
 
 const TriggerActionBtn = () => {
   const { 
@@ -6,6 +7,8 @@ const TriggerActionBtn = () => {
     fromAddress, toAddress, 
     setTempCenter 
   } = useLocationStore();
+  
+  const { setIsButtonClicked } = useSearchBtnStore(); 
 
   const parseCoordinates = (address: string): [number, number] | null => {
     if (!address) return null;
@@ -42,6 +45,7 @@ const TriggerActionBtn = () => {
     if (lineDrawn) {
       setLineDrawn(false);
       setMarkers([]);
+      setIsButtonClicked(false); // Set to false when "Sluta sök" is clicked
     } else {
       setLineDrawn(true);
       const newMarkers = [];
@@ -53,6 +57,7 @@ const TriggerActionBtn = () => {
       if (fromCoordinates) {
         setTempCenter(fromCoordinates);
       }
+      setIsButtonClicked(true); // Set to true when "Sök" is clicked
     }
   };
 
