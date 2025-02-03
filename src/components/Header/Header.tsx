@@ -2,10 +2,22 @@ import { Link } from 'react-router-dom';
 import logo from '../../assets/logotyp-visitvarmland.svg';
 
 const Header = () => (
-  <header className="w-full bg-gray-100 border-b grid items-center">
-    <Link to="/" className="grid place-items-center">
-      <img src={logo} alt="Visit Värmland Logo" className="h-12" />
-    </Link>
+  <header className="bg-white w-full p-2 border-b">
+    <nav className="grid grid-cols-2 items-center">
+      {/* Left: VisitVärmland Logo */}
+      <div className="grid place-items-start">
+        <Link to="/">
+          <img src={logo} alt="Visit Värmland Logo" className="h-9" />
+        </Link>
+      </div>
+
+      {/* Right: Collaboration Notice */}
+      <div className="grid place-items-end text-gray-600">
+        <Link to="/" className="text-sm hover:text-gray-900 transition">
+          I samarbete med <span className="font-semibold">Värmlandstrafik</span>
+        </Link>
+      </div>
+    </nav>
   </header>
 );
 

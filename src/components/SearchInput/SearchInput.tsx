@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 import { useLocationStore } from '../../store/useLocationStore';
+import { fetchAddress } from '../../utils/api/fetchAdress';
 
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
@@ -14,7 +15,7 @@ function SearchInput() {
   const [query, setQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const { setTempCenter } = useLocationStore();
+  const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
 
   const fetchSuggestions = async (searchQuery: string) => {
     if (!searchQuery) {
@@ -67,7 +68,7 @@ function SearchInput() {
 
         const place = event.places && event.places[0];
         if (place && place.latitude && place.longitude) {
-          const { latitude, longitude } = place;
+          const { latitude, longitude, name } = place;
 
           console.log('Event Coordinates:', { latitude, longitude });
 
@@ -75,7 +76,16 @@ function SearchInput() {
             parseFloat(latitude),
             parseFloat(longitude),
           ];
+
           setTempCenter(latlng);
+
+          await fetchAddress(
+            latitude,
+            longitude,
+            'to',
+            setToAddress,
+            setToAddress
+          );
         } else {
           console.error('Coordinates not found for the event.');
         }
@@ -86,29 +96,23 @@ function SearchInput() {
   };
 
   return (
-    <div className="w-full grid gap-4 bg-white text-gray-900 border border-gray-300 p-6 mt-6 rounded-md  text-center">
-      {/* Intro Text */}
-      <div className="grid gap-1">
-        <p className="text-sm text-gray-600 font-normal">
-          Vet du vad du vill upptäcka, men inte var det finns?
-        </p>
-        <p className="text-sm text-gray-600 font-normal">
-          Sök här och hitta det snabbt!
-        </p>
-      </div>
-
+    <div className="max-w-[950px] grid gap-4 bg-white py-6 text-gray-900 text-center">
       {/* Input Section */}
-      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full max-w-md mx-auto border border-gray-300 rounded-md bg-gray-50">
+      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-gray-300 rounded-lg bg-white">
+        {/* Search Icon */}
         <div className="px-3 text-gray-500">
-          <FaSearch className="w-5 h-5" />
+          <FaSearch />
         </div>
+
+        {/* Input Field */}
         <input
           type="text"
           value={query}
           onChange={handleInputChange}
-          placeholder="Ange plats eller stad"
-          className="h-10 w-full text-sm font-normal text-gray-900 placeholder-gray-400 px-3 bg-gray-50 focus:ring-1 focus:ring-gray-500 focus:outline-none"
+          placeholder="Vet du vad du söker men inte var? Hitta det snabbt här!"
+          className="h-10 w-full text-sm text-gray-900 placeholder-gray-400 px-3 bg-transparent focus:ring-2 focus:ring-gray-500 focus:outline-none"
         />
+
         {query && (
           <button
             onClick={clearInput}
@@ -136,6 +140,7 @@ function SearchInput() {
             ))}
           </ul>
         )}
+
         {loading && (
           <p className="absolute top-full left-0 text-sm text-gray-500 px-4 py-2">
             Loading...

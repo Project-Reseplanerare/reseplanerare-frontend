@@ -8,16 +8,42 @@
   padding: 0;
 }
 
+@layer base {
+  :root {
+    --color-primary: #ffffff;
+    --color-secondary: #f3f3f3;
+    --color-text-primary: #000000;
+    --color-text-secondary: #4b5563;
+    --color-text-medium: #6b7280;
+    /*background kolor*/
+    --color-bg-primary: #f3f3f3;
+    --color-line: #0d9488;
+    --color-line-secondary: #0f766e;
+    --color-border: #d1d5db;
+  }
+
+  /*zamiast theme uzylam dark w layer base */
+  .dark {
+    --color-primary: #030712;
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #4b5563;
+    --color-bg-secondary: #1f2937;
+    --color-line-secondary: #0f766e;
+    /* dark:invert -till svg*/
+  }
+}
+
 /* App.css */
-body, html {
-  overflow-x: hidden; 
+body,
+html {
+  overflow-x: hidden;
   width: 100%;
 }
 
 .app-container {
   display: flex;
   flex-direction: column;
-  height: 100vh; 
+  height: 100vh;
   gap: 20px;
   align-items: center;
 }

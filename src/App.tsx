@@ -11,6 +11,7 @@ import TravelOptions from './components/Dropdown/TravelOptions/TravelOptions';
 import DatePickerComponent from './components/Dropdown/DatePickerComponent/DatePickerComponent';
 import AttractionList from './components/Dropdown/AttractionList/AttractionList';
 import TravelStop from './components/Dropdown/TravelStop/TravelStop';
+import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptionsDropdown';
 
 function App() {
   return (
@@ -52,6 +53,11 @@ function App() {
                 {/* Travel Planner Wrapper */}
                 <div>
                   <TravelPlannerWrapper />
+                </div>
+
+                 {/* Route option dropdown */}
+                <div>
+                  <RouteOptionsDropdown />
                 </div>
 
                 {/* Travel Options */}
