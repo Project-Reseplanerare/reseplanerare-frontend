@@ -59,28 +59,33 @@ function SearchInput() {
 
   const fetchEventCoordinates = async (eventTitle: string) => {
     try {
-      const response = await fetch(`${EVENTS_API}?search=${eventTitle}&limit=1`);
+      const response = await fetch(
+        `${EVENTS_API}?search=${eventTitle}&limit=1`
+      );
       if (response.ok) {
         const data = await response.json();
         const event = data.data[0];
-  
+
         const place = event.places && event.places[0];
         if (place && place.latitude && place.longitude) {
           const { latitude, longitude, name } = place;
-  
+
           console.log('Event Coordinates:', { latitude, longitude });
-  
+
           const latlng: [number, number] = [
             parseFloat(latitude),
             parseFloat(longitude),
           ];
-  
+
           setTempCenter(latlng);
 
-          
-          await fetchAddress(latitude, longitude, 'to', setToAddress, setToAddress);
-
-          
+          await fetchAddress(
+            latitude,
+            longitude,
+            'to',
+            setToAddress,
+            setToAddress
+          );
         } else {
           console.error('Coordinates not found for the event.');
         }
@@ -91,28 +96,27 @@ function SearchInput() {
   };
 
   return (
-    <div className="w-full grid gap-4 bg-white text-gray-900 border border-gray-300 p-6 mt-6 rounded-md  text-center">
+    <div className="w-full grid gap-4 bg-white text-gray-900 p-6 text-center">
       {/* Intro Text */}
-      <div className="grid gap-1">
-        <p className="text-sm text-gray-600 font-normal">
-          Vet du vad du vill upptäcka, men inte var det finns?
-        </p>
-        <p className="text-sm text-gray-600 font-normal">
-          Sök här och hitta det snabbt!
+      <div className="grid text-gray-700">
+        <p className="text-sm font-medium prose prose-sm leading-relaxed">
+          Vet du vad du söker men inte var? Hitta det snabbt här!
         </p>
       </div>
 
       {/* Input Section */}
-      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full max-w-md mx-auto border border-gray-300 rounded-md bg-gray-50">
+      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full max-w-md mx-auto border border-gray-300 rounded-lg bg-white ">
+        {/* Search Icon */}
         <div className="px-3 text-gray-500">
-          <FaSearch className="w-5 h-5" />
+          <FaSearch />
         </div>
+        {/* Input Field */}
         <input
           type="text"
           value={query}
           onChange={handleInputChange}
-          placeholder="Browse events or locations..."
-          className="h-10 w-full text-sm font-normal text-gray-900 placeholder-gray-400 px-3 bg-gray-50 focus:ring-1 focus:ring-gray-500 focus:outline-none"
+          placeholder="Vet du vad du söker men inte var? Hitta det snabbt här!"
+          className="h-10 w-full text-sm text-gray-900 placeholder-gray-400 px-3 bg-transparent focus:ring-2 focus:ring-gray-500 focus:outline-none"
         />
         {query && (
           <button

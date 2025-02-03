@@ -6,17 +6,22 @@ const GeneralInformation: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <section className="bg-gray-100 p-6 rounded-md border grid gap-4 relative">
-      {/* Close Button */}
-      <button
-        onClick={() => setIsVisible(false)}
-        className="absolute top-2 right-2 text-gray-400 hover:text-gray-800 text-lg"
-      >
-        ✕
-      </button>
+    <section className="max-w-[950px] bg-gray-100 p-6 rounded-md border grid gap-4">
+      {/* Section 1: Close Button & Title */}
+      <div className="grid grid-cols-2 ">
+        {/* Title */}
+        <h2 className="text-2xl font-semibold text-gray-800">
+          Om Resplaneraren
+        </h2>
 
-      {/* Title */}
-      <h2 className="text-2xl font-semibold text-gray-800">Om Resplaneraren</h2>
+        {/* Close Button */}
+        <button
+          onClick={() => setIsVisible(false)}
+          className="text-gray-400 hover:text-gray-800 text-lg justify-self-end"
+        >
+          ✕
+        </button>
+      </div>
 
       {/* Description */}
       <p className="text-gray-500 text-sm">
