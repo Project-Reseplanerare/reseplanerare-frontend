@@ -1,8 +1,25 @@
 import { useEffect, useState } from 'react';
 import { useBusStopStore } from '../../store/useBusStopStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
+import { FaBus } from 'react-icons/fa';
 
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
+
+type Departure = {
+  JourneyDetailRef: { ref: string };
+  ProductAtStop?: { catOut: string; name: string };
+  time: string;
+};
+
+type Arrival = {
+  JourneyDetailRef: { ref: string };
+  time: string;
+};
+
+type ResponseData<T> = {
+  Departure?: T[];
+  Arrival?: T[];
+};
 
 const RouteOptionsDropdown = () => {
   const { fromStopId, toStopId } = useBusStopStore();
@@ -21,7 +38,7 @@ const RouteOptionsDropdown = () => {
         );
         if (!fromResponse.ok) throw new Error(`Error: ${fromResponse.status}`);
 
-        const fromData = await fromResponse.json();
+        const fromData: ResponseData<Departure> = await fromResponse.json();
         if (!fromData.Departure) {
           setRouteNames([]);
           setTravelTimes([]);
@@ -33,22 +50,22 @@ const RouteOptionsDropdown = () => {
         );
         if (!toResponse.ok) throw new Error(`Error: ${toResponse.status}`);
 
-        const toData = await toResponse.json();
+        const toData: ResponseData<Arrival> = await toResponse.json();
         if (!toData.Arrival) {
           setRouteNames([]);
           setTravelTimes([]);
           return;
         }
 
-        const validJourneyRefs = new Map();
-        toData.Arrival.forEach((arrival: any) => {
+        const validJourneyRefs = new Map<string, string>();
+        toData.Arrival.forEach((arrival) => {
           validJourneyRefs.set(arrival.JourneyDetailRef.ref, arrival.time);
         });
 
         const filteredDepartures = fromData.Departure.filter(
-          (departure: any) => 
+          (departure) =>
             validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
-            departure.ProductAtStop?.catOut === "BLT"
+            departure.ProductAtStop?.catOut === 'BLT'
         );
 
         if (filteredDepartures.length === 0) {
@@ -57,15 +74,20 @@ const RouteOptionsDropdown = () => {
           return;
         }
 
-        const names = filteredDepartures.map((departure: any) => {
-          //const line = departure.ProductAtStop?.line || 'N/A';
+        const names = filteredDepartures.map((departure) => {
           const departureTime = departure.time;
-          const arrivalTime = validJourneyRefs.get(departure.JourneyDetailRef.ref);
-          return `${departure.ProductAtStop.name} — ${formatTravelTime(departureTime)} - ${formatTravelTime(arrivalTime)}`;
+          const arrivalTime =
+            validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
+          return `${
+            departure.ProductAtStop?.name || 'N/A'
+          } — ${formatTravelTime(departureTime)} - ${formatTravelTime(
+            arrivalTime
+          )}`;
         });
 
-        const times = filteredDepartures.map((departure: any) => {
-          const arrivalTime = validJourneyRefs.get(departure.JourneyDetailRef.ref);
+        const times = filteredDepartures.map((departure) => {
+          const arrivalTime =
+            validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
           return calculateTravelDuration(departure.time, arrivalTime);
         });
 
@@ -86,10 +108,16 @@ const RouteOptionsDropdown = () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  const calculateTravelDuration = (departureTime: string, arrivalTime: string) => {
-    const departureDate = new Date(`${new Date().toDateString()} ${departureTime}`);
+  const calculateTravelDuration = (
+    departureTime: string,
+    arrivalTime: string
+  ) => {
+    const departureDate = new Date(
+      `${new Date().toDateString()} ${departureTime}`
+    );
     const arrivalDate = new Date(`${new Date().toDateString()} ${arrivalTime}`);
-    const duration = (arrivalDate.getTime() - departureDate.getTime()) / (1000 * 60);
+    const duration =
+      (arrivalDate.getTime() - departureDate.getTime()) / (1000 * 60);
 
     if (duration <= 0) return 'Arrived';
     return `${duration} min`;
@@ -100,20 +128,21 @@ const RouteOptionsDropdown = () => {
       <h2 className="text-xl font-bold text-gray-900 border-b pb-2">
         Ruttalternativ
       </h2>
-
       {error && (
         <p className="text-sm text-red-700 bg-red-200 p-2 rounded-md">
           ⚠️ {error}
         </p>
       )}
-
       {routeNames.length > 0 ? (
         <div className="grid gap-3">
           {routeNames.map((name, index) => (
             <div
               key={index}
-              className="grid grid-cols-[1fr_auto] items-center p-3 bg-gray-50 border border-gray-300 rounded-md"
+              className="grid grid-cols-[auto_1fr_auto] gap-2 items-center p-3 bg-gray-50 border border-gray-300 rounded-md"
             >
+              <div className="flex items-center justify-center p-1 bg-slate-500 text-white px-3 py-1 rounded-md text-sm ">
+                <FaBus className="text-white bg-slate-500" />
+              </div>
               <p className="font-medium text-gray-800 truncate" title={name}>
                 {name}
               </p>

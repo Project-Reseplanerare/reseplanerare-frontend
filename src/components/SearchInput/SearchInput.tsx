@@ -5,12 +5,6 @@ import { fetchAddress } from '../../utils/api/fetchAdress';
 
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
-// TODO: Vid klick på ett event, hämta koordinaterna (latitude och longitude) från eventets platsdata.
-// TODO: Kontrollera att koordinaterna är tillgängliga och giltiga innan de används.
-// TODO: Om koordinaterna är giltiga, lagra dem i en array.
-// TODO: Skicka den skapade arrayen med koordinater till funktionen setToLocation i ../../store/useLocationStore.
-// TODO: Hantera eventuella fel, exempelvis om koordinaterna saknas eller om API-anropet misslyckas.
-
 function SearchInput() {
   const [query, setQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -53,8 +47,8 @@ function SearchInput() {
   };
 
   const clearInput = () => {
-    setQuery((prev) => (prev ? '' : prev));
-    setSuggestions((prev) => (prev.length ? [] : prev));
+    setQuery('');
+    setSuggestions([]);
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
@@ -70,7 +64,7 @@ function SearchInput() {
         if (place && place.latitude && place.longitude) {
           const { latitude, longitude, name } = place;
 
-          console.log('Event Coordinates:', { latitude, longitude });
+          console.log('Event Coordinates:', { latitude, longitude, name });
 
           const latlng: [number, number] = [
             parseFloat(latitude),
@@ -78,6 +72,8 @@ function SearchInput() {
           ];
 
           setTempCenter(latlng);
+          setToLocation(latlng); // Now using setToLocation
+          setToAddress(name); // Now using name properly
 
           await fetchAddress(
             latitude,
