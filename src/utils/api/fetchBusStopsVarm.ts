@@ -12,7 +12,12 @@ export const fetchStops = async (searchString: string, maxResults = 10, lang = '
         const data = await response.json();
 
         return data.stopLocationOrCoordLocation
-            .filter((item: any) => item.StopLocation) 
+            .filter((item: any) => 
+                item.StopLocation &&
+                item.StopLocation.productAtStop?.some((product: any) => 
+                    product.cls === "8" || product.cls === "128"
+                )
+            )
             .map((item: any) => ({
                 name: item.StopLocation.name,
                 extId: item.StopLocation.extId,

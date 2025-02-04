@@ -37,7 +37,7 @@ interface ProductAtStop {
           .map((item) => item.StopLocation)
           .filter((stop) => {
             // Bus stop seems to have cls 128
-            return stop.productAtStop.some((product) => product.cls === "128");
+            return stop.productAtStop.some((product) => product.cls === "128" || product.cls === "8");
           });
         setStops(stops);
       } catch (error) {
@@ -66,7 +66,9 @@ interface ProductAtStop {
           .map((item) => item.StopLocation)
           .filter((stop) => {
             // Train stop has cls 8
-            return stop.productAtStop.some((product) => product.cls === "8");
+            return stop.productAtStop.some(
+              (product) => product.cls === "16" || product.cls === "2"
+            );
           });
         setStops(stops);
       } catch (error) {

@@ -100,30 +100,29 @@ function Map() {
   }, [route]);
 
   useEffect(() => {
-    if (selectedOption === 'Bil') {
-      fetchEvents(50, 100, 1, setLoading, setEvents);
-    }
-  }, [selectedOption]);
+    setStops([]); 
 
-  useEffect(() => {
-    if (selectedOption === 'Buss') {
-      if (Array.isArray(center) && center.length === 2) {
-        fetchNearbyBusStops(center as [number, number], setLoading, setStops);
-      }
-    } else {
-      setStops([]);
-    }
-  }, [center, selectedOption]);
+    switch (selectedOption) {
+      case 'Bil':
+        fetchEvents(50, 100, 1, setLoading, setEvents);
+        break;
 
-  useEffect(() => {
-    if (selectedOption === 'Tåg') {
-      if (Array.isArray(center) && center.length === 2) {
-        fetchNearbyTrains(center as [number, number], setLoading, setStops);
-      }
-    } else {
-      setStops([]);
+      case 'Buss':
+        if (Array.isArray(center) && center.length === 2) {
+          fetchNearbyBusStops(center as [number, number], setLoading, setStops);
+        }
+        break;
+
+      case 'Tåg':
+        if (Array.isArray(center) && center.length === 2) {
+          fetchNearbyTrains(center as [number, number], setLoading, setStops);
+        }
+        break;
+
+      default:
+        break;
     }
-  }, [center, selectedOption]);
+  }, [selectedOption, center]);
 
   const handleEventMarkerClick = async (lat: number, lng: number) => {
     setToLocation([lat, lng]);
