@@ -16,69 +16,49 @@ import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptions
 function App() {
   return (
     <Router>
-      <main className="app-container min-h-screen grid grid-rows-layout gap-4">
+      <main className="app-container min-h-screen grid grid-rows-[auto,1fr,auto] gap-4">
         <Header />
         <Routes>
           <Route
             path="/"
             element={
-              <section className="px-5 grid grid-cols-1 ">
+              <section className="px-4 sm:px-6 lg:px-8 w-full mx-auto grid gap-6">
                 {/* Breadcrumbs */}
-                <div>
-                  <BreadCrumbs
-                    crumbs={[
-                      { label: 'Visit Värmland', link: '/' },
-                      { label: 'Reseplaneraren', link: '/reseplaneraren' },
-                    ]}
-                  />
-                </div>
+                <BreadCrumbs
+                  crumbs={[
+                    { label: 'Visit Värmland', link: '/' },
+                    { label: 'Reseplaneraren', link: '/reseplaneraren' },
+                  ]}
+                />
 
                 {/* General Information */}
-                <div>
-                  <GeneralInformation />
-                </div>
+                <GeneralInformation />
 
                 {/* Search Input */}
-                <div>
-                  <SearchInput />
-                </div>
+                <SearchInput />
 
                 {/* Map Component */}
-                <div className="grid grid-cols-1 h-80">
-                  <div className="border z-10 border-gray-300 rounded-lg overflow-hidden flex flex-grow">
-                    <Map />
-                  </div>
+                <div className="relative w-full min-h-[50vh] md:min-h-[40vh] lg:min-h-[40vh] border border-gray-300 rounded-lg overflow-hidden flex">
+                  <Map />
                 </div>
 
                 {/* Travel Planner Wrapper */}
-                <div>
-                  <TravelPlannerWrapper />
-                </div>
+                <TravelPlannerWrapper />
 
-                 {/* Route option dropdown */}
-                <div>
-                  <RouteOptionsDropdown />
-                </div>
+                {/* Route option dropdown */}
+                <RouteOptionsDropdown />
 
                 {/* Travel Options */}
-                <div>
-                  <TravelOptions />
-                </div>
+                <TravelOptions />
 
                 {/* Date Picker */}
-                <div>
-                  <DatePickerComponent />
-                </div>
+                <DatePickerComponent />
 
                 {/* Attraction List */}
-                <div>
-                  <AttractionList />
-                </div>
+                <AttractionList />
 
                 {/* Travel Stop */}
-                <div>
-                  <TravelStop />
-                </div>
+                <TravelStop />
               </section>
             }
           />

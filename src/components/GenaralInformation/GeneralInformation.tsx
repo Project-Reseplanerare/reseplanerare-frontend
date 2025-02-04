@@ -6,7 +6,7 @@ const GeneralInformation: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <section className="max-w-[950px] bg-gray-100 p-6 rounded-md border grid gap-4">
+    <section className="w-full bg-gray-100 p-6 rounded-md border grid gap-4">
       {/* Section 1: Close Button & Title */}
       <div className="grid grid-cols-2 ">
         {/* Title */}
