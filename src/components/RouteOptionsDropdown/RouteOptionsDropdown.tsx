@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useBusStopStore } from '../../store/useBusStopStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
+import { fetchRouteStopsForRoute } from '../../utils/api/fetchRouteStopsForRoute';
 
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 
@@ -12,7 +13,6 @@ const RouteOptionsDropdown = () => {
   const [routeStops, setRouteStops] = useState<Record<number, any[]>>({});
   const [error, setError] = useState<string | null>(null);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(null);
-
 
   useEffect(() => {
     if (!isButtonClicked || !fromStopId || !toStopId) return;
@@ -82,45 +82,12 @@ const RouteOptionsDropdown = () => {
     fetchRoutes();
   }, [fromStopId, toStopId, isButtonClicked]);
 
-  const fetchRouteStopsForRoute = async (index: number) => {
-    try {
-      const url = `https://api.resrobot.se/v2.1/trip?format=json&originId=${fromStopId}&destId=${toStopId}&passlist=true&showPassingPoints=true&accessId=${apiKey}`;
-      const response = await fetch(url);
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-      const data = await response.json();
-      if (!data.Trip || data.Trip.length === 0) {
-        return;
-      }
-      const trip = data.Trip[index] || data.Trip[0];
-      let stops: any[] = [];
-      if (trip.LegList && trip.LegList.Leg) {
-        trip.LegList.Leg.forEach((leg: any) => {
-          if (leg.Stops && Array.isArray(leg.Stops.Stop)) {
-            stops = stops.concat(leg.Stops.Stop);
-          }
-        });
-      }
-
-      const uniqueStops = Array.from(new Map(stops.map((stop) => [stop.extId, stop])).values());
-      uniqueStops.sort((a, b) => {
-        const timeA = a.depTime || a.arrTime || '';
-        const timeB = b.depTime || b.arrTime || '';
-        return timeA.localeCompare(timeB);
-      });
-      setRouteStops((prev) => ({ ...prev, [index]: uniqueStops }));
-    } catch (err) {
-      setError((err as Error).message);
-    }
-  };
-
   const handleRouteClick = (index: number) => {
     if (selectedRouteIndex === index) {
       setSelectedRouteIndex(null);
     } else {
       setSelectedRouteIndex(index);
-      fetchRouteStopsForRoute(index);
+      fetchRouteStopsForRoute(index, fromStopId, toStopId, apiKey, setRouteStops, setError);
     }
   };
 
@@ -188,3 +155,4 @@ const RouteOptionsDropdown = () => {
 };
 
 export default RouteOptionsDropdown;
+
