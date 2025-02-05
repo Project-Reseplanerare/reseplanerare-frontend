@@ -4,6 +4,7 @@ import {
   Marker,
   Polyline,
   Popup,
+  CircleMarker
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
@@ -23,6 +24,7 @@ import {
   fetchNearbyBusStops,
   fetchNearbyTrains,
 } from '../../utils/api/fetchNearbyStops';
+import { useBusStopStore } from '../../store/useBusStopStore';
 import { fetchAddress } from '../../utils/api/fetchAdress';
 import busIcon from './../../assets/bus-solid.svg';
 import trainIcon from './../../assets/train-solid.svg';
@@ -48,6 +50,8 @@ function Map() {
   } = useLocationStore();
 
   const { selectedOption } = useTravelOptionsStore();
+
+  const { stopsCoords } = useBusStopStore();  
 
   const center = useGeolocation();
 
@@ -263,13 +267,36 @@ function Map() {
         );
       })}
 
-      {route.length > 0 && lineDrawn && (
-        <>
-          <Polyline positions={route} color="blue" weight={3} opacity={0.7} />
-          <div>Total distance: {calculatePolylineDistance(route)} km</div>
-        </>
-      )}
+    {route.length > 0 && lineDrawn && stopsCoords.length === 0 && (
+      <>
+        <Polyline positions={route} color="blue" weight={3} opacity={0.7} />
+        <div>Total distance: {calculatePolylineDistance(route)} km</div>
+      </>
+    )}
 
+    {stopsCoords.length > 0 && lineDrawn && (
+      <>
+        <Polyline
+          positions={stopsCoords.map(stop => stop.coords)} // Use stopsCoords for the polyline
+          color="blue"
+          weight={3}
+          opacity={0.7}
+        />
+
+        {stopsCoords.map((stop, index) => (
+          <CircleMarker
+            key={index}
+            center={stop.coords}
+            radius={6}
+            color="black"
+            fillColor="black"
+            fillOpacity={1}
+          >
+            <Popup>{stop.name || "Bus Stop"}</Popup>
+          </CircleMarker>
+        ))}
+      </>
+    )}
       {loading && <p>Loading route...</p>}
     </MapContainer>
   );

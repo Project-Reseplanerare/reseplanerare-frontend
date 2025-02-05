@@ -1,4 +1,8 @@
+import { useBusStopStore } from "../../store/useBusStopStore";
+
 interface Stop {
+    lon: any;
+    lat: any;
     extId: string;
     name: string;
     depTime?: string;
@@ -57,6 +61,18 @@ interface Stop {
       });
   
       setRouteStops((prev) => ({ ...prev, [index]: uniqueStops }));
+  
+  
+      const stopsWithCoords = uniqueStops
+      .filter((stop) => typeof stop.lat === "number" && typeof stop.lon === "number")
+      .map((stop) => ({
+        coords: [stop.lat as number, stop.lon as number] as [number, number], // Explicit tuple
+        name: stop.name, // Only keeping necessary properties
+      }));
+  
+
+      useBusStopStore.getState().setStopsCoords(stopsWithCoords);
+  
     } catch (err) {
       setError((err as Error).message);
     }

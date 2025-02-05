@@ -1,5 +1,6 @@
 import { useLocationStore } from '../../store/useLocationStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
+import { useBusStopStore } from '../../store/useBusStopStore';
 
 const TriggerActionBtn = () => {
   const {
@@ -12,6 +13,8 @@ const TriggerActionBtn = () => {
   } = useLocationStore();
 
   const { setIsButtonClicked } = useSearchBtnStore();
+
+  const {setStopsCoords} = useBusStopStore()
 
   const parseCoordinates = (address: string): [number, number] | null => {
     if (!address) return null;
@@ -49,6 +52,7 @@ const TriggerActionBtn = () => {
       setLineDrawn(false);
       setMarkers([]);
       setIsButtonClicked(false);
+      setStopsCoords([]);
     } else {
       setLineDrawn(true);
       const newMarkers = [];
