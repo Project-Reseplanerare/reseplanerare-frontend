@@ -49,6 +49,8 @@ const SearchInput = () => {
   const clearInput = () => {
     setQuery('');
     setSuggestions([]);
+    setQuery('');
+    setSuggestions([]);
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
@@ -64,6 +66,7 @@ const SearchInput = () => {
         if (place && place.latitude && place.longitude) {
           const { latitude, longitude, name } = place;
 
+          console.log('Event Coordinates:', { latitude, longitude, name });
           console.log('Event Coordinates:', { latitude, longitude, name });
 
           const latlng: [number, number] = [

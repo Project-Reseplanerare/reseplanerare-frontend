@@ -14,7 +14,7 @@ const TravelPlannerWrapper = () => {
   };
 
   return (
-    <section className="p-8 bg-slate-100 border border-slate-300 rounded-md grid gap-6">
+    <section className="w-full p-8 bg-slate-100 border border-slate-300 rounded-md grid gap-6">
       {/* Input Section */}
       <div className="grid gap-4">
         <h2 className="text-2xl font-bold text-slate-700">Planera din resa</h2>
