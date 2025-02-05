@@ -58,18 +58,10 @@ const Menu: React.FC = () => {
 
       {/* Display Components Based on Selection */}
       <div className="grid gap-4">
-        {activeComponent === 'resealternativ' && (
-          <div className="p-4 bg-lightDark dark:bg-darkLight rounded-md text-darkDark dark:text-lightLight grid gap-4">
-            <h3 className="text-lg font-semibold text-darkDark dark:text-lightLight">
-              Resealternativ
-            </h3>
-            <p>Här kan du se olika alternativ för din resa.</p>
-            <TravelOptions />
-          </div>
-        )}
+        {activeComponent === 'resealternativ' && <TravelOptions />}
 
         {activeComponent === 'besoksmal' && (
-          <div className="p-4 bg-lightDark dark:bg-darkLight rounded-md text-darkDark dark:text-lightLight grid gap-4">
+          <div className="grid grid-cols-1 ">
             <AttractionList
               setSelectedCategory={(category: string) => console.log(category)}
             />
@@ -77,16 +69,8 @@ const Menu: React.FC = () => {
         )}
 
         {activeComponent === 'karta' && (
-          <div className="p-4 bg-lightDark dark:bg-darkLight rounded-md text-darkDark dark:text-lightLight grid">
-            <h3 className="text-lg font-semibold text-darkDark dark:text-lightLight">
-              Karta
-            </h3>
-            <p>Visa en karta med din resväg och viktiga platser.</p>
-            <div className="grid grid-cols-1 h-80">
-              <div className="border z-10 border-darkLight dark:border-lightDark rounded-lg overflow-hidden flex flex-grow">
-                <Map />
-              </div>
-            </div>
+          <div className="rounded-md grid grid-cols-1 h-80 z-10 border border-darkLight dark:border-lightDark overflow-hidden">
+            <Map />
           </div>
         )}
       </div>

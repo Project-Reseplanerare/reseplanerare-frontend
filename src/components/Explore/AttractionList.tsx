@@ -1,10 +1,15 @@
-import { useState } from "react";
-import aktivitetIcon from "../../assets/sport-curling.svg";
-import kulturIcon from "../../assets/culture.svg";
-import matIcon from "../../assets/food.svg";
-import boendeIcon from "../../assets/house.svg";
-import designIcon from "../../assets/shopping.svg";
-import evenemangIcon from "../../assets/ticket.svg";
+import { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faBicycle,
+  faTicketAlt,
+  faLandmark,
+  faShoppingBag,
+  faUtensils,
+  faHotel,
+  faChevronDown,
+  faChevronUp,
+} from '@fortawesome/free-solid-svg-icons';
 
 interface AttractionListProps {
   setSelectedCategory: (category: string) => void;
@@ -14,115 +19,92 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const items = [
-    { 
-      id: 1, 
-      label: "Aktiviteter", 
-      icon: aktivitetIcon, 
-      subItems: [
-        "Bada", "Barn & Familj", "Cykla", "Fiska", 
-        "Golfa", "Motor", "Nöjesaktiviteter", "Paddla", 
-        "På vatten", "Skidåkning", "Sport, Motion & Hälsa", 
-        "Vandra", "Övriga vinteraktiviteter"
-      ] 
+    {
+      id: 1,
+      label: 'Aktiviteter',
+      icon: faBicycle,
+      subItems: ['Bada', 'Barn & Familj', 'Cykla', 'Fiska', 'Golfa', 'Sport'],
     },
-    { 
-      id: 2, 
-      label: "Evenemang", 
-      icon: evenemangIcon, 
-      subItems: [
-        "Barn", "Dans", "Föreläsning och workshop", 
-        "Marknad, mässa, auktion och loppis", "Mat och dryck", 
-        "Motor", "Musik", "På vatten", 
-        "Sport, motion och hälsa", "Teater och underhållning", 
-        "Utställning", "Övriga evenemang"
-      ] 
+    {
+      id: 2,
+      label: 'Evenemang',
+      icon: faTicketAlt,
+      subItems: ['Barn', 'Dans', 'Musik', 'Sport', 'Teater'],
     },
-    { 
-      id: 3, 
-      label: "Kultur & historia", 
-      icon: kulturIcon, 
-      subItems: [
-        "Hembygdsgårdar", "Hus & kulturmiljöer", "Konst", "Kyrka", 
-        "Museum", "Natursevärdheter", "Parker & trädgårdar"
-      ]
+    {
+      id: 3,
+      label: 'Kultur & historia',
+      icon: faLandmark,
+      subItems: ['Konst', 'Museum', 'Kyrka', 'Parker'],
     },
-    { 
-      id: 4, 
-      label: "Design & shopping", 
-      icon: designIcon, 
-      subItems: [
-        "Antikt, loppis & secondhand", "Gårdsbutik", "Hantverk", 
-        "Industri & tillverkning", "Köpcentrum", "Loppis", 
-        "Secondhand", "Shopping"
-      ] 
+    {
+      id: 4,
+      label: 'Design & shopping',
+      icon: faShoppingBag,
+      subItems: ['Antikt', 'Gårdsbutik', 'Shopping'],
     },
-    { 
-      id: 5, 
-      label: "Mat & dryck", 
-      icon: matIcon, 
-      subItems: [
-        "Gårdsbutiker", "Kafé & bageri", "Lunch", 
-        "Pub/nattklubb", "Restaurang", "Snabbmat", "Utkörning"
-      ] 
+    {
+      id: 5,
+      label: 'Mat & dryck',
+      icon: faUtensils,
+      subItems: ['Restaurang', 'Kafé', 'Pub'],
     },
-    { 
-      id: 6, 
-      label: "Boende", 
-      icon: boendeIcon, 
-      subItems: [
-        "Bed & breakfast", "Camping", "Gästhamnar", 
-        "Herrgård", "Hotell & pensionat", "Hus/lägenhet/rum", 
-        "Lägerplatser", "Stugor", "Ställplatser", 
-        "Unika boenden", "Vandrarhem"
-      ] 
-    }
+    {
+      id: 6,
+      label: 'Boende',
+      icon: faHotel,
+      subItems: ['Hotell', 'Stugor', 'Vandrarhem'],
+    },
   ];
 
-  // Funktion för att hantera öppning/stängning av underkategorier
   const handleItemClick = (id: number, label: string) => {
     setActiveIndex(activeIndex === id ? null : id);
     setSelectedCategory(label);
   };
 
   return (
-    <div className="bg-white border border-slate-300 rounded-lg p-4 w-full">
-      <h2 className="text-lg font-semibold text-slate-800">
-        Se och göra i Värmland
-      </h2>
+    <div className="space-y-4">
+      {' '}
+      {/* Ensures consistent spacing between items */}
+      {items.map((item) => (
+        <div key={item.id} className="w-full">
+          <div
+            className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 rounded-md border cursor-pointer transition 
+          bg-lightDark text-darkDark border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark
+          ${
+            activeIndex === item.id
+              ? 'bg-darkDark text-lightDark border-lightDark dark:bg-lightDark dark:text-darkDark dark:border-darkDark'
+              : ''
+          }`}
+            onClick={() => handleItemClick(item.id, item.label)}
+          >
+            <FontAwesomeIcon
+              icon={item.icon}
+              className="w-6 h-6 text-darkLight dark:text-lightDark"
+            />
+            <span className="text-sm">{item.label}</span>
+            <FontAwesomeIcon
+              icon={activeIndex === item.id ? faChevronUp : faChevronDown}
+              className="w-4 h-4 text-darkLight dark:text-lightDark transition-transform"
+            />
+          </div>
 
-      <div className="flex flex-col space-y-4 mt-4">
-        {items.map((item) => (
-          <div key={item.id}>
-            <div
-              className={`flex items-center gap-3 p-4 rounded-md cursor-pointer transition ${
-                activeIndex === item.id ? "bg-blue-100 text-blue-600" : "bg-slate-50 text-slate-700"
-              }`}
-              onClick={() => handleItemClick(item.id, item.label)}
-            >
-              <img
-                src={item.icon}
-                alt={`${item.label} icon`}
-                className="w-8 h-8"
-              />
-              <span className="text-sm">{item.label}</span>
-            </div>
-
-            {/* Visa underkategorier när kategorin är aktiv */}
-            {activeIndex === item.id && item.subItems && (
-              <div className="flex flex-col mt-4 space-y-2">
-                {item.subItems.map((subItem, index) => (
-                  <div
-                    key={index}
-                    className="p-4 bg-slate-50 hover:bg-blue-100 text-slate-700 rounded-md cursor-pointer transition"
-                  >
-                    {subItem}
-                  </div>
-                ))}
-              </div>
+          <div className="grid gap-2 mt-2">
+            {activeIndex === item.id && item.subItems ? (
+              item.subItems.map((subItem, index) => (
+                <div
+                  key={index}
+                  className="p-4 bg-lightDark text-darkDark border border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark rounded-md cursor-pointer transition hover:bg-darkDark dark:hover:bg-lightDark hover:text-lightDark dark:hover:text-darkDark hover:border-lightDark dark:hover:border-darkDark"
+                >
+                  {subItem}
+                </div>
+              ))
+            ) : (
+              <div className="h-0" /> // Maintains consistent spacing
             )}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }

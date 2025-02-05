@@ -34,33 +34,29 @@ const TravelOptions = () => {
   );
 
   return (
-    <div className="bg-white border border-slate-300 rounded-lg p-4 w-full">
-      <h2 className="text-lg font-semibold text-slate-800 mb-4">
-        Hur planerar du att resa?
-      </h2>
-      <div className="grid grid-cols-3 gap-4">
-        {travelOptions.map(({ id, label, icon }) => {
-          const isSelected = selectedOption === id;
-          return (
-            <div
-              key={id}
-              role="button"
-              aria-selected={isSelected}
-              tabIndex={0}
-              className={`flex flex-col items-center justify-center gap-2 p-4 rounded-md cursor-pointer transition focus:outline-none ${
-                isSelected
-                  ? 'bg-blue-100 text-blue-600'
-                  : 'bg-slate-50 text-slate-700'
-              }`}
-              onClick={() => handleOptionClick(id)}
-              onKeyPress={(e) => e.key === 'Enter' && handleOptionClick(id)}
-            >
-              {icon}
-              <span className="text-sm">{label}</span>
-            </div>
-          );
-        })}
-      </div>
+    <div className="grid grid-cols-3 auto-rows-fr gap-4">
+      {travelOptions.map(({ id, label, icon }) => {
+        const isSelected = selectedOption === id;
+        return (
+          <div
+            key={id}
+            role="button"
+            aria-selected={isSelected}
+            tabIndex={0}
+            className={`grid place-items-center gap-2 p-4 rounded-md cursor-pointer transition focus:outline-none border h-full w-full 
+          ${
+            isSelected
+              ? 'bg-darkLight text-darkDark border-darkDark dark:bg-lightDark dark:text-darkDark dark:border-darkDark'
+              : 'bg-lightDark text-darkDark border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark'
+          }`}
+            onClick={() => handleOptionClick(id)}
+            onKeyPress={(e) => e.key === 'Enter' && handleOptionClick(id)}
+          >
+            {icon}
+            <span className="text-sm">{label}</span>
+          </div>
+        );
+      })}
     </div>
   );
 };
