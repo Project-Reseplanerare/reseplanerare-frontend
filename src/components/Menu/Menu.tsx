@@ -6,9 +6,9 @@ const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
 
   return (
-    <section className="bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark w-full text-darkDark dark:text-lightLight p-6 rounded-md grid gap-4">
+    <section className="bg-lightdark dark:bg-darkDark border border-darkLight dark:border-lightDark  w-full text-darkDark dark:text-lightLight p-6 rounded-md grid gap-4">
       {/* Menu Navigation */}
-      <nav className="grid grid-cols-3 gap-2 text-center">
+      <nav className="grid grid-cols-3 gap-2 text-center ">
         <button
           onClick={() =>
             setActiveComponent(
