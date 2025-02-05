@@ -278,9 +278,9 @@ function Map() {
       <>
         <Polyline
           positions={stopsCoords.map(stop => stop.coords)} // Use stopsCoords for the polyline
-          color="blue"
-          weight={3}
-          opacity={0.7}
+          color="#0089e7" 
+          weight={5}
+          opacity={1}
         />
 
         {stopsCoords.map((stop, index) => (
@@ -288,9 +288,10 @@ function Map() {
             key={index}
             center={stop.coords}
             radius={6}
-            color="black"
-            fillColor="black"
-            fillOpacity={1}
+            color="#0089e7"          
+            fillColor="white"      
+            fillOpacity={1}      
+            weight={3}    
           >
             <Popup>{stop.name || "Bus Stop"}</Popup>
           </CircleMarker>
