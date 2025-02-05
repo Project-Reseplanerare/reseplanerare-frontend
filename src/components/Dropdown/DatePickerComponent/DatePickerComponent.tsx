@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { FaCalendarAlt, FaClock, FaChevronDown } from 'react-icons/fa';
 
 const dateAndTimeOptions = [

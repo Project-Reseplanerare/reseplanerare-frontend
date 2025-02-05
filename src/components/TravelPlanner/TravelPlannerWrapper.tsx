@@ -2,7 +2,7 @@ import { useLocationStore } from '../../store/useLocationStore';
 import TripInput from './TripInput';
 import TriggerActionBtn from './TriggerActionBtn';
 
-function TravelPlannerWrapper() {
+const TravelPlannerWrapper = () => {
   const { setFromAddress, setToAddress } = useLocationStore();
 
   const handleInputChange = (inputType: 'from' | 'to', value: string) => {
@@ -27,6 +27,6 @@ function TravelPlannerWrapper() {
       </div>
     </section>
   );
-}
+};
 
 export default TravelPlannerWrapper;

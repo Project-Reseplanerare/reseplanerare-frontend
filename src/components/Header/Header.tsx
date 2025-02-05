@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logotyp-visitvarmland.svg';
+import ThemeSwitch from '../ThemeSwitch/ThemeSwitch';
 
 const Header = () => (
   <header className="bg-white w-full p-2 border-b">
@@ -11,16 +12,9 @@ const Header = () => (
         </Link>
       </div>
 
-      {/* Right: Collaboration Notice */}
+      {/* Right: ThemeSwitch component */}
       <div className="grid place-items-end text-gray-600">
-      <a 
-          href="https://www.varmlandstrafik.se/" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="text-sm hover:text-gray-900 transition"
-        >
-         I samarbete med <span className="font-semibold">Värmlandstrafik</span>
-        </a>
+        <ThemeSwitch />
       </div>
     </nav>
   </header>

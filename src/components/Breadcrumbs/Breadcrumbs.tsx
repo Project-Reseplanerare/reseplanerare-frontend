@@ -1,4 +1,4 @@
-import React from 'react';
+import { memo, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 
 interface Crumb {
@@ -10,14 +10,11 @@ interface BreadCrumbsProps {
   crumbs: Crumb[];
 }
 
-function BreadCrumbs({ crumbs }: BreadCrumbsProps) {
-  return (
-    <nav
-      className="breadcrumbs flex justify-center items-center space-x-2 text-sm "
-      aria-label="Breadcrumb"
-    >
-      {crumbs.map((crumb: Crumb, index: number) => (
-        <React.Fragment key={index}>
+const BreadCrumbs = memo(({ crumbs }: BreadCrumbsProps) => {
+  const breadcrumbItems = useMemo(
+    () =>
+      crumbs.map((crumb, index) => (
+        <span key={index} className="flex items-center space-x-1">
           {crumb.link ? (
             <Link
               to={crumb.link}
@@ -34,12 +31,21 @@ function BreadCrumbs({ crumbs }: BreadCrumbsProps) {
             </span>
           )}
           {index < crumbs.length - 1 && (
-            <span className="breadcrumb-separator text-gray-400">{'/'}</span>
+            <span className="breadcrumb-separator text-gray-400">/</span>
           )}
-        </React.Fragment>
-      ))}
+        </span>
+      )),
+    [crumbs]
+  );
+
+  return (
+    <nav
+      className="breadcrumbs flex justify-center items-center space-x-2 text-sm"
+      aria-label="Breadcrumb"
+    >
+      {breadcrumbItems}
     </nav>
   );
-}
+});
 
 export default BreadCrumbs;

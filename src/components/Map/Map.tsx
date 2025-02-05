@@ -49,7 +49,6 @@ function Map() {
 
   const { selectedOption } = useTravelOptionsStore();
 
-  // Use the custom hook to handle geolocation
   const center = useGeolocation();
 
   useEffect(() => {
@@ -104,7 +103,7 @@ function Map() {
   }, [route]);
 
   useEffect(() => {
-    setStops([]); 
+    setStops([]);
 
     switch (selectedOption) {
       case 'Bil':
@@ -175,7 +174,7 @@ function Map() {
                   iconAnchor: [12, 41],
                 })}
                 eventHandlers={{
-                  click: () => handleEventMarkerClick(lat, lng),
+                  click: () => handleEventMarkerClick(lat, lng), // Only clickable for car markers
                 }}
               >
                 <Popup>
@@ -236,32 +235,6 @@ function Map() {
             </Marker>
           ))}
       </MarkerClusterGroup>
-
-      {/* Bil no api markers
-      {selectedOption === 'Bil' && (
-        <MarkerClusterGroup>
-          {filteredEvents.map((event, index) => {
-            const { lat, lng, title, description } = event;
-            return (
-              <Marker
-                key={index}
-                position={[lat, lng]}
-                eventHandlers={{
-                  click: () => handleEventMarkerClick(lat, lng),
-                  mouseover: (e) => e.target.openPopup(),
-                  mouseout: (e) => e.target.closePopup(),
-                }}
-              >
-                <Popup>
-                  <strong>{title}</strong>
-                  <br />
-                  {description}
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MarkerClusterGroup>
-      )} */}
 
       {/* Marker you add by clicking */}
       {markers.map((position, index) => {

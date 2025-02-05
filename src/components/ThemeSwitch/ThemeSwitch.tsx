@@ -27,7 +27,7 @@ function ThemeSwitch() {
   return (
     <button
       onClick={toggleTheme}
-      className="p-2 mt-8 mb-8 rounded-lg bg-bgPrimary dark:bg-gray-800 text-black dark:text-white hover:bg-gray-300 dark:hover:bg-tSecondary transition"
+      className="p-2 rounded-lg bg-bgPrimary dark:bg-gray-800 text-black dark:text-white hover:bg-gray-300 dark:hover:bg-tSecondary transition"
     >
       Change theme
     </button>

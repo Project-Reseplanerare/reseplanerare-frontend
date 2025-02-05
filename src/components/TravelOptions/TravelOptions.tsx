@@ -1,30 +1,37 @@
+import { memo, useCallback, useMemo } from 'react';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import { FaTrain, FaBus, FaCar } from 'react-icons/fa';
 
-const TravelOptions: React.FC = () => {
+const TravelOptions = () => {
   const { selectedOption, setSelectedOption } = useTravelOptionsStore();
 
-  const travelOptions = [
-    {
-      id: 'Bil',
-      label: 'Bil',
-      icon: <FaCar className="text-3xl text-slate-700" />,
+  const handleOptionClick = useCallback(
+    (id: string) => {
+      setSelectedOption(id);
     },
-    {
-      id: 'Buss',
-      label: 'Buss',
-      icon: <FaBus className="text-3xl text-slate-700" />,
-    },
-    {
-      id: 'Tåg',
-      label: 'Tåg',
-      icon: <FaTrain className="text-3xl text-slate-700" />,
-    },
-  ];
+    [setSelectedOption]
+  );
 
-  const handleOptionClick = (id: string) => {
-    setSelectedOption(id);
-  };
+  const travelOptions = useMemo(
+    () => [
+      {
+        id: 'Bil',
+        label: 'Bil',
+        icon: <FaCar className="text-3xl text-slate-700" />,
+      },
+      {
+        id: 'Buss',
+        label: 'Buss',
+        icon: <FaBus className="text-3xl text-slate-700" />,
+      },
+      {
+        id: 'Tåg',
+        label: 'Tåg',
+        icon: <FaTrain className="text-3xl text-slate-700" />,
+      },
+    ],
+    []
+  );
 
   return (
     <div className="bg-white border border-slate-300 rounded-lg p-4 w-full">
@@ -32,23 +39,30 @@ const TravelOptions: React.FC = () => {
         Hur planerar du att resa?
       </h2>
       <div className="grid grid-cols-3 gap-4">
-        {travelOptions.map((option) => (
-          <div
-            key={option.id}
-            className={`flex flex-col items-center justify-center gap-2 p-4 rounded-md cursor-pointer transition ${
-              selectedOption === option.id
-                ? 'bg-blue-100 text-blue-600'
-                : 'bg-slate-50 text-slate-700'
-            }`}
-            onClick={() => handleOptionClick(option.id)}
-          >
-            {option.icon}
-            <span className="text-sm">{option.label}</span>
-          </div>
-        ))}
+        {travelOptions.map(({ id, label, icon }) => {
+          const isSelected = selectedOption === id;
+          return (
+            <div
+              key={id}
+              role="button"
+              aria-selected={isSelected}
+              tabIndex={0}
+              className={`flex flex-col items-center justify-center gap-2 p-4 rounded-md cursor-pointer transition focus:outline-none ${
+                isSelected
+                  ? 'bg-blue-100 text-blue-600'
+                  : 'bg-slate-50 text-slate-700'
+              }`}
+              onClick={() => handleOptionClick(id)}
+              onKeyPress={(e) => e.key === 'Enter' && handleOptionClick(id)}
+            >
+              {icon}
+              <span className="text-sm">{label}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
 };
 
-export default TravelOptions;
+export default memo(TravelOptions);

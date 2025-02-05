@@ -5,7 +5,7 @@ import { fetchAddress } from '../../utils/api/fetchAdress';
 
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
-function SearchInput() {
+const SearchInput = () => {
   const [query, setQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
@@ -49,6 +49,8 @@ function SearchInput() {
   const clearInput = () => {
     setQuery('');
     setSuggestions([]);
+    setQuery('');
+    setSuggestions([]);
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
@@ -65,6 +67,7 @@ function SearchInput() {
           const { latitude, longitude, name } = place;
 
           console.log('Event Coordinates:', { latitude, longitude, name });
+          console.log('Event Coordinates:', { latitude, longitude, name });
 
           const latlng: [number, number] = [
             parseFloat(latitude),
@@ -72,8 +75,8 @@ function SearchInput() {
           ];
 
           setTempCenter(latlng);
-          setToLocation(latlng); // Now using setToLocation
-          setToAddress(name); // Now using name properly
+          setToLocation(latlng);
+          setToAddress(name);
 
           await fetchAddress(
             latitude,
@@ -145,6 +148,6 @@ function SearchInput() {
       </div>
     </div>
   );
-}
+};
 
 export default SearchInput;
