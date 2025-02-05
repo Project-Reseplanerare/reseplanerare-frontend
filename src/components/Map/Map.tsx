@@ -269,7 +269,7 @@ function Map() {
 
     {route.length > 0 && lineDrawn && stopsCoords.length === 0 && (
       <>
-        <Polyline positions={route} color="blue" weight={3} opacity={0.7} />
+        <Polyline positions={route} color="#0089e7"  weight={5} opacity={1} />
         <div>Total distance: {calculatePolylineDistance(route)} km</div>
       </>
     )}
