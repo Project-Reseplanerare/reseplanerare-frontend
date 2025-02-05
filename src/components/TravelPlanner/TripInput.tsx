@@ -10,34 +10,54 @@ interface TripInputProps {
 }
 
 const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
-  const { fromAddress, toAddress, setFromAddress, setToAddress } = useLocationStore();
+  const { fromAddress, toAddress, setFromAddress, setToAddress } =
+    useLocationStore();
   const { selectedOption } = useTravelOptionsStore();
-  const { setFromStopId, setToStopId, fromStopId, toStopId } = useBusStopStore();
+  const { setFromStopId, setToStopId, fromStopId, toStopId } =
+    useBusStopStore();
 
-  const [fromSuggestions, setFromSuggestions] = useState<{ name: string; extId: string }[]>([]);
-  const [toSuggestions, setToSuggestions] = useState<{ name: string; extId: string }[]>([]);
+  const [fromSuggestions, setFromSuggestions] = useState<
+    { name: string; extId: string }[]
+  >([]);
+  const [toSuggestions, setToSuggestions] = useState<
+    { name: string; extId: string }[]
+  >([]);
 
-  const handleFromAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFromAddressChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = e.target.value;
     setFromAddress(value);
     onInputChange('from', value);
 
     if (value.trim() && selectedOption === 'Buss') {
       const stops = await fetchStops(value);
-      setFromSuggestions(stops.map((stop: { name: any; extId: any; }) => ({ name: stop.name, extId: stop.extId })));
+      setFromSuggestions(
+        stops.map((stop: { name: any; extId: any }) => ({
+          name: stop.name,
+          extId: stop.extId,
+        }))
+      );
     } else {
       setFromSuggestions([]);
     }
   };
 
-  const handleToAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleToAddressChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = e.target.value;
     setToAddress(value);
     onInputChange('to', value);
 
     if (value.trim() && selectedOption === 'Buss') {
       const stops = await fetchStops(value);
-      setToSuggestions(stops.map((stop: { name: any; extId: any; }) => ({ name: stop.name, extId: stop.extId })));
+      setToSuggestions(
+        stops.map((stop: { name: any; extId: any }) => ({
+          name: stop.name,
+          extId: stop.extId,
+        }))
+      );
     } else {
       setToSuggestions([]);
     }
@@ -65,42 +85,42 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   const isSwapDisabled = !fromAddress || !toAddress;
 
   useEffect(() => {
-    console.log("Updated fromStopId:", fromStopId);
-    console.log("Updated toStopId:", toStopId);
+    console.log('Updated fromStopId:', fromStopId);
+    console.log('Updated toStopId:', toStopId);
   }, [fromStopId, toStopId]);
 
   return (
     <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
       {/* From Address Input */}
-      <div className="relative flex items-center p-3 border border-slate-300 rounded-md bg-slate-50">
-        <div className="flex items-center justify-center w-8 h-8 bg-slate-500 text-white rounded-md font-bold">
+      <div className="relative flex items-center p-3 border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark">
+        <div className="flex items-center justify-center w-8 h-8 bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark rounded-md font-bold">
           A
         </div>
         <input
           type="text"
           value={fromAddress}
           onChange={handleFromAddressChange}
-          className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
+          className="ml-3 flex-grow text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
         />
         {/* Clear button for From Address */}
         {fromAddress && (
           <button
             onClick={clearFromInput}
-            className="absolute right-2 text-slate-500 hover:text-slate-700"
+            className="absolute right-2 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
           >
             <FaTimes className="w-4 h-4" />
           </button>
         )}
         {/* From Address Suggestions Dropdown */}
         {fromSuggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
+          <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
             {fromSuggestions.map((suggestion, index) => (
               <li
                 key={index}
-                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 cursor-pointer transition"
+                className="px-4 py-2 text-sm text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
                 onClick={() => {
                   setFromAddress(suggestion.name);
-                  setFromStopId(suggestion.extId); // Store extId in Zustand
+                  setFromStopId(suggestion.extId);
                   setFromSuggestions([]);
                   onInputChange('from', suggestion.name);
                 }}
@@ -114,11 +134,12 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
 
       {/* Swap Button */}
       <button
-        className={`flex items-center justify-center rounded-full h-12 w-12 border focus:outline-none hover:bg-slate-100 ${
-          isSwapDisabled
-            ? 'bg-slate-300 text-slate-500 border-slate-300 cursor-not-allowed'
-            : 'bg-white text-slate-500 border-slate-300 hover:bg-slate-100'
-        }`}
+        className={`flex items-center justify-center rounded-full h-12 w-12 border focus:outline-none transition
+      ${
+        isSwapDisabled
+          ? 'bg-darkLight dark:bg-lightDark text-lightDark dark:text-darkLight border-darkLight dark:border-lightDark cursor-not-allowed opacity-50'
+          : 'bg-lightLight dark:bg-darkDark text-darkDark dark:text-lightLight border-darkLight dark:border-lightDark hover:bg-lightDark dark:hover:bg-darkLight'
+      }`}
         onClick={swapAddresses}
         aria-label="Swap addresses"
         title="Swap addresses"
@@ -141,35 +162,35 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       </button>
 
       {/* To Address Input */}
-      <div className="relative flex items-center p-3 border border-slate-300 rounded-md bg-slate-50">
-        <div className="flex items-center justify-center w-8 h-8 bg-slate-500 text-white rounded-md font-bold">
+      <div className="relative flex items-center p-3 border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark">
+        <div className="flex items-center justify-center w-8 h-8 bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark rounded-md font-bold">
           B
         </div>
         <input
           type="text"
           value={toAddress}
           onChange={handleToAddressChange}
-          className="ml-3 flex-grow text-slate-700 bg-transparent border-none outline-none"
+          className="ml-3 flex-grow text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
         />
         {/* Clear button for To Address */}
         {toAddress && (
           <button
             onClick={clearToInput}
-            className="absolute right-2 text-slate-500 hover:text-slate-700"
+            className="absolute right-2 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
           >
             <FaTimes className="w-4 h-4" />
           </button>
         )}
         {/* To Address Suggestions Dropdown */}
         {toSuggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
+          <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
             {toSuggestions.map((suggestion, index) => (
               <li
                 key={index}
-                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 cursor-pointer transition"
+                className="px-4 py-2 text-sm text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
                 onClick={() => {
                   setToAddress(suggestion.name);
-                  setToStopId(suggestion.extId); // Store extId in Zustand
+                  setToStopId(suggestion.extId);
                   setToSuggestions([]);
                   onInputChange('to', suggestion.name);
                 }}

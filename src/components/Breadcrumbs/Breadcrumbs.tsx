@@ -18,20 +18,22 @@ const BreadCrumbs = memo(({ crumbs }: BreadCrumbsProps) => {
           {crumb.link ? (
             <Link
               to={crumb.link}
-              className="breadcrumb-link text-gray-500 hover:text-blue-600 transition duration-200"
+              className="breadcrumb-link text-darkDark dark:text-lightLight hover:text-darkLight dark:hover:text-lightDark transition duration-200"
             >
               {crumb.label}
             </Link>
           ) : (
             <span
-              className="breadcrumb-current font-semibold text-blue-700"
+              className="breadcrumb-current font-semibold text-darkDark dark:text-lightLight"
               aria-current="page"
             >
               {crumb.label}
             </span>
           )}
           {index < crumbs.length - 1 && (
-            <span className="breadcrumb-separator text-gray-400">/</span>
+            <span className="breadcrumb-separator text-darkDark dark:text-lightLight">
+              /
+            </span>
           )}
         </span>
       )),
@@ -40,7 +42,7 @@ const BreadCrumbs = memo(({ crumbs }: BreadCrumbsProps) => {
 
   return (
     <nav
-      className="breadcrumbs flex justify-center items-center space-x-2 text-sm"
+      className="breadcrumbs flex justify-center items-center space-x-2 text-sm text-darkDark dark:text-lightLight"
       aria-label="Breadcrumb"
     >
       {breadcrumbItems}

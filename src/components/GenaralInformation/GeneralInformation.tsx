@@ -6,25 +6,25 @@ const GeneralInformation: React.FC = () => {
   if (!isVisible) return null;
 
   return (
-    <section className="w-full bg-gray-100 p-6 rounded-md border grid gap-4">
+    <section className="w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-darkLight dark:border-lightDark grid gap-4">
       {/* Section 1: Close Button & Title */}
-      <div className="grid grid-cols-2 ">
+      <div className="grid grid-cols-2">
         {/* Title */}
-        <h2 className="text-2xl font-semibold text-gray-800">
+        <h2 className="text-2xl font-semibold text-darkDark dark:text-lightLight">
           Om Resplaneraren
         </h2>
 
         {/* Close Button */}
         <button
           onClick={() => setIsVisible(false)}
-          className="text-gray-400 hover:text-gray-800 text-lg justify-self-end"
+          className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight text-lg justify-self-end"
         >
           ✕
         </button>
       </div>
 
       {/* Description */}
-      <p className="text-gray-500 text-sm">
+      <p className="text-darkLight dark:text-lightDark text-sm">
         Resplaneraren hjälper dig att enkelt hitta och planera dina resor i
         Värmland. Oavsett om du pendlar dagligen eller besöker regionen, ger vår
         tjänst dig de bästa resealternativen i samarbete med Värmlandstrafik.

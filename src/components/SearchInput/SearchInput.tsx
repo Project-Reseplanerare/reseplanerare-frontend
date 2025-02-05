@@ -95,11 +95,11 @@ const SearchInput = () => {
   };
 
   return (
-    <div className="w-full grid gap-4 bg-white py-6 text-gray-900 text-center">
+    <div className="w-full grid gap-4">
       {/* Input Section */}
-      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-gray-300 rounded-lg bg-white">
+      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-darkLight dark:border-lightDark rounded-lg bg-lightLight dark:bg-darkDark">
         {/* Search Icon */}
-        <div className="px-3 text-gray-500">
+        <div className="px-3 text-darkLight dark:text-lightDark">
           <FaSearch />
         </div>
 
@@ -109,13 +109,13 @@ const SearchInput = () => {
           value={query}
           onChange={handleInputChange}
           placeholder="Vet du vad du söker men inte var? Hitta det snabbt här!"
-          className="h-10 w-full text-sm text-gray-900 placeholder-gray-400 px-3 bg-transparent focus:ring-2 focus:ring-gray-500 focus:outline-none"
+          className="h-10 w-full text-sm text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark px-3 bg-transparent focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none"
         />
 
         {query && (
           <button
             onClick={clearInput}
-            className="px-3 text-gray-500 hover:text-gray-700 transition"
+            className="px-3 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight transition"
           >
             <FaTimes className="w-4 h-4" />
           </button>
@@ -123,11 +123,11 @@ const SearchInput = () => {
 
         {/* Dropdown Suggestions */}
         {suggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-white border border-gray-300 rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
+          <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
             {suggestions.map((title, index) => (
               <li
                 key={index}
-                className="px-4 py-2 text-sm text-gray-700 hover:bg-gray-200 cursor-pointer transition"
+                className="px-4 py-2 text-sm text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
                 onClick={() => {
                   setQuery(title);
                   setSuggestions([]);
@@ -141,7 +141,7 @@ const SearchInput = () => {
         )}
 
         {loading && (
-          <p className="absolute top-full left-0 text-sm text-gray-500 px-4 py-2">
+          <p className="absolute top-full left-0 text-sm text-darkLight dark:text-lightDark px-4 py-2">
             Loading...
           </p>
         )}

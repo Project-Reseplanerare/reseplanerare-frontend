@@ -3,7 +3,7 @@ import logo from '../../assets/logotyp-visitvarmland.svg';
 import ThemeSwitch from '../ThemeSwitch/ThemeSwitch';
 
 const Header = () => (
-  <header className="bg-white w-full p-2 border-b">
+  <header className="bg-lightLight dark:bg-darkDark w-full p-2 border-b border-darkLight dark:border-lightDark">
     <nav className="grid grid-cols-2 items-center">
       {/* Left: VisitVärmland Logo */}
       <div className="grid place-items-start">
@@ -13,7 +13,7 @@ const Header = () => (
       </div>
 
       {/* Right: ThemeSwitch component */}
-      <div className="grid place-items-end text-gray-600">
+      <div className="grid place-items-end text-darkLight dark:text-lightDark">
         <ThemeSwitch />
       </div>
     </nav>
