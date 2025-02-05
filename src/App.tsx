@@ -12,25 +12,21 @@ import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptions
 function App() {
   return (
     <Router>
-      <main className="app-container h-full grid grid-rows-[auto,1fr,auto] gap-4 bg-lightLight dark:bg-darkDark text-darkDark dark:text-lightLight">
+      <main className="app-container h-screen grid grid-rows-[auto,1fr,auto] gap-4 bg-lightLight dark:bg-darkDark text-darkDark dark:text-lightLight">
         <Header />
         <Routes>
           <Route
             path="/"
             element={
-              <section className="p-8 max-w-[800px] mx-auto grid gap-4 ">
+              <section className="p-8 max-w-[800px] mx-auto grid gap-4 h-full">
                 {/* General Information */}
                 <GeneralInformation />
-
                 {/* Search Input */}
                 <SearchInput />
-
                 {/* Travel Planner Wrapper */}
                 <TravelPlannerWrapper />
-
                 {/* Route option dropdown */}
                 <RouteOptionsDropdown />
-
                 {/* Travel Options */}
                 <Menu />
               </section>
