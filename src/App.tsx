@@ -2,14 +2,14 @@ import './App.css';
 import Header from './components/Header/Header';
 import BreadCrumbs from './components/BreadCrumbs/BreadCrumbs';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import TravelPlannerWrapper from './components/TravelPlanner.tsx/TravelPlannerWrapper';
-import Map from './components/Map/Map';
+import TravelPlannerWrapper from './components/TravelPlanner/TravelPlannerWrapper';
+// import Map from './components/Map/Map';
 import GeneralInformation from './components/GenaralInformation/GeneralInformation';
 import SearchInput from './components/SearchInput/SearchInput';
 import Footer from './components/Footer/Footer';
-import TravelOptions from './components/Dropdown/TravelOptions/TravelOptions';
+import Menu from './components/Menu/Menu';
 import DatePickerComponent from './components/Dropdown/DatePickerComponent/DatePickerComponent';
-import AttractionList from './components/Dropdown/AttractionList/AttractionList';
+// import AttractionList from './components/Explore/AttractionsList';
 import TravelStop from './components/Dropdown/TravelStop/TravelStop';
 import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptionsDropdown';
 
@@ -43,12 +43,12 @@ function App() {
                   <SearchInput />
                 </div>
 
-                {/* Map Component */}
+                {/* Map Component
                 <div className="grid grid-cols-1 h-80">
                   <div className="border z-10 border-gray-300 rounded-lg overflow-hidden flex flex-grow">
                     <Map />
                   </div>
-                </div>
+                </div> */}
 
                 {/* Travel Planner Wrapper */}
                 <div>
@@ -62,7 +62,7 @@ function App() {
 
                 {/* Travel Options */}
                 <div>
-                  <TravelOptions />
+                  <Menu />
                 </div>
 
                 {/* Date Picker */}
@@ -71,9 +71,9 @@ function App() {
                 </div>
 
                 {/* Attraction List */}
-                <div>
+                {/* <div>
                   <AttractionList />
-                </div>
+                </div> */}
 
                 {/* Travel Stop */}
                 <div>

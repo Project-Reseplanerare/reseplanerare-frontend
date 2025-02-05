@@ -1,4 +1,4 @@
-import { useTravelOptionsStore } from '../../../store/useTravelOptionsStore';
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import { FaTrain, FaBus, FaCar, FaChevronDown } from 'react-icons/fa';
 import { useState } from 'react';
 

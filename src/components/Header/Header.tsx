@@ -13,9 +13,14 @@ const Header = () => (
 
       {/* Right: Collaboration Notice */}
       <div className="grid place-items-end text-gray-600">
-        <Link to="/" className="text-sm hover:text-gray-900 transition">
-          I samarbete med <span className="font-semibold">Värmlandstrafik</span>
-        </Link>
+      <a 
+          href="https://www.varmlandstrafik.se/" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-sm hover:text-gray-900 transition"
+        >
+         I samarbete med <span className="font-semibold">Värmlandstrafik</span>
+        </a>
       </div>
     </nav>
   </header>
