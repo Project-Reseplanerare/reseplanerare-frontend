@@ -18,7 +18,7 @@ function App() {
           <Route
             path="/"
             element={
-              <section className="px-8 w-full max-w-[800px] mx-auto grid gap-4 ">
+              <section className="p-8 max-w-[800px] mx-auto grid gap-4 ">
                 {/* General Information */}
                 <GeneralInformation />
 
