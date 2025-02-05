@@ -1,6 +1,5 @@
 import './App.css';
 import Header from './components/Header/Header';
-import BreadCrumbs from './components/BreadCrumbs/BreadCrumbs';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TravelPlannerWrapper from './components/TravelPlanner/TravelPlannerWrapper';
 // import Map from './components/Map/Map';
@@ -20,14 +19,6 @@ function App() {
             path="/"
             element={
               <section className="px-8 w-full max-w-[800px] mx-auto grid gap-4 ">
-                {/* Breadcrumbs */}
-                <BreadCrumbs
-                  crumbs={[
-                    { label: 'Visit Värmland', link: '/' },
-                    { label: 'Reseplaneraren', link: '/reseplaneraren' },
-                  ]}
-                />
-
                 {/* General Information */}
                 <GeneralInformation />
 
