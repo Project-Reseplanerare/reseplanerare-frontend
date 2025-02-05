@@ -1,42 +1,53 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 
 interface Event {
-  lat: number;
-  lng: number;
-  title?: string;
-  description?: string;
+ lat: number;
+ lng: number;
+ title?: string;
+ description?: string;
 }
 
 interface FilterEventsByBoundsProps {
-  events: Event[];
-  setFilteredEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+ events: Event[];
+ setFilteredEvents: React.Dispatch<React.SetStateAction<Event[]>>;
 }
 
 const FilterEventsByBounds: React.FC<FilterEventsByBoundsProps> = ({
-  events,
-  setFilteredEvents,
+ events,
+ setFilteredEvents,
 }) => {
-  const map = useMap();
+ const map = useMap();
+ const timeoutRef = useRef<number>();
 
-  useEffect(() => {
-    const updateFilteredEvents = () => {
-      const bounds = map.getBounds();
-      const filtered = events.filter((event) =>
-        bounds.contains([event.lat, event.lng])
-      );
-      setFilteredEvents(filtered);
-    };
+ const updateFilteredEvents = useCallback(() => {
+   const bounds = map.getBounds();
+   const filtered = events.filter((event) =>
+     bounds.contains([event.lat, event.lng])
+   );
+   setFilteredEvents(filtered);
+ }, [map, events, setFilteredEvents]);
 
-    updateFilteredEvents();
-    map.on('moveend', updateFilteredEvents);
+ useEffect(() => {
+   const debouncedUpdate = () => {
+     if (timeoutRef.current) {
+       window.clearTimeout(timeoutRef.current);
+     }
+     timeoutRef.current = window.setTimeout(updateFilteredEvents, 100);
+   };
 
-    return () => {
-      map.off('moveend', updateFilteredEvents);
-    };
-  }, [map, events, setFilteredEvents]);
+   debouncedUpdate();
+   map.on('moveend', debouncedUpdate);
 
-  return null;
+   return () => {
+     map.off('moveend', debouncedUpdate);
+     if (timeoutRef.current) {
+       window.clearTimeout(timeoutRef.current);
+     }
+   };
+ }, [map, updateFilteredEvents]);
+
+ return null;
 };
 
 export default FilterEventsByBounds;
