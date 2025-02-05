@@ -44,12 +44,11 @@ function Map() {
     setLineDrawn,
     markers,
     setMarkers,
-    from
+    from,
   } = useLocationStore();
 
   const { selectedOption } = useTravelOptionsStore();
 
-  // Use the custom hook to handle geolocation
   const center = useGeolocation();
 
   useEffect(() => {
@@ -62,12 +61,16 @@ function Map() {
     const updateRoute = async () => {
       if (from && markers.length > 0 && lineDrawn) {
         let routeData: LatLngExpression[] = [];
-  
+
         const firstSegment = await getRoute(from, markers[0], setLoading);
         routeData = [...routeData, ...firstSegment];
-  
+
         for (let i = 0; i < markers.length - 1; i++) {
-          const segmentRoute = await getRoute(markers[i], markers[i + 1], setLoading);
+          const segmentRoute = await getRoute(
+            markers[i],
+            markers[i + 1],
+            setLoading
+          );
           routeData = [...routeData, ...segmentRoute];
         }
         setRoute(routeData);
@@ -75,7 +78,7 @@ function Map() {
         setRoute([]);
       }
     };
-  
+
     updateRoute();
   }, [from, markers, lineDrawn]);
 
@@ -100,7 +103,7 @@ function Map() {
   }, [route]);
 
   useEffect(() => {
-    setStops([]); 
+    setStops([]);
 
     switch (selectedOption) {
       case 'Bil':
@@ -128,9 +131,8 @@ function Map() {
     setToLocation([lat, lng]);
     await fetchAddress(lat, lng, 'to', setToAddress, setToAddress);
 
-
     if (markers.length > 0) {
-      const userMarker = markers[markers.length - 1]; 
+      const userMarker = markers[markers.length - 1];
       setRoute([userMarker, [lat, lng]]);
       setLineDrawn(true);
     }
@@ -157,34 +159,34 @@ function Map() {
         <Popup>Your current location</Popup>
       </Marker>
 
- {/* Car markers */}
-    {selectedOption === 'Bil' && (
-      <MarkerClusterGroup>
-        {filteredEvents.map((event, index) => {
-          const { lat, lng, title, description } = event;
-          return (
-            <Marker
-              key={index}
-              position={[lat, lng]}
-              icon={L.icon({
-                iconUrl: carIcon,
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
-              })}
-              eventHandlers={{
-                click: () => handleEventMarkerClick(lat, lng),  // Only clickable for car markers
-              }}
-            >
-              <Popup>
-                <strong>{title}</strong>
-                <br />
-                {description}
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MarkerClusterGroup>
-    )}
+      {/* Car markers */}
+      {selectedOption === 'Bil' && (
+        <MarkerClusterGroup>
+          {filteredEvents.map((event, index) => {
+            const { lat, lng, title, description } = event;
+            return (
+              <Marker
+                key={index}
+                position={[lat, lng]}
+                icon={L.icon({
+                  iconUrl: carIcon,
+                  iconSize: [25, 41],
+                  iconAnchor: [12, 41],
+                })}
+                eventHandlers={{
+                  click: () => handleEventMarkerClick(lat, lng), // Only clickable for car markers
+                }}
+              >
+                <Popup>
+                  <strong>{title}</strong>
+                  <br />
+                  {description}
+                </Popup>
+              </Marker>
+            );
+          })}
+        </MarkerClusterGroup>
+      )}
 
       {/* Bus markers */}
       <MarkerClusterGroup>
@@ -233,32 +235,6 @@ function Map() {
             </Marker>
           ))}
       </MarkerClusterGroup>
-
-      {/* Bil no api markers
-      {selectedOption === 'Bil' && (
-        <MarkerClusterGroup>
-          {filteredEvents.map((event, index) => {
-            const { lat, lng, title, description } = event;
-            return (
-              <Marker
-                key={index}
-                position={[lat, lng]}
-                eventHandlers={{
-                  click: () => handleEventMarkerClick(lat, lng),
-                  mouseover: (e) => e.target.openPopup(),
-                  mouseout: (e) => e.target.closePopup(),
-                }}
-              >
-                <Popup>
-                  <strong>{title}</strong>
-                  <br />
-                  {description}
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MarkerClusterGroup>
-      )} */}
 
       {/* Marker you add by clicking */}
       {markers.map((position, index) => {
