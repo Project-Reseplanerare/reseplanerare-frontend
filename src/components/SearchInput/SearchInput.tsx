@@ -96,7 +96,7 @@ function SearchInput() {
   };
 
   return (
-    <div className="max-w-[950px] grid gap-4 bg-white py-6 text-gray-900 text-center">
+    <div className="w-full grid gap-4 bg-white py-6 text-gray-900 text-center">
       {/* Input Section */}
       <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-gray-300 rounded-lg bg-white">
         {/* Search Icon */}
