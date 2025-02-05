@@ -28,7 +28,9 @@ const RouteOptionsDropdown = () => {
   const [travelTimes, setTravelTimes] = useState<string[]>([]);
   const [routeStops, setRouteStops] = useState<Record<number, any[]>>({});
   const [error, setError] = useState<string | null>(null);
-  const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(null);
+  const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
     if (!isButtonClicked || !fromStopId || !toStopId) return;
@@ -95,7 +97,7 @@ const RouteOptionsDropdown = () => {
 
         setRouteNames(names);
         setTravelTimes(times);
-        setRouteStops({}); 
+        setRouteStops({});
       } catch (err) {
         setError((err as Error).message);
       }
@@ -109,7 +111,14 @@ const RouteOptionsDropdown = () => {
       setSelectedRouteIndex(null);
     } else {
       setSelectedRouteIndex(index);
-      fetchRouteStopsForRoute(index, fromStopId, toStopId, apiKey, setRouteStops, setError);
+      fetchRouteStopsForRoute(
+        index,
+        fromStopId,
+        toStopId,
+        apiKey,
+        setRouteStops,
+        setError
+      );
     }
   };
 
@@ -128,16 +137,23 @@ const RouteOptionsDropdown = () => {
       `${new Date().toDateString()} ${departureTime}`
     );
     const arrivalDate = new Date(`${new Date().toDateString()} ${arrivalTime}`);
-    const duration = (arrivalDate.getTime() - departureDate.getTime()) / (1000 * 60);
+    const duration =
+      (arrivalDate.getTime() - departureDate.getTime()) / (1000 * 60);
     if (duration <= 0) return 'Arrived';
     return `${duration} min`;
   };
 
   return (
-    <div className="grid gap-4 p-4 border bg-gray-100 text-gray-800 rounded-lg">
-      <h2 className="text-xl font-bold text-gray-900 border-b pb-2">Ruttalternativ</h2>
+    <div className="grid gap-4 p-4 border bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
+      <h2 className="text-xl font-bold text-darkDark dark:text-lightLight border-b border-darkLight dark:border-lightDark pb-2">
+        Ruttalternativ
+      </h2>
 
-      {error && <p className="text-sm text-red-700 bg-red-200 p-2 rounded-md">⚠️ {error}</p>}
+      {error && (
+        <p className="text-sm text-darkDark dark:text-lightLight bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
+          ⚠️ {error}
+        </p>
+      )}
 
       {routeNames.length > 0 ? (
         <div className="grid gap-3">
@@ -145,26 +161,36 @@ const RouteOptionsDropdown = () => {
             <div key={index} className="grid gap-2">
               <div
                 onClick={() => handleRouteClick(index)}
-                className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-gray-50 border border-gray-300 rounded-md hover:bg-gray-200 transition"
+                className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md hover:bg-lightDark dark:hover:bg-darkLight transition"
               >
-                <p className="font-medium text-gray-800 truncate" title={name}>
+                <p
+                  className="font-medium text-darkDark dark:text-lightLight truncate"
+                  title={name}
+                >
                   {name}
                 </p>
-                <div className="bg-gray-200 px-3 py-1 rounded-md text-right">
-                  <p className="text-sm text-gray-700">
-                    Restid: <span className="font-bold">{travelTimes[index]}</span>
+                <div className="bg-lightDark dark:bg-darkLight px-3 py-1 rounded-md text-right">
+                  <p className="text-sm text-darkDark dark:text-lightLight">
+                    Restid:{' '}
+                    <span className="font-bold">{travelTimes[index]}</span>
                   </p>
                 </div>
                 <span
-                  className={`text-gray-700 transition-transform ${selectedRouteIndex === index ? 'rotate-180' : 'rotate-0'}`}
+                  className={`text-darkDark dark:text-lightLight transition-transform ${
+                    selectedRouteIndex === index ? 'rotate-180' : 'rotate-0'
+                  }`}
                 >
                   ▼
                 </span>
               </div>
+
               {selectedRouteIndex === index && routeStops[index] && (
-                <div className="mt-2 p-2 border rounded bg-white space-y-1">
+                <div className="mt-2 p-2 border border-darkLight dark:border-lightDark rounded bg-lightLight dark:bg-darkDark space-y-1">
                   {routeStops[index].map((stop, sIndex) => (
-                    <div key={sIndex} className="flex justify-between text-sm text-gray-700">
+                    <div
+                      key={sIndex}
+                      className="flex justify-between text-sm text-darkDark dark:text-lightLight"
+                    >
                       <span>● {stop.name}</span>
                       <span>{stop.depTime || stop.arrTime || ''}</span>
                     </div>
@@ -175,11 +201,12 @@ const RouteOptionsDropdown = () => {
           ))}
         </div>
       ) : (
-        <p className="text-gray-600 text-center py-4">⏳ Laddar rutter...</p>
+        <p className="text-darkDark dark:text-lightLight text-center py-4">
+          ⏳ Laddar rutter...
+        </p>
       )}
     </div>
   );
 };
 
 export default RouteOptionsDropdown;
-
