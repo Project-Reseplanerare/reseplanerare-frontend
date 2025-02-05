@@ -19,7 +19,7 @@ function App() {
           <Route
             path="/"
             element={
-              <section className="px-4 sm:px-6 lg:px-8 w-[800px] mx-auto grid gap-6">
+              <section className="px-8 w-full max-w-[800px] mx-auto grid gap-4 ">
                 {/* Breadcrumbs */}
                 <BreadCrumbs
                   crumbs={[
