@@ -16,13 +16,13 @@ import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptions
 function App() {
   return (
     <Router>
-      <main className="app-container min-h-screen grid grid-rows-layout gap-4">
+      <main className="app-container min-h-screen grid grid-rows-[auto,1fr,auto] gap-4">
         <Header />
         <Routes>
           <Route
             path="/"
             element={
-              <section className="px-5 grid grid-cols-1 ">
+              <section className="px-4 sm:px-6 lg:px-8 w-full mx-auto grid gap-6 ">
                 {/* Breadcrumbs */}
                 <div>
                   <BreadCrumbs
