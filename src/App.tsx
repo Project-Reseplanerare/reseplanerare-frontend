@@ -24,24 +24,18 @@ function App() {
             element={
               <section className="px-4 sm:px-6 lg:px-8 w-full mx-auto grid gap-6 ">
                 {/* Breadcrumbs */}
-                <div>
-                  <BreadCrumbs
-                    crumbs={[
-                      { label: 'Visit Värmland', link: '/' },
-                      { label: 'Reseplaneraren', link: '/reseplaneraren' },
-                    ]}
-                  />
-                </div>
+                <BreadCrumbs
+                  crumbs={[
+                    { label: 'Visit Värmland', link: '/' },
+                    { label: 'Reseplaneraren', link: '/reseplaneraren' },
+                  ]}
+                />
 
                 {/* General Information */}
-                <div>
-                  <GeneralInformation />
-                </div>
+                <GeneralInformation />
 
                 {/* Search Input */}
-                <div>
-                  <SearchInput />
-                </div>
+                <SearchInput />
 
                 {/* Map Component
                 <div className="grid grid-cols-1 h-80">
@@ -51,14 +45,10 @@ function App() {
                 </div> */}
 
                 {/* Travel Planner Wrapper */}
-                <div>
-                  <TravelPlannerWrapper />
-                </div>
+                <TravelPlannerWrapper />
 
-                 {/* Route option dropdown */}
-                <div>
-                  <RouteOptionsDropdown />
-                </div>
+                {/* Route option dropdown */}
+                <RouteOptionsDropdown />
 
                 {/* Travel Options */}
                 <div>
@@ -66,9 +56,7 @@ function App() {
                 </div>
 
                 {/* Date Picker */}
-                <div>
-                  <DatePickerComponent />
-                </div>
+                <DatePickerComponent />
 
                 {/* Attraction List */}
                 {/* <div>
@@ -76,9 +64,7 @@ function App() {
                 </div> */}
 
                 {/* Travel Stop */}
-                <div>
-                  <TravelStop />
-                </div>
+                <TravelStop />
               </section>
             }
           />
