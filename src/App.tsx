@@ -22,7 +22,7 @@ function App() {
           <Route
             path="/"
             element={
-              <section className="px-4 sm:px-6 lg:px-8 w-full mx-auto grid gap-6 ">
+              <section className="px-4 sm:px-6 lg:px-8 w-full h-full mx-auto grid gap-6 ">
                 {/* Breadcrumbs */}
                 <div>
                   <BreadCrumbs
@@ -55,7 +55,7 @@ function App() {
                   <TravelPlannerWrapper />
                 </div>
 
-                 {/* Route option dropdown */}
+                {/* Route option dropdown */}
                 <div>
                   <RouteOptionsDropdown />
                 </div>
