@@ -14,7 +14,7 @@ const TriggerActionBtn = () => {
 
   const { setIsButtonClicked } = useSearchBtnStore();
 
-  const {setStopsCoords} = useBusStopStore()
+  const { setStopsCoords } = useBusStopStore();
 
   const parseCoordinates = (address: string): [number, number] | null => {
     if (!address) return null;
@@ -72,13 +72,8 @@ const TriggerActionBtn = () => {
   return (
     <button
       onClick={handleClick}
-      className={`px-4 py-2 rounded-md transition
-    ${
-      lineDrawn
-        ? 'bg-darkDark dark:bg-lightLight hover:bg-darkLight dark:hover:bg-lightDark'
-        : 'bg-darkDark dark:bg-lightLight hover:bg-darkLight dark:hover:bg-lightDark'
-    } 
-    text-lightLight dark:text-darkDark
+      className={`px-4 py-2 rounded-md transition text-lightLight dark:text-darkDark 
+    bg-darkDark dark:bg-lightLight hover:bg-darkLight dark:hover:bg-lightDark 
     ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       disabled={isDisabled}
     >
