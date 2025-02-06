@@ -4,6 +4,7 @@ import { useLocationStore } from '../../store/useLocationStore';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import { useBusStopStore } from '../../store/useBusStopStore';
 import { fetchStops } from '../../utils/api/fetchBusStopsVarm';
+import { fetchTrainStops } from '../../utils/api/fetchTrainStopsVarm';
 
 interface TripInputProps {
   onInputChange: (inputType: 'from' | 'to', value: string) => void;
@@ -23,41 +24,66 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     { name: string; extId: string }[]
   >([]);
 
-  const handleFromAddressChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleFromAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setFromAddress(value);
     onInputChange('from', value);
 
-    if (value.trim() && selectedOption === 'Buss') {
-      const stops = await fetchStops(value);
-      setFromSuggestions(
-        stops.map((stop: { name: any; extId: any }) => ({
-          name: stop.name,
-          extId: stop.extId,
-        }))
-      );
+    if (value.trim()) {
+      if (selectedOption === 'Buss') {
+        // Fetch bus stops if option is "Buss"
+        const stops = await fetchStops(value);
+        setFromSuggestions(
+          stops.map((stop: { name: any; extId: any }) => ({
+            name: stop.name,
+            extId: stop.extId,
+          }))
+        );
+      } else if (selectedOption === 'Tåg') {
+        // Fetch train stops if option is "Tåg"
+        const trainStops = await fetchTrainStops(value);
+        setFromSuggestions(
+          trainStops.map((stop: { name: any; extId: any }) => ({
+            name: stop.name,
+            extId: stop.extId,
+          }))
+        );
+      } else {
+        setFromSuggestions([]);
+      }
     } else {
       setFromSuggestions([]);
     }
   };
 
-  const handleToAddressChange = async (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+
+  const handleToAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setToAddress(value);
     onInputChange('to', value);
 
-    if (value.trim() && selectedOption === 'Buss') {
-      const stops = await fetchStops(value);
-      setToSuggestions(
-        stops.map((stop: { name: any; extId: any }) => ({
-          name: stop.name,
-          extId: stop.extId,
-        }))
-      );
+    if (value.trim()) {
+      if (selectedOption === 'Buss') {
+        // Fetch bus stops if option is "Buss"
+        const stops = await fetchStops(value);
+        setToSuggestions(
+          stops.map((stop: { name: any; extId: any }) => ({
+            name: stop.name,
+            extId: stop.extId,
+          }))
+        );
+      } else if (selectedOption === 'Tåg') {
+        // Fetch train stops if option is "Tåg"
+        const trainStops = await fetchTrainStops(value);
+        setToSuggestions(
+          trainStops.map((stop: { name: any; extId: any }) => ({
+            name: stop.name,
+            extId: stop.extId,
+          }))
+        );
+      } else {
+        setToSuggestions([]);
+      }
     } else {
       setToSuggestions([]);
     }

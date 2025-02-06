@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useBusStopStore } from '../../store/useBusStopStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
 import { fetchRouteStopsForRoute } from '../../utils/api/fetchRouteStopsForRoute';
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 
@@ -31,10 +32,13 @@ const RouteOptionsDropdown = () => {
   const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(
     null
   );
+  const { selectedOption } = useTravelOptionsStore();
 
   useEffect(() => {
     if (!isButtonClicked || !fromStopId || !toStopId) return;
 
+    if (selectedOption !== 'Buss') return;
+    
     const fetchRoutes = async () => {
       try {
         const fromResponse = await fetch(
