@@ -152,7 +152,7 @@ function Map() {
       />
 
       <MapCenterUpdater />
-      <MapClickHandler />
+      <MapClickHandler disabled={stopsCoords.length > 0} />
 
       <FilterEventsByBounds
         events={events}
@@ -247,7 +247,9 @@ function Map() {
           <Marker
             key={index}
             position={[lat, lng]}
-            eventHandlers={{
+            eventHandlers={
+            stopsCoords.length === 0 
+              ? {
               click: () =>
                 handleRemoveMarker(
                   index,
@@ -258,7 +260,8 @@ function Map() {
                 ),
               mouseover: (e) => e.target.openPopup(),
               mouseout: (e) => e.target.closePopup(),
-            }}
+            } : {}
+          }
           >
             <Popup>
               Latitude: {lat.toFixed(4)}, Longitude: {lng.toFixed(4)}
