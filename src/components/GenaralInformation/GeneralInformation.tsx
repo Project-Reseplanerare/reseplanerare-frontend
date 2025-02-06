@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 
 const GeneralInformation: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
 
-  if (!isVisible) return null;
-
   return (
-    <section className="w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-darkLight dark:border-lightDark grid gap-4">
+    <section
+      className={`w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-darkLight dark:border-lightDark grid gap-4" ${
+        isVisible
+          ? "opacity-100 h-auto"
+          : "opacity-0 h-0 overflow-hidden pointer-events-none"
+      }`}
+    >
       {/* Section 1: Close Button & Title */}
-      <div className="grid grid-cols-2">
+      <div className="relative">
         {/* Title */}
-        <h2 className="text-2xl font-semibold text-darkDark dark:text-lightLight">
+        <h2 className="text-2xl font-semibold text-darkDark dark:text-lightLight text-center">
           Om Resplaneraren
         </h2>
 
         {/* Close Button */}
         <button
           onClick={() => setIsVisible(false)}
-          className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight text-lg justify-self-end"
+          className="absolute top-0 right-0 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight text-lg"
         >
           ✕
         </button>

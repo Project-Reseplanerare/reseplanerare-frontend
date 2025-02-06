@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import TravelOptions from '../TravelOptions/TravelOptions';
 import AttractionList from '../Explore/AttractionList';
 import Map from '../Map/Map';
+
 const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
 
   return (
-    <section className="border border-darkLight dark:border-lightDark rounded-md w-full p-6 grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
+    <section className="border border-black dark:border-white rounded-md w-full p-6 grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
       {/* Menu Navigation */}
       <nav className="grid grid-cols-3 gap-2 text-center">
         <button
@@ -15,11 +16,11 @@ const Menu: React.FC = () => {
               activeComponent === 'resealternativ' ? null : 'resealternativ'
             )
           }
-          className={`p-2 border rounded-md transition
+          className={`p-2 border border-black dark:border-white rounded-md transition
       ${
         activeComponent === 'resealternativ'
-          ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
-          : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
+          ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
+          : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:bg-blueLight dark:hover:bg-blueDark hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
       }`}
         >
           Resealternativ
@@ -31,11 +32,11 @@ const Menu: React.FC = () => {
               activeComponent === 'besoksmal' ? null : 'besoksmal'
             )
           }
-          className={`p-2 border rounded-md transition
+          className={`p-2 border border-black dark:border-white rounded-md transition
       ${
         activeComponent === 'besoksmal'
-          ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
-          : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
+          ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
+          : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:bg-blueLight dark:hover:bg-blueDark hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
       }`}
         >
           Se och göra i Värmland
@@ -45,11 +46,11 @@ const Menu: React.FC = () => {
           onClick={() =>
             setActiveComponent(activeComponent === 'karta' ? null : 'karta')
           }
-          className={`p-2 border rounded-md transition
+          className={`p-2 border border-black dark:border-white rounded-md transition
       ${
         activeComponent === 'karta'
-          ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
-          : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
+          ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
+          : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:bg-blueLight dark:hover:bg-blueDark hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
       }`}
         >
           Karta
@@ -69,7 +70,7 @@ const Menu: React.FC = () => {
         )}
 
         {activeComponent === 'karta' && (
-          <div className="rounded-md grid grid-cols-1 h-80 z-10 border border-darkLight dark:border-lightDark overflow-hidden">
+          <div className="rounded-md grid grid-cols-1 h-80 z-10 border border-black dark:border-white overflow-hidden">
             <Map />
           </div>
         )}

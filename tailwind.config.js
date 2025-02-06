@@ -10,12 +10,16 @@ export default {
         darkLight: '#1F1F1F',
 
         // Primary Dark
-        darkDark: '#111111',
+        darkDark: '#1F1F1F',
         lightDark: '#F3F3F3',
 
         // Accent
         accentDark: '#EBD699',
         accentLight: '#FEECB6',
+
+        // Adding Blue color
+        blueLight: '#0495A2',
+        blueDark: '#005B79',
       },
     },
   },
