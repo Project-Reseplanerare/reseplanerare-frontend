@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
 import { fetchRouteStopsForRoute } from '../../utils/api/fetchRouteStopsForRoute';
-import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 
@@ -29,15 +28,10 @@ const RouteOptionsDropdown = () => {
   const [travelTimes, setTravelTimes] = useState<string[]>([]);
   const [routeStops, setRouteStops] = useState<Record<number, any[]>>({});
   const [error, setError] = useState<string | null>(null);
-  const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(
-    null
-  );
-  const { selectedOption } = useTravelOptionsStore();
+  const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(null);
 
   useEffect(() => {
     if (!isButtonClicked || !fromStopId || !toStopId) return;
-
-    if (selectedOption !== 'Buss') return;
 
     const fetchRoutes = async () => {
       try {
@@ -76,12 +70,15 @@ const RouteOptionsDropdown = () => {
             departure.ProductAtStop?.catOut === 'BLT'
         );
 
+        //INCLUDES TRAINS VERSION:const filteredDepartures = fromData.Departure.filter( (departure: any) => validJourneyRefs.has(departure.JourneyDetailRef.ref) );
+
         if (filteredDepartures.length === 0) {
           setRouteNames([]);
           setTravelTimes([]);
           return;
         }
 
+        // Here, we now ensure every bus is treated as an individual entry
         const names = filteredDepartures.map((departure: any) => {
           const departureTime = departure.time;
           const arrivalTime =
@@ -148,7 +145,7 @@ const RouteOptionsDropdown = () => {
   };
 
   return (
-    <div className="grid gap-4 p-4 border border-darkLight dark:border-lightDark  bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
+    <div className="grid gap-4 p-4 border border-darkLight dark:border-lightDark bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
       <h2 className="text-xl font-bold text-darkDark dark:text-lightLight border-b border-darkLight dark:border-lightDark pb-2">
         Ruttalternativ
       </h2>

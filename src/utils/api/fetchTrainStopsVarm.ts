@@ -10,7 +10,14 @@ export const fetchTrainStops = async (searchString: string, maxResults = 10, lan
             throw new Error(`HTTP error! Status: ${response.status}`);
         }
         const data = await response.json();
-
+        console.log(data.stopLocationOrCoordLocation
+            .filter((item: any) => 
+                item.StopLocation &&
+                item.StopLocation.productAtStop?.some((product: any) => 
+                    product.cls === "16" || product.cls === "2"
+                )
+            ));
+        
         return data.stopLocationOrCoordLocation
             .filter((item: any) => 
                 item.StopLocation &&

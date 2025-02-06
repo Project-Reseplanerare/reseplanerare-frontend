@@ -39,12 +39,14 @@ interface Stop {
   
       const data: ApiResponse = await response.json();
       if (!data.Trip || data.Trip.length === 0) {
+        setError('No trips found.');
         return;
       }
   
       const trip = data.Trip[index] || data.Trip[0];
       let stops: Stop[] = [];
   
+      // Aggregate stops from each leg
       if (trip.LegList?.Leg) {
         trip.LegList.Leg.forEach((leg) => {
           if (leg.Stops?.Stop) {
@@ -53,6 +55,7 @@ interface Stop {
         });
       }
   
+      // Remove duplicate stops
       const uniqueStops = Array.from(new Map(stops.map((stop) => [stop.extId, stop])).values());
       uniqueStops.sort((a, b) => {
         const timeA = a.depTime || a.arrTime || "";
@@ -62,18 +65,18 @@ interface Stop {
   
       setRouteStops((prev) => ({ ...prev, [index]: uniqueStops }));
   
-  
+      // Filter stops with coordinates
       const stopsWithCoords = uniqueStops
-      .filter((stop) => typeof stop.lat === "number" && typeof stop.lon === "number")
-      .map((stop) => ({
-        coords: [stop.lat as number, stop.lon as number] as [number, number], // Explicit tuple
-        name: stop.name, // Only keeping necessary properties
-      }));
+        .filter((stop) => typeof stop.lat === 'number' && typeof stop.lon === 'number')
+        .map((stop) => ({
+          coords: [stop.lat, stop.lon] as [number, number],
+          name: stop.name,
+        }));
   
-
+      // Set coordinates in store
       useRouteStopStore.getState().setStopsCoords(stopsWithCoords);
   
     } catch (err) {
-      setError((err as Error).message);
+      setError(`Error fetching stops: ${(err as Error).message}`);
     }
   };
