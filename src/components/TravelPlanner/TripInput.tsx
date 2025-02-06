@@ -92,26 +92,40 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   return (
     <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
       {/* From Address Input */}
-      <div className="relative flex items-center p-3 border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark">
-        <div className="flex items-center justify-center w-8 h-8 bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark rounded-md font-bold">
-          A
+      <div className="relative">
+        {/* Strict 3-Column Grid Layout */}
+        <div className="grid grid-cols-[min-content_1fr_min-content] border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark p-3 items-center gap-2">
+          {/* Column 1: Icon */}
+          <div>
+            <div className="w-8 h-8 flex items-center justify-center bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark rounded-md font-bold">
+              A
+            </div>
+          </div>
+
+          {/* Column 2: Input Field (Expands to Fill Space) */}
+          <div>
+            <input
+              type="text"
+              value={fromAddress}
+              onChange={handleFromAddressChange}
+              className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
+            />
+          </div>
+
+          {/* Column 3: Clear Button (Min-Width) */}
+          <div>
+            {fromAddress && (
+              <button
+                onClick={clearFromInput}
+                className="text-darkLight dark:text-lightDark hover:text-darkDark  dark:hover:text-lightLight"
+              >
+                <FaTimes className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
-        <input
-          type="text"
-          value={fromAddress}
-          onChange={handleFromAddressChange}
-          className="ml-3 flex-grow text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
-        />
-        {/* Clear button for From Address */}
-        {fromAddress && (
-          <button
-            onClick={clearFromInput}
-            className="absolute right-2 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
-          >
-            <FaTimes className="w-4 h-4" />
-          </button>
-        )}
-        {/* From Address Suggestions Dropdown */}
+
+        {/* From Address Suggestions Dropdown (Separate from Grid) */}
         {fromSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
             {fromSuggestions.map((suggestion, index) => (
@@ -162,26 +176,40 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       </button>
 
       {/* To Address Input */}
-      <div className="relative flex items-center p-3 border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark">
-        <div className="flex items-center justify-center w-8 h-8 bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark rounded-md font-bold">
-          B
+      <div className="relative">
+        {/* Strict 3-Column Grid Layout */}
+        <div className="grid grid-cols-[min-content_1fr_min-content] border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark p-3 items-center gap-2">
+          {/* Column 1: Icon */}
+          <div>
+            <div className="w-8 h-8 flex items-center justify-center bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark rounded-md font-bold">
+              B
+            </div>
+          </div>
+
+          {/* Column 2: Input Field (Expands to Fill Space) */}
+          <div>
+            <input
+              type="text"
+              value={toAddress}
+              onChange={handleToAddressChange}
+              className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
+            />
+          </div>
+
+          {/* Column 3: Clear Button (Min-Width) */}
+          <div>
+            {toAddress && (
+              <button
+                onClick={clearToInput}
+                className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
+              >
+                <FaTimes className="w-4 h-4" />
+              </button>
+            )}
+          </div>
         </div>
-        <input
-          type="text"
-          value={toAddress}
-          onChange={handleToAddressChange}
-          className="ml-3 flex-grow text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
-        />
-        {/* Clear button for To Address */}
-        {toAddress && (
-          <button
-            onClick={clearToInput}
-            className="absolute right-2 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
-          >
-            <FaTimes className="w-4 h-4" />
-          </button>
-        )}
-        {/* To Address Suggestions Dropdown */}
+
+        {/* To Address Suggestions Dropdown (Separate from Grid) */}
         {toSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
             {toSuggestions.map((suggestion, index) => (
