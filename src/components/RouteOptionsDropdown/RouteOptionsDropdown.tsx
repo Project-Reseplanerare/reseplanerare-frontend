@@ -144,7 +144,7 @@ const RouteOptionsDropdown = () => {
   };
 
   return (
-    <div className="grid gap-4 p-4 border bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
+    <div className="grid gap-4 p-4 border border-darkLight dark:border-lightDark  bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
       <h2 className="text-xl font-bold text-darkDark dark:text-lightLight border-b border-darkLight dark:border-lightDark pb-2">
         Ruttalternativ
       </h2>
@@ -185,7 +185,7 @@ const RouteOptionsDropdown = () => {
               </div>
 
               {selectedRouteIndex === index && routeStops[index] && (
-                <div className="mt-2 p-2 border border-darkLight dark:border-lightDark rounded bg-lightLight dark:bg-darkDark space-y-1">
+                <div className="mt-2 p-2 border border-darkLight dark:border-lightDark  rounded bg-lightLight dark:bg-darkDark space-y-1">
                   {routeStops[index].map((stop, sIndex) => (
                     <div
                       key={sIndex}

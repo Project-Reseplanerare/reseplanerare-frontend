@@ -12,7 +12,7 @@ import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptions
 function App() {
   return (
     <Router>
-      <main className="app-container h-screen grid grid-rows-[auto,1fr,auto] gap-4 bg-lightLight dark:bg-darkDark text-darkDark dark:text-lightLight">
+      <main className="app-container grid grid-rows-[1fr_2fr_1fr] gap-4 bg-lightLight dark:bg-darkDark text-darkDark dark:text-lightLight">
         <Header />
         <Routes>
           <Route
