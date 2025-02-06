@@ -12,13 +12,19 @@ import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptions
 function App() {
   return (
     <Router>
-      <main className="app-container grid grid-rows-[1fr_2fr_1fr] gap-4 bg-lightLight dark:bg-darkDark text-darkDark dark:text-lightLight">
+      <main
+        className="app-container grid grid-rows-[1fr_2fr_1fr] bg-cover bg-center text-darkDark dark:text-lightLight"
+        style={{
+          backgroundImage:
+            "url('https://images.pexels.com/photos/6772037/pexels-photo-6772037.jpeg')",
+        }}
+      >
         <Header />
         <Routes>
           <Route
             path="/"
             element={
-              <section className="p-8 max-w-[800px] mx-auto grid gap-4 h-full ">
+              <section className="p-8 max-w-[800px] mx-auto grid gap-4 h-full backdrop-blur-md">
                 {/* General Information */}
                 <GeneralInformation />
                 {/* Search Input */}
