@@ -46,7 +46,7 @@ const TravelOptions = () => {
             className={`grid place-items-center gap-2 p-4 bg-lightLight rounded-md cursor-pointer transition focus:outline-none border h-full w-full 
           ${
             isSelected
-              ? 'bg-lightlight text-darkDark border-darkDark dark:bg-lightDark dark:text-darkDark dark:border-darkDark'
+              ? 'bg-slate-300 text-darkDark border-darkDark dark:bg-lightDark dark:text-darkDark dark:border-darkDark'
               : 'bg-lightDark text-darkDark border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark'
           }`}
             onClick={() => handleOptionClick(id)}
