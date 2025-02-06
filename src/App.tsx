@@ -13,7 +13,7 @@ function App() {
   return (
     <Router>
       <main
-        className="app-container grid grid-rows-[1fr_2fr_1fr] bg-cover bg-center text-darkDark dark:text-lightLight"
+        className="app-container grid grid-rows-[1fr_2fr_1fr] bg-cover bg-center  text-darkDark dark:text-lightLight"
         style={{
           backgroundImage:
             "url('https://images.pexels.com/photos/6772037/pexels-photo-6772037.jpeg')",

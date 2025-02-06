@@ -6,9 +6,9 @@ const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
 
   return (
-    <section className="bg-lightdark dark:bg-darkDark border border-darkLight dark:border-lightDark  w-full text-darkDark dark:text-lightLight p-6 rounded-md grid gap-4">
+    <section className="border border-darkLight dark:border-lightDark rounded-md w-full p-6 grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
       {/* Menu Navigation */}
-      <nav className="grid grid-cols-3 gap-2 text-center ">
+      <nav className="grid grid-cols-3 gap-2 text-center">
         <button
           onClick={() =>
             setActiveComponent(
@@ -16,11 +16,11 @@ const Menu: React.FC = () => {
             )
           }
           className={`p-2 border rounded-md transition
-        ${
-          activeComponent === 'resealternativ'
-            ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
-            : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
-        }`}
+      ${
+        activeComponent === 'resealternativ'
+          ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
+          : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
+      }`}
         >
           Resealternativ
         </button>
@@ -32,11 +32,11 @@ const Menu: React.FC = () => {
             )
           }
           className={`p-2 border rounded-md transition
-        ${
-          activeComponent === 'besoksmal'
-            ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
-            : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
-        }`}
+      ${
+        activeComponent === 'besoksmal'
+          ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
+          : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
+      }`}
         >
           Se och göra i Värmland
         </button>
@@ -46,11 +46,11 @@ const Menu: React.FC = () => {
             setActiveComponent(activeComponent === 'karta' ? null : 'karta')
           }
           className={`p-2 border rounded-md transition
-        ${
-          activeComponent === 'karta'
-            ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
-            : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
-        }`}
+      ${
+        activeComponent === 'karta'
+          ? 'bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark'
+          : 'bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight hover:bg-darkDark dark:hover:bg-lightLight'
+      }`}
         >
           Karta
         </button>
@@ -61,7 +61,7 @@ const Menu: React.FC = () => {
         {activeComponent === 'resealternativ' && <TravelOptions />}
 
         {activeComponent === 'besoksmal' && (
-          <div className="grid grid-cols-1 ">
+          <div className="grid grid-cols-1">
             <AttractionList
               setSelectedCategory={(category: string) => console.log(category)}
             />

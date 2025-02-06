@@ -34,7 +34,7 @@ const TravelOptions = () => {
   );
 
   return (
-    <div className="grid grid-cols-3 auto-rows-fr gap-4">
+    <div className="grid grid-cols-3 auto-rows-fr gap-4 ">
       {travelOptions.map(({ id, label, icon }) => {
         const isSelected = selectedOption === id;
         return (
@@ -43,7 +43,7 @@ const TravelOptions = () => {
             role="button"
             aria-selected={isSelected}
             tabIndex={0}
-            className={`grid place-items-center gap-2 p-4 rounded-md cursor-pointer transition focus:outline-none border h-full w-full 
+            className={`grid place-items-center gap-2 p-4 bg-lightLight rounded-md cursor-pointer transition focus:outline-none border h-full w-full 
           ${
             isSelected
               ? 'bg-lightlight text-darkDark border-darkDark dark:bg-lightDark dark:text-darkDark dark:border-darkDark'
