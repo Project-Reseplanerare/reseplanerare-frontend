@@ -1,4 +1,4 @@
-import { useBusStopStore } from "../../store/useBusStopStore";
+import { useRouteStopStore } from "../../store/useRouteStopStore";
 
 interface Stop {
     lon: any;
@@ -71,7 +71,7 @@ interface Stop {
       }));
   
 
-      useBusStopStore.getState().setStopsCoords(stopsWithCoords);
+      useRouteStopStore.getState().setStopsCoords(stopsWithCoords);
   
     } catch (err) {
       setError((err as Error).message);

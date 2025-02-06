@@ -1,6 +1,6 @@
 import { useLocationStore } from '../../store/useLocationStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
-import { useBusStopStore } from '../../store/useBusStopStore';
+import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { useTravelOptionsStore } from "../../store/useTravelOptionsStore"; 
 
 const TriggerActionBtn = () => {
@@ -15,7 +15,7 @@ const TriggerActionBtn = () => {
 
   const { setIsButtonClicked } = useSearchBtnStore();
 
-  const { setStopsCoords, setBusRouteMarkers } = useBusStopStore();
+  const { setStopsCoords, setRouteMarkers } = useRouteStopStore();
 
   const { selectedOption } = useTravelOptionsStore(); // Get selected travel option
 
@@ -56,7 +56,7 @@ const TriggerActionBtn = () => {
       setMarkers([]);
       setIsButtonClicked(false);
       setStopsCoords([]);
-      setBusRouteMarkers([]); // Clear bus route markers when stopping search
+      setRouteMarkers([]); // Clear bus route markers when stopping search
     } else {
       setLineDrawn(true);
 
@@ -65,7 +65,7 @@ const TriggerActionBtn = () => {
         const busMarkers = [];
         if (fromCoordinates) busMarkers.push({ coords: fromCoordinates });
         if (toCoordinates) busMarkers.push({ coords: toCoordinates });
-        setBusRouteMarkers(busMarkers);
+        setRouteMarkers(busMarkers);
       } else {
         // If traveling by car or train, use regular markers
         const newMarkers = [];

@@ -25,7 +25,7 @@ import {
   fetchNearbyBusStops,
   fetchNearbyTrains,
 } from '../../utils/api/fetchNearbyStops';
-import { useBusStopStore } from '../../store/useBusStopStore';
+import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { fetchAddress } from '../../utils/api/fetchAdress';
 import busIcon from './../../assets/bus-solid.svg';
 import trainIcon from './../../assets/train-solid.svg';
@@ -52,7 +52,7 @@ function Map() {
 
   const { selectedOption } = useTravelOptionsStore();
 
-  const { stopsCoords } = useBusStopStore();  
+  const { stopsCoords } = useRouteStopStore();  
 
   const center = useGeolocation();
 

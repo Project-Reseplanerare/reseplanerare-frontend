@@ -1,12 +1,12 @@
 import { useEffect } from "react";
-import { useBusStopStore } from "../../store/useBusStopStore";
+import { useRouteStopStore } from "../../store/useRouteStopStore";
 import { useMap } from "react-leaflet"
 import L from 'leaflet';
 
 
 const MapCenterUpdater = () => {
   const map = useMap();
-  const { stopsCoords } = useBusStopStore();
+  const { stopsCoords } = useRouteStopStore();
 
   useEffect(() => {
     if (stopsCoords.length > 0) {

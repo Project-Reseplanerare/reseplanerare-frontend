@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useBusStopStore } from '../../store/useBusStopStore';
+import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
 import { fetchRouteStopsForRoute } from '../../utils/api/fetchRouteStopsForRoute';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
@@ -23,7 +23,7 @@ type ResponseData<T> = {
 };
 
 const RouteOptionsDropdown = () => {
-  const { fromStopId, toStopId } = useBusStopStore();
+  const { fromStopId, toStopId } = useRouteStopStore();
   const { isButtonClicked } = useSearchBtnStore();
   const [routeNames, setRouteNames] = useState<string[]>([]);
   const [travelTimes, setTravelTimes] = useState<string[]>([]);
@@ -38,7 +38,7 @@ const RouteOptionsDropdown = () => {
     if (!isButtonClicked || !fromStopId || !toStopId) return;
 
     if (selectedOption !== 'Buss') return;
-    
+
     const fetchRoutes = async () => {
       try {
         const fromResponse = await fetch(

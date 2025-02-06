@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { FaTimes } from 'react-icons/fa';
 import { useLocationStore } from '../../store/useLocationStore';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
-import { useBusStopStore } from '../../store/useBusStopStore';
-import { fetchStops } from '../../utils/api/fetchBusStopsVarm';
+import { useRouteStopStore } from '../../store/useRouteStopStore';
+import { fetchBusStops } from '../../utils/api/fetchBusStopsVarm';
 import { fetchTrainStops } from '../../utils/api/fetchTrainStopsVarm';
 
 interface TripInputProps {
@@ -15,7 +15,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     useLocationStore();
   const { selectedOption } = useTravelOptionsStore();
   const { setFromStopId, setToStopId, fromStopId, toStopId } =
-    useBusStopStore();
+    useRouteStopStore();
 
   const [fromSuggestions, setFromSuggestions] = useState<
     { name: string; extId: string }[]
@@ -32,7 +32,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     if (value.trim()) {
       if (selectedOption === 'Buss') {
         // Fetch bus stops if option is "Buss"
-        const stops = await fetchStops(value);
+        const stops = await fetchBusStops(value);
         setFromSuggestions(
           stops.map((stop: { name: any; extId: any }) => ({
             name: stop.name,
@@ -65,7 +65,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     if (value.trim()) {
       if (selectedOption === 'Buss') {
         // Fetch bus stops if option is "Buss"
-        const stops = await fetchStops(value);
+        const stops = await fetchBusStops(value);
         setToSuggestions(
           stops.map((stop: { name: any; extId: any }) => ({
             name: stop.name,
