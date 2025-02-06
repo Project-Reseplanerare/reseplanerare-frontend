@@ -4,7 +4,8 @@ import {
   Marker,
   Polyline,
   Popup,
-  CircleMarker
+  CircleMarker,
+  Tooltip
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
@@ -280,7 +281,7 @@ function Map() {
     {stopsCoords.length > 0 && lineDrawn && (
       <>
         <Polyline
-          positions={stopsCoords.map(stop => stop.coords)} // Use stopsCoords for the polyline
+          positions={stopsCoords.map(stop => stop.coords)}
           color="#0089e7" 
           weight={5}
           opacity={1}
@@ -299,8 +300,16 @@ function Map() {
             <Popup>{stop.name || "Bus Stop"}</Popup>
           </CircleMarker>
         ))}
-      </>
-    )}
+           {/* markers for first and last stops */}
+           <Marker position={stopsCoords[0].coords}>
+              <Tooltip permanent>{`START: ${stopsCoords[0].name || "Start"}`}</Tooltip>
+            </Marker>
+
+            <Marker position={stopsCoords[stopsCoords.length - 1].coords}>
+              <Tooltip permanent>{`STOP: ${stopsCoords[stopsCoords.length - 1].name || "End"}`}</Tooltip>
+            </Marker>
+          </>
+)}
       {loading && <p>Loading route...</p>}
     </MapContainer>
   );
