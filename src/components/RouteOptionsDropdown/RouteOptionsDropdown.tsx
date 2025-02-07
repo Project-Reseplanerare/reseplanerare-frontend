@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
 import { fetchRouteStopsForRoute } from '../../utils/api/fetchRouteStopsForRoute';
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 
@@ -29,6 +30,7 @@ const RouteOptionsDropdown = () => {
   const [routeStops, setRouteStops] = useState<Record<number, any[]>>({});
   const [error, setError] = useState<string | null>(null);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(null);
+  const {selectedOption} = useTravelOptionsStore()
 
   useEffect(() => {
     if (!isButtonClicked || !fromStopId || !toStopId) return;
@@ -36,7 +38,7 @@ const RouteOptionsDropdown = () => {
     const fetchRoutes = async () => {
       try {
         const fromResponse = await fetch(
-          `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}`
+          `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
         if (!fromResponse.ok) throw new Error(`Error: ${fromResponse.status}`);
 
@@ -48,7 +50,7 @@ const RouteOptionsDropdown = () => {
         }
 
         const toResponse = await fetch(
-          `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}`
+          `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
         if (!toResponse.ok) throw new Error(`Error: ${toResponse.status}`);
 
@@ -64,14 +66,25 @@ const RouteOptionsDropdown = () => {
           validJourneyRefs.set(arrival.JourneyDetailRef.ref, arrival.time);
         });
 
-        const filteredDepartures = fromData.Departure.filter(
-          (departure: any) =>
-            validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
-            departure.ProductAtStop?.catOut === 'BLT'
-        );
+        let filteredDepartures: Departure[] = [];
 
-        //INCLUDES TRAINS VERSION:const filteredDepartures = fromData.Departure.filter( (departure: any) => validJourneyRefs.has(departure.JourneyDetailRef.ref) );
 
+        if (selectedOption === 'Buss') {
+ 
+          filteredDepartures = fromData.Departure.filter(
+            (departure: any) =>
+              validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
+              departure.ProductAtStop?.catOut === 'BLT'
+          );
+        } else if (selectedOption === 'Tåg') {
+
+          filteredDepartures = fromData.Departure.filter(
+            (departure: any) =>
+              validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
+              departure.ProductAtStop?.catOut === 'JLT'
+          );
+        }
+      
         if (filteredDepartures.length === 0) {
           setRouteNames([]);
           setTravelTimes([]);
