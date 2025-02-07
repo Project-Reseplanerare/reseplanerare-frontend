@@ -28,7 +28,7 @@ const GeneralInformation: React.FC = () => {
       </div>
 
       {/* Description */}
-      <p className="text-darkLight dark:text-lightDark text-sm">
+      <p className="text-darkLight dark:text-lightDark text-sm text-center">
         Resplaneraren hjälper dig att enkelt hitta och planera dina resor i
         Värmland. Oavsett om du pendlar dagligen eller besöker regionen, ger vår
         tjänst dig de bästa resealternativen i samarbete med Värmlandstrafik.

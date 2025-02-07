@@ -112,14 +112,12 @@ const SearchInput = () => {
 
         {/* Input Field */}
         <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          placeholder={!isFocused && query === '' ? "Vet du vad du söker men inte var? Hitta det snabbt här!" : ""}
-          className={`h-10 w-full text-sm text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark px-3 bg-transparent focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none ${isFocused || query !== '' ? 'text-left' : 'text-center'}`} // Conditional centering
-          onFocus={handleFocus} 
-          onBlur={handleBlur}   
-        />
+        type="text"
+        value={query}
+        onChange={handleInputChange}
+        placeholder="Vet du vad du söker men inte var? Hitta det snabbt här!"
+        className="h-10 w-full text-sm text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark px-3 bg-transparent focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none text-left"
+      />
 
         {query && (
           <button
