@@ -104,7 +104,7 @@ const SearchInput = () => {
   return (
     <div className="items-center grid gap-4">
       {/* Input Section */}
-      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-darkLight dark:border-lightDark rounded-lg bg-lightLight dark:bg-darkDark">
+      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-lightBorder border-darkLight dark:border-lightDark rounded-lg bg-lightLight dark:bg-darkDark">
         {/* Search Icon */}
         <div className="px-3 text-darkLight dark:text-lightDark">
           <FaSearch />

@@ -20,6 +20,10 @@ export default {
         // Adding Blue color
         blueLight: '#0495A2',
         blueDark: '#005B79',
+
+        // Border
+        lightBorder:'#727272',
+        lightlightBorder: '#D9D9D9',
       },
     },
   },

@@ -144,7 +144,7 @@ const RouteOptionsDropdown = () => {
   };
 
   return (
-    <div className="grid gap-4 p-4 border border-darkLight dark:border-lightDark  bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
+    <div className="grid gap-4 p-4 border border-lightBorder border-darkLight dark:border-lightDark  bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
       <h2 className="text-xl font-bold text-darkDark dark:text-lightLight border-b border-darkLight dark:border-lightDark pb-2">
         Ruttalternativ
       </h2>

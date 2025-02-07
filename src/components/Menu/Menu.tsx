@@ -7,7 +7,7 @@ const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
 
   return (
-    <section className="border border-black dark:border-white rounded-md w-full p-6 grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
+    <section className="border border-lightBorder dark:border-white rounded-md w-full p-6 grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
       {/* Menu Navigation */}
       <nav className="grid grid-cols-3 gap-2 text-center">
         <button
@@ -16,7 +16,7 @@ const Menu: React.FC = () => {
               activeComponent === 'resealternativ' ? null : 'resealternativ'
             )
           }
-          className={`p-2 border border-black dark:border-white rounded-md transition
+          className={`p-2 border border-lightBorder dark:border-white rounded-md transition
       ${
         activeComponent === 'resealternativ'
           ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
@@ -32,7 +32,7 @@ const Menu: React.FC = () => {
               activeComponent === 'besoksmal' ? null : 'besoksmal'
             )
           }
-          className={`p-2 border border-black dark:border-white rounded-md transition
+          className={`p-2 border border-lightBorder dark:border-white rounded-md transition
       ${
         activeComponent === 'besoksmal'
           ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
@@ -46,7 +46,7 @@ const Menu: React.FC = () => {
           onClick={() =>
             setActiveComponent(activeComponent === 'karta' ? null : 'karta')
           }
-          className={`p-2 border border-black dark:border-white rounded-md transition
+          className={`p-2 border border-lightBorder dark:border-white rounded-md transition
       ${
         activeComponent === 'karta'
           ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
@@ -70,7 +70,7 @@ const Menu: React.FC = () => {
         )}
 
         {activeComponent === 'karta' && (
-          <div className="rounded-md grid grid-cols-1 h-80 z-10 border border-black dark:border-white overflow-hidden">
+          <div className="rounded-md grid grid-cols-1 h-80 z-10 border border-lightBorder border-black dark:border-white overflow-hidden">
             <Map />
           </div>
         )}

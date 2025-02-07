@@ -5,10 +5,10 @@ const GeneralInformation: React.FC = () => {
 
   return (
     <section
-      className={`w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-darkLight dark:border-lightDark grid gap-4" ${
-        isVisible
-          ? "opacity-100 h-auto"
-          : "opacity-0 h-0 overflow-hidden pointer-events-none"
+    className={`w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-lightBorder dark:border-lightDark grid gap-4 ${
+      isVisible
+        ? "opacity-100 h-auto"
+        : "opacity-0 h-0 overflow-hidden pointer-events-none"
       }`}
     >
       {/* Section 1: Close Button & Title */}
@@ -28,7 +28,7 @@ const GeneralInformation: React.FC = () => {
       </div>
 
       {/* Description */}
-      <p className="text-darkLight dark:text-lightDark text-sm text-center">
+      <p className="text-darkLight dark:text-lightDark text-sm text-left w-full">
         Resplaneraren hjälper dig att enkelt hitta och planera dina resor i
         Värmland. Oavsett om du pendlar dagligen eller besöker regionen, ger vår
         tjänst dig de bästa resealternativen i samarbete med Värmlandstrafik.

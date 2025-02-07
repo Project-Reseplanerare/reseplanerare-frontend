@@ -68,7 +68,7 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
         <div key={item.id} className="w-full">
           <div
             className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 rounded-md border cursor-pointer transition 
-            bg-lightDark text-darkDark border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark
+            bg-lightDark text-darkDark border border-lightBorder dark:bg-darkDark dark:text-lightDark dark:border-lightDark
             ${
               activeIndex === item.id
                 ? 'bg-blueLight border-blueDark dark:bg-blueDark dark:border-blueDark'
@@ -94,8 +94,8 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
               item.subItems.map((subItem, index) => (
                 <div
                   key={index}
-                  className="p-4 bg-lightLight text-darkDark border border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark rounded-md cursor-pointer transition hover:bg-blueLight hover:text-darkDark hover:border-blueDark dark:hover:bg-blueDark dark:hover:text-lightDark"
-                >
+                  className="p-4 bg-lightLight text-darkDark border border-lightlightBorder dark:bg-darkDark dark:text-lightDark dark:border-lightDark rounded-md cursor-pointer transition hover:bg-blueLight hover:text-darkDark hover:border-blueDark dark:hover:bg-blueDark dark:hover:text-lightDark"
+                  >
                   {subItem}
                 </div>
               ))
