@@ -21,22 +21,24 @@ function ThemeSwitch() {
   };
 
   return (
-    <button
-      onClick={toggleTheme}
-      className="flex items-center justify-center p-2 m-2 rounded-md bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight shadow-md hover:shadow-lg hover:scale-105 transition-transform"
-    >
-      {/* Display Sun or Moon icon */}
-      {theme === 'light' ? (
-        <FontAwesomeIcon icon={faMoon} className="h-5 w-5 mr-2" />
-      ) : (
-        <FontAwesomeIcon icon={faSun} className="h-5 w-5 mr-2" />
-      )}
+<button
+  onClick={toggleTheme}
+  className="grid grid-cols-[min-content_1fr] items-center gap-2 p-2 rounded-md bg-blueLight dark:bg-blueLight text-white hover:scale-105 transition-transform"
+>
+  {/* Display Sun or Moon icon */}
+  {theme === 'light' ? (
+    <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
+  ) : (
+    <FontAwesomeIcon icon={faSun} className="h-5 w-5" />
+  )}
 
-      {/* Text next to the icon */}
-      <span className="text-sm">
-        {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
-      </span>
-    </button>
+  {/* Text next to the icon, hidden on small screens */}
+  <span className="text-sm text-white hidden sm:inline">
+    {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+  </span>
+</button>
+
+
   );
 }
 
