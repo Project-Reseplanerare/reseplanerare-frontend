@@ -30,13 +30,14 @@ const RouteOptionsDropdown = () => {
   const [routeStops, setRouteStops] = useState<Record<number, any[]>>({});
   const [error, setError] = useState<string | null>(null);
   const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(null);
-  const {selectedOption} = useTravelOptionsStore()
+  const { selectedOption } = useTravelOptionsStore();
 
   useEffect(() => {
     if (!isButtonClicked || !fromStopId || !toStopId) return;
 
     const fetchRoutes = async () => {
       try {
+        // Fetch departures for the 'from' stop
         const fromResponse = await fetch(
           `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
@@ -49,6 +50,7 @@ const RouteOptionsDropdown = () => {
           return;
         }
 
+        // Fetch arrivals for the 'to' stop
         const toResponse = await fetch(
           `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
@@ -68,31 +70,28 @@ const RouteOptionsDropdown = () => {
 
         let filteredDepartures: Departure[] = [];
 
-
         if (selectedOption === 'Buss') {
- 
           filteredDepartures = fromData.Departure.filter(
-            (departure: any) =>
+            (departure) =>
               validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
               departure.ProductAtStop?.catOut === 'BLT'
           );
         } else if (selectedOption === 'Tåg') {
-
           filteredDepartures = fromData.Departure.filter(
-            (departure: any) =>
+            (departure) =>
               validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
               departure.ProductAtStop?.catOut === 'JLT'
           );
         }
-      
+
         if (filteredDepartures.length === 0) {
           setRouteNames([]);
           setTravelTimes([]);
           return;
         }
 
-        // Here, we now ensure every bus is treated as an individual entry
-        const names = filteredDepartures.map((departure: any) => {
+        // Format route names and travel times
+        const names = filteredDepartures.map((departure) => {
           const departureTime = departure.time;
           const arrivalTime =
             validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
@@ -111,28 +110,31 @@ const RouteOptionsDropdown = () => {
 
         setRouteNames(names);
         setTravelTimes(times);
-        setRouteStops({});
+
+        // Fetch stops for all routes and store them
+        filteredDepartures.forEach((departure, index) => {
+          fetchRouteStopsForRoute(
+            index,
+            fromStopId,
+            toStopId,
+            apiKey,
+            setRouteStops,
+            setError
+          );
+        });
       } catch (err) {
         setError((err as Error).message);
       }
     };
 
     fetchRoutes();
-  }, [fromStopId, toStopId, isButtonClicked]);
+  }, [fromStopId, toStopId, isButtonClicked, selectedOption]);
 
   const handleRouteClick = (index: number) => {
     if (selectedRouteIndex === index) {
       setSelectedRouteIndex(null);
     } else {
       setSelectedRouteIndex(index);
-      fetchRouteStopsForRoute(
-        index,
-        fromStopId,
-        toStopId,
-        apiKey,
-        setRouteStops,
-        setError
-      );
     }
   };
 
