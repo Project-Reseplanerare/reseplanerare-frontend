@@ -25,7 +25,7 @@ function ThemeSwitch() {
   onClick={toggleTheme}
   className="grid grid-cols-[min-content_1fr] items-center gap-2 p-2 rounded-md bg-blueLight dark:bg-blueLight text-white hover:scale-105 transition-transform"
 >
-  {/* Display Sun or Moon icon */}
+  {/* Sun or Moon icon */}
   {theme === 'light' ? (
     <FontAwesomeIcon icon={faMoon} className="h-5 w-5" />
   ) : (
