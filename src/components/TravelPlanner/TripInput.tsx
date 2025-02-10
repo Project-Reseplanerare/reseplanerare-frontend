@@ -18,9 +18,9 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     useRouteStopStore();
 
   const [fromSuggestions, setFromSuggestions] = useState<
-    { name: string; extId: string }[]
+    { name: string; extId: string }[] 
   >([]);
-  const [toSuggestions, setToSuggestions] = useState<
+  const [toSuggestions, setToSuggestions] = useState< 
     { name: string; extId: string }[]
   >([]);
 
@@ -120,10 +120,18 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       {/* From Address Input */}
       <div className="relative">
         {/* Strict 3-Column Grid Layout */}
-        <div className="grid grid-cols-[min-content_1fr_min-content] border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark p-3 items-center gap-2">
+        <div
+          className={`grid grid-cols-[min-content_1fr_min-content] border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark p-3 items-center gap-2 ${
+            fromAddress ? 'border-blueLight dark:border-blueDark' : ''
+          }`}
+        >
           {/* Column 1: Icon */}
           <div>
-            <div className="w-8 h-8 flex items-center justify-center bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark rounded-md font-bold">
+            <div
+              className={`w-8 h-8 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
+                fromAddress ? 'bg-blueLight dark:bg-blueDark' : 'bg-darkLight dark:bg-lightDark'
+              }`}
+            >
               A
             </div>
           </div>
@@ -143,7 +151,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
             {fromAddress && (
               <button
                 onClick={clearFromInput}
-                className="text-darkLight dark:text-lightDark hover:text-darkDark  dark:hover:text-lightLight"
+                className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
               >
                 <FaTimes className="w-4 h-4" />
               </button>
@@ -151,7 +159,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           </div>
         </div>
 
-        {/* From Address Suggestions Dropdown (Separate from Grid) */}
+        {/* From Address Suggestions Dropdown */}
         {fromSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
             {fromSuggestions.map((suggestion, index) => (
@@ -204,10 +212,18 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       {/* To Address Input */}
       <div className="relative">
         {/* Strict 3-Column Grid Layout */}
-        <div className="grid grid-cols-[min-content_1fr_min-content] border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark p-3 items-center gap-2">
+        <div
+          className={`grid grid-cols-[min-content_1fr_min-content] border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark p-3 items-center gap-2 ${
+            toAddress ? 'border-blueLight dark:border-blueDark' : ''
+          }`}
+        >
           {/* Column 1: Icon */}
           <div>
-            <div className="w-8 h-8 flex items-center justify-center bg-darkLight dark:bg-lightDark text-lightLight dark:text-darkDark rounded-md font-bold">
+            <div
+              className={`w-8 h-8 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
+                toAddress ? 'bg-blueLight dark:bg-blueDark' : 'bg-darkLight dark:bg-lightDark'
+              }`}
+            >
               B
             </div>
           </div>
@@ -235,7 +251,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           </div>
         </div>
 
-        {/* To Address Suggestions Dropdown (Separate from Grid) */}
+        {/* To Address Suggestions Dropdown */}
         {toSuggestions.length > 0 && (
           <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
             {toSuggestions.map((suggestion, index) => (
