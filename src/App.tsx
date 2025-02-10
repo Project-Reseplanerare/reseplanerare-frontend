@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TravelPlannerWrapper from './components/TravelPlanner/TravelPlannerWrapper';
 import GeneralInformation from './components/GenaralInformation/GeneralInformation';
 import SearchInput from './components/SearchInput/SearchInput';
-import Footer from './components/Footer/Footer';
 import Menu from './components/Menu/Menu';
 import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptionsDropdown';
 
@@ -18,7 +17,7 @@ function App() {
           <Route
             path="/"
             element={
-              <section className="p-8 max-w-[800px] mx-auto grid gap-4 h-full">
+              <section className="p-8 max-w-[800px] mx-auto grid gap-4 h-auto ">
                 <GeneralInformation />
                 <SearchInput />
                 <TravelPlannerWrapper />
@@ -29,7 +28,7 @@ function App() {
           />
         </Routes>
         {/* Footer */}
-        {/*<Footer />*/} 
+        {/*<Footer />*/}
       </div>
     </Router>
   );

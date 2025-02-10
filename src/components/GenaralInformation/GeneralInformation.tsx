@@ -1,15 +1,12 @@
-import React, { useState } from "react";
+import { useState } from 'react';
 
 const GeneralInformation: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
 
+  if (!isVisible) return null; // Completely remove from DOM
+
   return (
-    <section
-      className={`w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-lightBorder dark:border-lightDark grid gap-4" ${isVisible
-        ? "opacity-100 h-auto"
-        : "opacity-0 h-0 overflow-hidden pointer-events-none"
-        }`}
-    >
+    <section className="w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-lightBorder dark:border-lightDark grid gap-4">
       {/* Section 1: Close Button & Title */}
       <div className="relative">
         {/* Title */}
