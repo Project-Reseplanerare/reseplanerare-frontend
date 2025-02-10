@@ -17,9 +17,9 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     useBusStopStore();
 
   const [fromSuggestions, setFromSuggestions] = useState<
-    { name: string; extId: string }[] 
+    { name: string; extId: string }[]
   >([]);
-  const [toSuggestions, setToSuggestions] = useState< 
+  const [toSuggestions, setToSuggestions] = useState<
     { name: string; extId: string }[]
   >([]);
 
@@ -103,7 +103,9 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           <div>
             <div
               className={`w-8 h-8 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
-                fromAddress ? 'bg-blueLight dark:bg-blueDark' : 'bg-darkLight dark:bg-lightDark'
+                fromAddress
+                  ? 'bg-blueLight dark:bg-blueDark'
+                  : 'bg-darkLight dark:bg-lightDark'
               }`}
             >
               A
@@ -195,7 +197,9 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           <div>
             <div
               className={`w-8 h-8 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
-                toAddress ? 'bg-blueLight dark:bg-blueDark' : 'bg-darkLight dark:bg-lightDark'
+                toAddress
+                  ? 'bg-blueLight dark:bg-blueLight'
+                  : 'bg-darkLight dark:bg-lightDark'
               }`}
             >
               B
