@@ -1,5 +1,5 @@
 import { useRouteStopStore } from "../../store/useRouteStopStore";
-import { useTravelOptionsStore } from "../../store/useTravelOptionsStore";
+
 
 interface Stop {
   lon: any;
@@ -28,11 +28,11 @@ export const fetchRouteStopsForRoute = async (
   fromStopId: string,
   toStopId: string,
   apiKey: string,
+  selectedOption: string | null,
   setRouteStops: React.Dispatch<React.SetStateAction<Record<number, Stop[]>>>,
   setError: React.Dispatch<React.SetStateAction<string | null>>
 ): Promise<void> => {
   try {
-    const { selectedOption } = useTravelOptionsStore.getState(); // Get selected mode
     const expectedCatOut = selectedOption === "Tåg" ? "JLT" : "BLT"; // JLT for train, BLT for bus
 
     const url = `https://api.resrobot.se/v2.1/trip?format=json&originId=${fromStopId}&destId=${toStopId}&passlist=true&showPassingPoints=true&accessId=${apiKey}`;

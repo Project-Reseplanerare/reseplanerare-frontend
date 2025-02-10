@@ -118,6 +118,7 @@ const RouteOptionsDropdown = () => {
             fromStopId,
             toStopId,
             apiKey,
+            selectedOption, 
             setRouteStops,
             setError
           );
