@@ -8,11 +8,14 @@
   padding: 0;
 }
 
-/* App.css */
-body,
-html {
-  overflow-x: hidden;
-  width: 100%;
+body {
+  background-image: url('../src/assets/background.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  min-height: 100vh;
+  margin: 0; 
 }
 
 .app-container {

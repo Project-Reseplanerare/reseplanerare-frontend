@@ -4,7 +4,8 @@ import {
   Marker,
   Polyline,
   Popup,
-  CircleMarker
+  CircleMarker,
+  Tooltip
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
@@ -24,7 +25,7 @@ import {
   fetchNearbyBusStops,
   fetchNearbyTrains,
 } from '../../utils/api/fetchNearbyStops';
-import { useBusStopStore } from '../../store/useBusStopStore';
+import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { fetchAddress } from '../../utils/api/fetchAdress';
 import busIcon from './../../assets/bus-solid.svg';
 import trainIcon from './../../assets/train-solid.svg';
@@ -51,7 +52,7 @@ function Map() {
 
   const { selectedOption } = useTravelOptionsStore();
 
-  const { stopsCoords } = useBusStopStore();  
+  const { stopsCoords } = useRouteStopStore();  
 
   const center = useGeolocation();
 
@@ -152,7 +153,7 @@ function Map() {
       />
 
       <MapCenterUpdater />
-      <MapClickHandler />
+      <MapClickHandler disabled={stopsCoords.length > 0} />
 
       <FilterEventsByBounds
         events={events}
@@ -247,7 +248,9 @@ function Map() {
           <Marker
             key={index}
             position={[lat, lng]}
-            eventHandlers={{
+            eventHandlers={
+            stopsCoords.length === 0 
+              ? {
               click: () =>
                 handleRemoveMarker(
                   index,
@@ -258,7 +261,8 @@ function Map() {
                 ),
               mouseover: (e) => e.target.openPopup(),
               mouseout: (e) => e.target.closePopup(),
-            }}
+            } : {}
+          }
           >
             <Popup>
               Latitude: {lat.toFixed(4)}, Longitude: {lng.toFixed(4)}
@@ -277,7 +281,7 @@ function Map() {
     {stopsCoords.length > 0 && lineDrawn && (
       <>
         <Polyline
-          positions={stopsCoords.map(stop => stop.coords)} // Use stopsCoords for the polyline
+          positions={stopsCoords.map(stop => stop.coords)}
           color="#0089e7" 
           weight={5}
           opacity={1}
@@ -296,8 +300,16 @@ function Map() {
             <Popup>{stop.name || "Bus Stop"}</Popup>
           </CircleMarker>
         ))}
-      </>
-    )}
+           {/* markers for first and last stops */}
+           <Marker position={stopsCoords[0].coords}>
+              <Tooltip permanent>{`START: ${stopsCoords[0].name || "Start"}`}</Tooltip>
+            </Marker>
+
+            <Marker position={stopsCoords[stopsCoords.length - 1].coords}>
+              <Tooltip permanent>{`STOP: ${stopsCoords[stopsCoords.length - 1].name || "End"}`}</Tooltip>
+            </Marker>
+          </>
+)}
       {loading && <p>Loading route...</p>}
     </MapContainer>
   );

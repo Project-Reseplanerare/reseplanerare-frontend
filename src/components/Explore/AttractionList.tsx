@@ -64,28 +64,28 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
 
   return (
     <div className="space-y-4">
-      {' '}
-      {/* Ensures consistent spacing between items */}
       {items.map((item) => (
         <div key={item.id} className="w-full">
           <div
             className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 rounded-md border cursor-pointer transition 
-          bg-lightDark text-darkDark border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark
-          ${
-            activeIndex === item.id
-              ? 'bg-darkDark text-lightDark border-lightDark dark:bg-lightDark dark:text-darkDark dark:border-darkDark'
-              : ''
-          }`}
+            bg-lightDark text-darkDark border border-lightBorder dark:bg-darkDark dark:text-lightDark dark:border-lightDark
+            ${
+              activeIndex === item.id
+                ? 'bg-blueLight border-blueDark dark:bg-blueDark dark:border-blueDark'
+                : ''
+            }`}
             onClick={() => handleItemClick(item.id, item.label)}
           >
             <FontAwesomeIcon
               icon={item.icon}
-              className="w-6 h-6 text-darkLight dark:text-lightDark"
+              className="w-6 h-6 text-darkDark dark:text-lightDark"
             />
-            <span className="text-sm">{item.label}</span>
+            <span className="text-sm text-darkDark dark:text-lightDark">
+              {item.label}
+            </span>
             <FontAwesomeIcon
               icon={activeIndex === item.id ? faChevronUp : faChevronDown}
-              className="w-4 h-4 text-darkLight dark:text-lightDark transition-transform"
+              className="w-4 h-4 text-darkDark dark:text-lightDark transition-transform"
             />
           </div>
 
@@ -94,13 +94,13 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
               item.subItems.map((subItem, index) => (
                 <div
                   key={index}
-                  className="p-4 bg-lightDark text-darkDark border border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark rounded-md cursor-pointer transition hover:bg-darkDark dark:hover:bg-lightDark hover:text-lightDark dark:hover:text-darkDark hover:border-lightDark dark:hover:border-darkDark"
-                >
+                  className="p-4 bg-lightLight text-darkDark border border-lightlightBorder dark:bg-darkDark dark:text-lightDark dark:border-lightDark rounded-md cursor-pointer transition hover:bg-blueLight hover:text-darkDark hover:border-blueDark dark:hover:bg-blueDark dark:hover:text-lightDark"
+                  >
                   {subItem}
                 </div>
               ))
             ) : (
-              <div className="h-0" /> // Maintains consistent spacing
+              <div className="h-0" /> 
             )}
           </div>
         </div>
