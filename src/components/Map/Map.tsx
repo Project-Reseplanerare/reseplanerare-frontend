@@ -143,6 +143,18 @@ function Map() {
     }
   };
 
+
+  useEffect(() => {
+    const updateRoadRoute = async () => {
+      if (stopsCoords.length > 0 && center) {
+        const fetchedRoute = await getRoute(stopsCoords[0].coords, center, setLoading);
+        setRoute(fetchedRoute); 
+      }
+    };
+  
+    updateRoadRoute(); 
+  }, [stopsCoords, center]);
+
   if (!center) return <p>Loading map...</p>;
 
   return (
@@ -278,7 +290,7 @@ function Map() {
       </>
     )}
 
-    {stopsCoords.length > 0 && lineDrawn && (
+    {route.length > 0 && stopsCoords.length > 0 && lineDrawn && (
       <>
         <Polyline
           positions={stopsCoords.map(stop => stop.coords)}
@@ -287,6 +299,13 @@ function Map() {
           opacity={1}
         />
 
+      <Polyline
+            positions={route}  
+            color="#434747"
+            weight={3}
+            opacity={1}
+            dashArray="5,5"
+          />
         {stopsCoords.map((stop, index) => (
           <CircleMarker
             key={index}
