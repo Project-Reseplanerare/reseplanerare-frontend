@@ -1,3 +1,7 @@
+// React imports
+import { useState, useEffect } from 'react';
+
+// Leaflet imports
 import {
   MapContainer,
   TileLayer,
@@ -5,28 +9,35 @@ import {
   Polyline,
   Popup,
   CircleMarker,
-  Tooltip
+  Tooltip,
 } from 'react-leaflet';
 import MarkerClusterGroup from 'react-leaflet-cluster';
 import 'leaflet/dist/leaflet.css';
 import { LatLngExpression } from 'leaflet';
-import { useState, useEffect } from 'react';
-import { useLocationStore } from '../../store/useLocationStore';
-import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
-import MapCenterUpdater from './MapCenterUpdater';
-import { fetchEvents } from '../../utils/api/fetchEvents';
-import FilterEventsByBounds from './FilterEventsByBounds';
-import MapClickHandler from './MapClickHandler';
-import { handleRemoveMarker } from '../../utils/mapUtils/handleRemoveMarker';
-import { getRoute } from '../../utils/api/getRoute';
-import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 import L from 'leaflet';
+
+// Utils imports
 import {
   fetchNearbyBusStops,
   fetchNearbyTrains,
 } from '../../utils/api/fetchNearbyStops';
-import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { fetchAddress } from '../../utils/api/fetchAdress';
+import { getRoute } from '../../utils/api/getRoute';
+import { handleRemoveMarker } from '../../utils/mapUtils/handleRemoveMarker';
+import { fetchEvents } from '../../utils/api/fetchEvents';
+
+// Store imports
+import { useLocationStore } from '../../store/useLocationStore';
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
+import { useRouteStopStore } from '../../store/useRouteStopStore';
+
+// Other imports
+import MapCenterUpdater from './MapCenterUpdater';
+import MapClickHandler from './MapClickHandler';
+import FilterEventsByBounds from './FilterEventsByBounds';
+import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
+
+// Icons from Assets folder
 import busIcon from './../../assets/bus-solid.svg';
 import trainIcon from './../../assets/train-solid.svg';
 import carIcon from './../../assets/car-solid.svg';
@@ -52,7 +63,7 @@ function Map() {
 
   const { selectedOption } = useTravelOptionsStore();
 
-  const { stopsCoords } = useRouteStopStore();  
+  const { stopsCoords } = useRouteStopStore();
 
   const center = useGeolocation();
 
@@ -143,16 +154,19 @@ function Map() {
     }
   };
 
-
   useEffect(() => {
     const updateRoadRoute = async () => {
       if (stopsCoords.length > 0 && center) {
-        const fetchedRoute = await getRoute(stopsCoords[0].coords, center, setLoading);
-        setRoute(fetchedRoute); 
+        const fetchedRoute = await getRoute(
+          stopsCoords[0].coords,
+          center,
+          setLoading
+        );
+        setRoute(fetchedRoute);
       }
     };
-  
-    updateRoadRoute(); 
+
+    updateRoadRoute();
   }, [stopsCoords, center]);
 
   if (!center) return <p>Loading map...</p>;
@@ -261,20 +275,21 @@ function Map() {
             key={index}
             position={[lat, lng]}
             eventHandlers={
-            stopsCoords.length === 0 
-              ? {
-              click: () =>
-                handleRemoveMarker(
-                  index,
-                  lineDrawn,
-                  setMarkers,
-                  setToAddress,
-                  setLineDrawn
-                ),
-              mouseover: (e) => e.target.openPopup(),
-              mouseout: (e) => e.target.closePopup(),
-            } : {}
-          }
+              stopsCoords.length === 0
+                ? {
+                    click: () =>
+                      handleRemoveMarker(
+                        index,
+                        lineDrawn,
+                        setMarkers,
+                        setToAddress,
+                        setLineDrawn
+                      ),
+                    mouseover: (e) => e.target.openPopup(),
+                    mouseout: (e) => e.target.closePopup(),
+                  }
+                : {}
+            }
           >
             <Popup>
               Latitude: {lat.toFixed(4)}, Longitude: {lng.toFixed(4)}
@@ -283,52 +298,56 @@ function Map() {
         );
       })}
 
-    {route.length > 0 && lineDrawn && stopsCoords.length === 0 && (
-      <>
-        <Polyline positions={route} color="#0089e7"  weight={5} opacity={1} />
-        <div>Total distance: {calculatePolylineDistance(route)} km</div>
-      </>
-    )}
+      {route.length > 0 && lineDrawn && stopsCoords.length === 0 && (
+        <>
+          <Polyline positions={route} color="#0089e7" weight={5} opacity={1} />
+          <div>Total distance: {calculatePolylineDistance(route)} km</div>
+        </>
+      )}
 
-    {route.length > 0 && stopsCoords.length > 0 && lineDrawn && (
-      <>
-        <Polyline
-          positions={stopsCoords.map(stop => stop.coords)}
-          color="#0089e7" 
-          weight={5}
-          opacity={1}
-        />
+      {route.length > 0 && stopsCoords.length > 0 && lineDrawn && (
+        <>
+          <Polyline
+            positions={stopsCoords.map((stop) => stop.coords)}
+            color="#0089e7"
+            weight={5}
+            opacity={1}
+          />
 
-      <Polyline
-            positions={route}  
+          <Polyline
+            positions={route}
             color="#434747"
             weight={3}
             opacity={1}
             dashArray="5,5"
           />
-        {stopsCoords.map((stop, index) => (
-          <CircleMarker
-            key={index}
-            center={stop.coords}
-            radius={6}
-            color="#0089e7"          
-            fillColor="white"      
-            fillOpacity={1}      
-            weight={3}    
-          >
-            <Popup>{stop.name || "Bus Stop"}</Popup>
-          </CircleMarker>
-        ))}
-           {/* markers for first and last stops */}
-           <Marker position={stopsCoords[0].coords}>
-              <Tooltip permanent>{`START: ${stopsCoords[0].name || "Start"}`}</Tooltip>
-            </Marker>
+          {stopsCoords.map((stop, index) => (
+            <CircleMarker
+              key={index}
+              center={stop.coords}
+              radius={6}
+              color="#0089e7"
+              fillColor="white"
+              fillOpacity={1}
+              weight={3}
+            >
+              <Popup>{stop.name || 'Bus Stop'}</Popup>
+            </CircleMarker>
+          ))}
+          {/* markers for first and last stops */}
+          <Marker position={stopsCoords[0].coords}>
+            <Tooltip permanent>{`START: ${
+              stopsCoords[0].name || 'Start'
+            }`}</Tooltip>
+          </Marker>
 
-            <Marker position={stopsCoords[stopsCoords.length - 1].coords}>
-              <Tooltip permanent>{`STOP: ${stopsCoords[stopsCoords.length - 1].name || "End"}`}</Tooltip>
-            </Marker>
-          </>
-)}
+          <Marker position={stopsCoords[stopsCoords.length - 1].coords}>
+            <Tooltip permanent>{`STOP: ${
+              stopsCoords[stopsCoords.length - 1].name || 'End'
+            }`}</Tooltip>
+          </Marker>
+        </>
+      )}
       {loading && <p>Loading route...</p>}
     </MapContainer>
   );
