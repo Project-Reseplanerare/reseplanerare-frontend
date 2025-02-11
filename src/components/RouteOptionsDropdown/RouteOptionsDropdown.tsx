@@ -111,16 +111,20 @@ const RouteOptionsDropdown = () => {
         setRouteNames(names);
         setTravelTimes(times);
 
-        // Fetch stops for all routes and store them
         filteredDepartures.forEach((departure, index) => {
+          const departureTime = departure.time;
+          const arrivalTime = validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
+        
           fetchRouteStopsForRoute(
             index,
             fromStopId,
             toStopId,
             apiKey,
-            selectedOption, 
+            selectedOption,
             setRouteStops,
-            setError
+            setError,
+            departureTime, 
+            arrivalTime 
           );
         });
       } catch (err) {

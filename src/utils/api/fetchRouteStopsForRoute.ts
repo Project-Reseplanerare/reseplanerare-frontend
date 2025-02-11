@@ -12,7 +12,7 @@ interface Stop {
 
 interface TripLeg {
   Stops?: { Stop: Stop[] };
-  Product?: { catOut: string }[]; // Check transport category
+  Product?: { catOut: string }[]; 
 }
 
 interface Trip {
@@ -30,10 +30,12 @@ export const fetchRouteStopsForRoute = async (
   apiKey: string,
   selectedOption: string | null,
   setRouteStops: React.Dispatch<React.SetStateAction<Record<number, Stop[]>>>,
-  setError: React.Dispatch<React.SetStateAction<string | null>>
+  setError: React.Dispatch<React.SetStateAction<string | null>>,
+  departureTime: string,
+  arrivalTime: string 
 ): Promise<void> => {
   try {
-    const expectedCatOut = selectedOption === "Tåg" ? "JLT" : "BLT"; // JLT for train, BLT for bus
+    const expectedCatOut = selectedOption === "Tåg" ? "JLT" : "BLT"; 
 
     const url = `https://api.resrobot.se/v2.1/trip?format=json&originId=${fromStopId}&destId=${toStopId}&passlist=true&showPassingPoints=true&accessId=${apiKey}`;
     const response = await fetch(url);
@@ -48,7 +50,6 @@ export const fetchRouteStopsForRoute = async (
       return;
     }
 
-    // Filter trips that match the selected transport type
     const validTrips = data.Trip.filter((trip) =>
       trip.LegList?.Leg.some((leg) => leg.Product?.some((prod) => prod.catOut === expectedCatOut))
     );
@@ -58,34 +59,42 @@ export const fetchRouteStopsForRoute = async (
       return;
     }
 
-    // Pick the requested index trip (or the first available valid trip)
     const trip = validTrips[index] || validTrips[0];
     let stops: Stop[] = [];
 
-    // Extract stops only from legs that match the transport type
     trip.LegList?.Leg.forEach((leg) => {
       if (leg.Product?.some((prod) => prod.catOut === expectedCatOut) && leg.Stops?.Stop) {
         stops = stops.concat(leg.Stops.Stop);
       }
     });
 
+    stops = stops.filter((stop) => stop.depTime || stop.arrTime);
+
     if (stops.length === 0) {
       setError(`No valid stops found for ${selectedOption}.`);
       return;
     }
 
-    // Remove duplicate stops
-    const uniqueStops = Array.from(new Map(stops.map((stop) => [stop.extId, stop])).values());
+    const uniqueStops = Array.from(
+      new Map(stops.map((stop) => [`${stop.extId}-${stop.depTime || stop.arrTime}`, stop])).values()
+    );
+
     uniqueStops.sort((a, b) => {
-      const timeA = a.depTime || a.arrTime || "";
-      const timeB = b.depTime || b.arrTime || "";
+      const timeA = a.depTime || a.arrTime || "23:59:59"; 
+      const timeB = b.depTime || b.arrTime || "23:59:59";
       return timeA.localeCompare(timeB);
     });
 
-    // Update state only if stops exist
+    if (uniqueStops.length > 0) {
+      uniqueStops[0].depTime = departureTime;
+    }
+
+    if (uniqueStops.length > 0) {
+      uniqueStops[uniqueStops.length - 1].arrTime = arrivalTime;
+    }
+
     setRouteStops((prev) => ({ ...prev, [index]: uniqueStops }));
 
-    // Filter stops with valid coordinates
     const stopsWithCoords = uniqueStops
       .filter((stop) => typeof stop.lat === "number" && typeof stop.lon === "number")
       .map((stop) => ({
@@ -93,7 +102,7 @@ export const fetchRouteStopsForRoute = async (
         name: stop.name,
       }));
 
-    // Only update store if valid coordinates exist
+
     if (stopsWithCoords.length > 0) {
       useRouteStopStore.getState().setStopsCoords(stopsWithCoords);
     }
