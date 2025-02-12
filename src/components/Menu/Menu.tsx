@@ -16,11 +16,12 @@ const Menu: React.FC = () => {
               activeComponent === 'resealternativ' ? null : 'resealternativ'
             )
           }
-          className={`px-2 py-4 border border-lightBorder dark:border-white rounded-md transition
-            ${activeComponent === 'resealternativ'
-                    ? 'bg-blueLight text-lightLight dark:text-lightLight' // Aktiverad färg
-                    : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
-                  }`}
+          className={` py-2 border border-lightlightBorder dark:border-lightlight  rounded transition
+            ${
+              activeComponent === 'resealternativ'
+                ? 'bg-blueLight text-lightLight dark:text-lightLight'
+                : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
+            }`}
         >
           Resealternativ
         </button>
@@ -31,11 +32,12 @@ const Menu: React.FC = () => {
               activeComponent === 'besoksmal' ? null : 'besoksmal'
             )
           }
-          className={`px-2 py-1 border border-lightBorder dark:border-white rounded-md transition
-      ${activeComponent === 'besoksmal'
-              ? 'bg-blueLight text-lightLight dark:text-lightLight' // Aktiverad färg
-              : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
-            }`}
+          className={` py-2 rounded border border-lightlightBorder dark:border-lightlight  transition
+      ${
+        activeComponent === 'besoksmal'
+          ? 'bg-blueLight text-lightLight dark:text-lightLight'
+          : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
+      }`}
         >
           Se och göra
         </button>
@@ -44,32 +46,33 @@ const Menu: React.FC = () => {
           onClick={() =>
             setActiveComponent(activeComponent === 'karta' ? null : 'karta')
           }
-          className={`px-2 py-1 border border-lightBorder dark:border-white rounded-md transition
-            ${activeComponent === 'karta'
-                    ? 'bg-blueLight text-lightLight dark:text-lightLight' // Aktiverad färg
-                    : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
-                  }`}
+          className={` py-2 rounded border border-lightlightBorder dark:border-lightlight  transition
+            ${
+              activeComponent === 'karta'
+                ? 'bg-blueLight text-lightLight dark:text-lightLight'
+                : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
+            }`}
         >
           Karta
         </button>
       </nav>
 
       {/* Display Components Based on Selection */}
-      <div className="grid gap-4">
-        {activeComponent === 'resealternativ' && <TravelOptions />}
-
-        {activeComponent === 'besoksmal' && (
-          <div className="grid grid-cols-1">
+      <div className="grid grid-cols-1 ">
+        {activeComponent === 'resealternativ' ? (
+          <TravelOptions />
+        ) : activeComponent === 'besoksmal' ? (
+          <div className="grid grid-cols-1 ">
             <AttractionList
               setSelectedCategory={(category: string) => console.log(category)}
             />
           </div>
-        )}
-
-        {activeComponent === 'karta' && (
-          <div className="rounded-md grid grid-cols-1 h-80 z-10 overflow-hidden">
+        ) : activeComponent === 'karta' ? (
+          <div className="rounded-md grid grid-cols-1 h-80 ">
             <Map />
           </div>
+        ) : (
+          <div className="hidden"></div>
         )}
       </div>
     </section>

@@ -7,26 +7,31 @@ const GeneralInformation: React.FC = () => {
 
   return (
     <section className="w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-lightBorder dark:border-lightDark grid gap-4">
-      {/* Section 1: Close Button & Title */}
-      <div className="relative">
-        {/* Title */}
-        <h2 className="text-4xl text-darkDark dark:text-lightLight text-center">
-          Reseplaneraren
-        </h2>
-
-        <hr className="bg-blueLight mt-4 h-0.5 mx-auto w-full"></hr>
-
+      {/* Grid container for Close Button & Title */}
+      <div className="grid grid-cols-[min-content_min-content_1fr] gap-4 items-center">
         {/* Close Button */}
-        <button
-          onClick={() => setIsVisible(false)}
-          className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight text-sm"
-        >
-          ✕
-        </button>
+        <div>
+          <button
+            onClick={() => setIsVisible(false)}
+            className="text-darkLight dark:text-lightDark border border-darkLight dark:border-lightDark 
+             font-bold px-3 py-1 rounded-md text-sm transition 
+             hover:text-white dark:hover:text-white 
+             hover:bg-darkLight dark:hover:bg-lightDark"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Title */}
+        <h1 className="text-2xl font-bold text-darkDark dark:text-lightLight ">
+          Reseplaneraren
+        </h1>
       </div>
 
+      <hr className="bg-blueLight mt-4 h-0.5 mx-auto w-full"></hr>
+
       {/* Description */}
-      <p className="text-darkLight dark:text-lightDark text-center">
+      <p className="text-darkLight dark:text-lightDark ">
         Reseplaneraren hjälper dig att enkelt hitta och planera dina resor i
         Värmland. Oavsett om du pendlar dagligen eller besöker regionen, ger vår
         tjänst dig de bästa resealternativen i samarbete med Värmlandstrafik.

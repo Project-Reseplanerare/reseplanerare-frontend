@@ -9,7 +9,7 @@ const SearchInput = () => {
   const [query, setQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isFocused, setIsFocused] = useState<boolean>(false); 
+  const [isFocused, setIsFocused] = useState<boolean>(false);
   const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
 
   const fetchSuggestions = async (searchQuery: string) => {
@@ -92,13 +92,13 @@ const SearchInput = () => {
 
   const handleFocus = () => {
     if (query === '') {
-      setQuery(''); 
+      setQuery('');
     }
-    setIsFocused(true); 
+    setIsFocused(true);
   };
 
   const handleBlur = () => {
-    setIsFocused(false); 
+    setIsFocused(false);
   };
 
   return (
@@ -112,12 +112,12 @@ const SearchInput = () => {
 
         {/* Input Field */}
         <input
-        type="text"
-        value={query}
-        onChange={handleInputChange}
-        placeholder="Vet du vad du söker men inte var? Hitta det snabbt här!"
-        className="h-10 w-full text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark px-3 bg-transparent focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none text-left"
-      />
+          type="text"
+          value={query}
+          onChange={handleInputChange}
+          placeholder="Sök snabbt och enkelt!"
+          className="h-10 w-full text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark px-3 bg-transparent focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none text-left"
+        />
 
         {query && (
           <button

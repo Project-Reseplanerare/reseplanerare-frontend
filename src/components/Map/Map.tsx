@@ -176,7 +176,7 @@ function Map() {
     <MapContainer center={center} zoom={13} className="h-[1fr] w-[100%]">
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        attribution="&copy;"
       />
 
       <MapCenterUpdater />

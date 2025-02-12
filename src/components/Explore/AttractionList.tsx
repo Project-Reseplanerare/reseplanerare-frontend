@@ -1,16 +1,3 @@
-// import { useState } from 'react';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import {
-//   faBicycle,
-//   faTicketAlt,
-//   faLandmark,
-//   faShoppingBag,
-//   faUtensils,
-//   faHotel,
-//   faChevronDown,
-//   faChevronUp,
-// } from '@fortawesome/free-solid-svg-icons';
-
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
@@ -27,13 +14,21 @@ interface AttractionListProps {
   setSelectedCategory: (category: string) => void;
 }
 
-const iconMapping: Record<string, string> = {
-  "Kultur & historia": cultureIcon,
-  "Mat & dryck": foodIcon,
-  "Boende": houseIcon,
-  "Design & shopping": shoppingIcon,
-  "Aktiviteter": sportCurlingIcon,
-  "Evenemang": ticketIcon,
+type IconCategory =
+  | 'Kultur & historia'
+  | 'Mat & dryck'
+  | 'Boende'
+  | 'Design & shopping'
+  | 'Aktiviteter'
+  | 'Evenemang';
+
+const iconMapping: Record<IconCategory, string> = {
+  'Kultur & historia': cultureIcon,
+  'Mat & dryck': foodIcon,
+  Boende: houseIcon,
+  'Design & shopping': shoppingIcon,
+  Aktiviteter: sportCurlingIcon,
+  Evenemang: ticketIcon,
 };
 
 function AttractionList({ setSelectedCategory }: AttractionListProps) {
@@ -56,53 +51,60 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
   const handleSubItemClick = (subItem: string) => {
     setSelectedSubItem(subItem);
     setSelectedCategory(subItem);
-    console.log("Kategori vald:", subItem);
+    console.log('Kategori vald:', subItem);
   };
 
   return (
-    <div className="space-y-2">
-      {categories.map((category) => (
-        <div key={category.id} className="w-full">
-          <div
-            className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition 
-            ${activeIndex === category.id ? 'bg-blueLight border-blueDark dark:border-blueDark' : ''}`}
-            onClick={() => handleItemClick(category.id)}
-          >
-            <img
-              src={iconMapping[category.label] || cultureIcon}
-              alt={`${category.label} ikon`}
-              className="w-5 h-5"
-            />
-            <span className={`text-xs transition-colors 
-              ${activeIndex === category.id ? 'text-lightLight' : 'text-darkDark dark:text-lightDark'}`}>
-              {category.label}
-            </span>
-            <FontAwesomeIcon
-              icon={activeIndex === category.id ? faChevronUp : faChevronDown}
-              className="w-3 h-3 text-darkDark dark:text-lightDark transition-transform"
-            />
-          </div>
+    <div className="grid gap-2">
+      {categories.map((category) => {
+        const isActive = activeIndex === category.id;
 
-          {activeIndex === category.id && category.subItems.length > 0 ? (
-            <div className="grid gap-1 mt-1">
-              {category.subItems.map((subItem: string, index: number) => (
-                <div
-                  key={index}
-                  className={`p-3 rounded-md cursor-pointer transition 
-                  bg-lightLight text-darkDark border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark
-                  hover:text-blueLight dark:hover:text-blueLight
-                  ${selectedSubItem === subItem ? 'bg-blueDark text-dark' : ''}`}
-                  onClick={() => handleSubItemClick(subItem)}
-                >
-                  <span className="text-xs">{subItem}</span>
-                </div>
-              ))}
+        return (
+          <div key={category.id} className="w-full">
+            {/* Category Item */}
+            <div
+              className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border border-lightlightBorder dark:border-lightlight 
+              ${
+                isActive
+                  ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
+                  : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
+              }`}
+              onClick={() => handleItemClick(category.id)}
+            >
+              <img
+                src={iconMapping[category.label] || cultureIcon}
+                alt={`${category.label} ikon`}
+                className="w-5 h-5"
+              />
+              <span>{category.label}</span>
+              <FontAwesomeIcon
+                icon={isActive ? faChevronUp : faChevronDown}
+                className="transition-transform"
+              />
             </div>
-          ) : (
-            <div className="h-0" />
-          )}
-        </div>
-      ))}
+
+            {/* Sub-items */}
+            {isActive && category.subItems.length > 0 && (
+              <div className="grid gap-2 ">
+                {category.subItems.map((subItem, index) => (
+                  <div
+                    key={index}
+                    className={`p-3 rounded-md border border-lightlightBorder dark:border-lightlight  cursor-pointer transition-all
+                    ${
+                      selectedSubItem === subItem
+                        ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
+                        : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
+                    }`}
+                    onClick={() => handleSubItemClick(subItem)}
+                  >
+                    <span className="text-xs">{subItem}</span>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -23,6 +23,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      'quote-props': ['error', 'consistent'], // Ensures consistent quoting of object keys
     },
   }
 );
