@@ -14,7 +14,7 @@ const GeneralInformation: React.FC = () => {
       <div className="relative">
         {/* Title */}
         <h2 className="text-2xl font-semibold text-darkDark dark:text-lightLight text-center">
-          Om Resplaneraren
+          Om Reseplaneraren
         </h2>
 
         {/* Close Button */}
@@ -28,7 +28,7 @@ const GeneralInformation: React.FC = () => {
 
       {/* Description */}
       <p className="text-darkLight dark:text-lightDark text-sm text-center">
-        Resplaneraren hjälper dig att enkelt hitta och planera dina resor i
+        Reseplaneraren hjälper dig att enkelt hitta och planera dina resor i
         Värmland. Oavsett om du pendlar dagligen eller besöker regionen, ger vår
         tjänst dig de bästa resealternativen i samarbete med Värmlandstrafik.
       </p>

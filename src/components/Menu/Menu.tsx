@@ -7,7 +7,7 @@ const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
 
   return (
-    <section className="border border-lightBorder dark:border-white rounded-md w-full p-6 grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
+    <section className="grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
       {/* Menu Navigation */}
       <nav className="grid grid-cols-3 gap-2 text-center">
         <button

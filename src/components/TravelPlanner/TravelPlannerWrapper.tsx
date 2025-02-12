@@ -1,6 +1,7 @@
 import { useLocationStore } from '../../store/useLocationStore';
 import TripInput from './TripInput';
 import TriggerActionBtn from './TriggerActionBtn';
+import Menu from '../Menu/Menu';
 
 const TravelPlannerWrapper = () => {
   const { setFromAddress, setToAddress } = useLocationStore();
@@ -17,6 +18,7 @@ const TravelPlannerWrapper = () => {
     <section className="w-full p-8 bg-lightDark dark:bg-darkLight border border-lightBorder border-darkLight dark:border-lightDark rounded-md grid gap-6">
       {/* Input Section */}
       <div className="grid gap-4">
+        <Menu/>
         <h2 className="text-2xl font-bold text-darkDark dark:text-lightLight">
           Planera din resa
         </h2>
