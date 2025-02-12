@@ -1,6 +1,6 @@
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 
-export const fetchTrainStops = async (searchString: string, maxResults = 10, lang = 'sv') => {
+export const fetchTrainStops = async (searchString: string, maxResults = 3, lang = 'sv') => {
     const baseUrl = "https://api.resrobot.se/v2.1/location.name";
     const url = `${baseUrl}?input=${encodeURIComponent(searchString)}&format=json&accessId=${apiKey}&maxNo=${maxResults}&lang=${lang}`;
     

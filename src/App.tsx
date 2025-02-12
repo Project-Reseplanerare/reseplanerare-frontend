@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import TravelPlannerWrapper from './components/TravelPlanner/TravelPlannerWrapper';
 import GeneralInformation from './components/GenaralInformation/GeneralInformation';
 import SearchInput from './components/SearchInput/SearchInput';
-import Menu from './components/Menu/Menu';
+// import Menu from './components/Menu/Menu';
 import RouteOptionsDropdown from './components/RouteOptionsDropdown/RouteOptionsDropdown';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
                 <SearchInput />
                 <TravelPlannerWrapper />
                 <RouteOptionsDropdown />
-                <Menu />
+                {/* <Menu /> */}
               </section>
             }
           />

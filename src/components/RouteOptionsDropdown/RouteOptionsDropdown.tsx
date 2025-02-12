@@ -90,8 +90,11 @@ const RouteOptionsDropdown = () => {
           return;
         }
 
-        // Format route names and travel times
-        const names = filteredDepartures.map((departure) => {
+        // Limit to 8 routes
+        const limitedDepartures = filteredDepartures.slice(0, 8);
+
+
+        const names = limitedDepartures.map((departure) => {
           const departureTime = departure.time;
           const arrivalTime =
             validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
@@ -102,7 +105,7 @@ const RouteOptionsDropdown = () => {
           )}`;
         });
 
-        const times = filteredDepartures.map((departure) => {
+        const times = limitedDepartures.map((departure) => {
           const arrivalTime =
             validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
           return calculateTravelDuration(departure.time, arrivalTime);
@@ -111,7 +114,8 @@ const RouteOptionsDropdown = () => {
         setRouteNames(names);
         setTravelTimes(times);
 
-        filteredDepartures.forEach((departure, index) => {
+        // Fetch route stops for the first 8 departures
+        limitedDepartures.forEach((departure, index) => {
           const departureTime = departure.time;
           const arrivalTime = validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
         
@@ -165,68 +169,70 @@ const RouteOptionsDropdown = () => {
   };
 
   return (
-    <div className="grid gap-4 p-4 border border-darkLight dark:border-lightDark bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
-      <h2 className="text-xl font-bold text-darkDark dark:text-lightLight border-b border-darkLight dark:border-lightDark pb-2">
-        Ruttalternativ
-      </h2>
-
-      {error && (
-        <p className="text-sm text-darkDark dark:text-lightLight bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
-          ⚠️ {error}
-        </p>
-      )}
-
-      {routeNames.length > 0 ? (
-        <div className="grid gap-3">
-          {routeNames.map((name, index) => (
-            <div key={index} className="grid gap-2">
-              <div
-                onClick={() => handleRouteClick(index)}
-                className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md hover:bg-lightDark dark:hover:bg-darkLight transition"
-              >
-                <p
-                  className="font-medium text-darkDark dark:text-lightLight truncate"
-                  title={name}
+    isButtonClicked && (
+      <div className="grid gap-4 p-4 border border-darkLight dark:border-lightDark bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
+        <h2 className="text-xl font-bold text-darkDark dark:text-lightLight border-b border-darkLight dark:border-lightDark pb-2">
+          Ruttalternativ
+        </h2>
+  
+        {error && (
+          <p className="text-sm text-darkDark dark:text-lightLight bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
+            ⚠️ {error}
+          </p>
+        )}
+  
+        {routeNames.length > 0 ? (
+          <div className="grid gap-3">
+            {routeNames.map((name, index) => (
+              <div key={index} className="grid gap-2">
+                <div
+                  onClick={() => handleRouteClick(index)}
+                  className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md hover:bg-lightDark dark:hover:bg-darkLight transition"
                 >
-                  {name}
-                </p>
-                <div className="bg-lightDark dark:bg-darkLight px-3 py-1 rounded-md text-right">
-                  <p className="text-sm text-darkDark dark:text-lightLight">
-                    Restid:{' '}
-                    <span className="font-bold">{travelTimes[index]}</span>
+                  <p
+                    className="font-medium text-darkDark dark:text-lightLight truncate"
+                    title={name}
+                  >
+                    {name}
                   </p>
+                  <div className="bg-lightDark dark:bg-darkLight px-3 py-1 rounded-md text-right">
+                    <p className="text-sm text-darkDark dark:text-lightLight">
+                      Restid:{' '}
+                      <span className="font-bold">{travelTimes[index]}</span>
+                    </p>
+                  </div>
+                  <span
+                    className={`text-darkDark dark:text-lightLight transition-transform ${
+                      selectedRouteIndex === index ? 'rotate-180' : 'rotate-0'
+                    }`}
+                  >
+                    ▼
+                  </span>
                 </div>
-                <span
-                  className={`text-darkDark dark:text-lightLight transition-transform ${
-                    selectedRouteIndex === index ? 'rotate-180' : 'rotate-0'
-                  }`}
-                >
-                  ▼
-                </span>
+  
+                {selectedRouteIndex === index && routeStops[index] && (
+                  <div className="mt-2 p-2 border border-darkLight dark:border-lightDark  rounded bg-lightLight dark:bg-darkDark space-y-1">
+                    {routeStops[index].map((stop, sIndex) => (
+                      <div
+                        key={sIndex}
+                        className="flex justify-between text-sm text-darkDark dark:text-lightLight"
+                      >
+                        <span>● {stop.name}</span>
+                        <span>{stop.depTime || stop.arrTime || ''}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
-
-              {selectedRouteIndex === index && routeStops[index] && (
-                <div className="mt-2 p-2 border border-darkLight dark:border-lightDark  rounded bg-lightLight dark:bg-darkDark space-y-1">
-                  {routeStops[index].map((stop, sIndex) => (
-                    <div
-                      key={sIndex}
-                      className="flex justify-between text-sm text-darkDark dark:text-lightLight"
-                    >
-                      <span>● {stop.name}</span>
-                      <span>{stop.depTime || stop.arrTime || ''}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-      ) : (
-        <p className="text-darkDark dark:text-lightLight text-center py-4">
-          ⏳ Laddar rutter...
-        </p>
-      )}
-    </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-darkDark dark:text-lightLight text-center py-4">
+            ⏳ Laddar rutter...
+          </p>
+        )}
+      </div>
+    )
   );
 };
 

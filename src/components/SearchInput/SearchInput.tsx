@@ -116,7 +116,7 @@ const SearchInput = () => {
         value={query}
         onChange={handleInputChange}
         placeholder="Vet du vad du söker men inte var? Hitta det snabbt här!"
-        className="h-10 w-full text-sm text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark px-3 bg-transparent focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none text-left"
+        className="h-10 w-full text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark px-3 bg-transparent focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none text-left"
       />
 
         {query && (
@@ -134,7 +134,7 @@ const SearchInput = () => {
             {suggestions.map((title, index) => (
               <li
                 key={index}
-                className="px-4 py-2 text-sm text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
+                className="px-4 py-2 text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
                 onClick={() => {
                   setQuery(title);
                   setSuggestions([]);

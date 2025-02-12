@@ -5,6 +5,7 @@ import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { fetchBusStops } from '../../utils/api/fetchBusStopsVarm';
 import { fetchTrainStops } from '../../utils/api/fetchTrainStopsVarm';
+import SwapBtn from './swapBtn';
 
 interface TripInputProps {
   onInputChange: (inputType: 'from' | 'to', value: string) => void;
@@ -116,21 +117,24 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   }, [fromStopId, toStopId]);
 
   return (
-    <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg p-4">
+    <>
+      <h4 className=" text-base font-medium text-darkDark dark:text-lightLight">
+          Vart vill du resa?
+      </h4>
+    
+    <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg ">
       {/* From Address Input */}
       <div className="relative">
         {/* Strict 3-Column Grid Layout */}
         <div
-          className={`grid grid-cols-[min-content_1fr_min-content] border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark p-3 items-center gap-2 ${
-            fromAddress ? 'border-blueLight dark:border-blueDark' : ''
-          }`}
+          className={`grid grid-cols-[min-content_1fr_min-content] border border-lightBorder dark:border-lightLight rounded-md bg-lightLight dark:bg-darkDark p-4 items-center gap-2 ${fromAddress ? 'border-blueLight dark:border-blueDark' : ''
+            }`}
         >
           {/* Column 1: Icon */}
           <div>
             <div
-              className={`w-8 h-8 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
-                fromAddress ? 'bg-blueLight dark:bg-blueDark' : 'bg-darkLight dark:bg-lightDark'
-              }`}
+              className={`w-6 h-6 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${fromAddress ? 'bg-blueLight dark:bg-blueLight dark:text-lightLight' : 'bg-darkLight dark:bg-lightDark'
+                }`}
             >
               A
             </div>
@@ -138,12 +142,12 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
 
           {/* Column 2: Input Field (Expands to Fill Space) */}
           <div>
-            <input
-              type="text"
-              value={fromAddress}
-              onChange={handleFromAddressChange}
-              className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
-            />
+          <input
+          type="text"
+          value={fromAddress}
+          onChange={handleFromAddressChange}
+          className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"  // här minskar vi padding och textstorlek
+        />
           </div>
 
           {/* Column 3: Clear Button (Min-Width) */}
@@ -180,62 +184,36 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
         )}
       </div>
 
-      {/* Swap Button */}
-      <button
-        className={`flex items-center justify-center rounded-full h-12 w-12 border focus:outline-none transition
-      ${
-        isSwapDisabled
-          ? 'bg-darkLight dark:bg-lightDark text-lightDark dark:text-darkLight border-darkLight dark:border-lightDark cursor-not-allowed opacity-50'
-          : 'bg-lightLight dark:bg-darkDark text-darkDark dark:text-lightLight border-darkLight dark:border-lightDark hover:bg-lightDark dark:hover:bg-darkLight'
-      }`}
-        onClick={swapAddresses}
-        aria-label="Swap addresses"
-        title="Swap addresses"
-        disabled={isSwapDisabled}
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="w-6 h-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"
-          />
-        </svg>
-      </button>
+      {/* Swap Button - ny komponent*/}
+      <div className='row-span-2 self-center ml-1'>
+        <SwapBtn isDisabled={isSwapDisabled} onClick={swapAddresses} />
+      </div>
 
       {/* To Address Input */}
       <div className="relative">
         {/* Strict 3-Column Grid Layout */}
         <div
-          className={`grid grid-cols-[min-content_1fr_min-content] border border-darkLight dark:border-lightDark rounded-md bg-lightLight dark:bg-darkDark p-3 items-center gap-2 ${
-            toAddress ? 'border-blueLight dark:border-blueDark' : ''
-          }`}
+          className={`grid grid-cols-[min-content_1fr_min-content] border border-lightBorder dark:border-lightLight rounded-md bg-lightLight dark:bg-darkDark p-4 items-center gap-2 ${toAddress ? 'border-blueLight dark:border-blueDark' : ''
+            }`}
         >
           {/* Column 1: Icon */}
           <div>
-            <div
-              className={`w-8 h-8 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
-                toAddress ? 'bg-blueLight dark:bg-blueDark' : 'bg-darkLight dark:bg-lightDark'
+          <div
+            className={`w-6 h-6 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${toAddress ? 'bg-blueLight dark:bg-blueLight dark:text-lightLight' : 'bg-darkLight dark:bg-lightLight'
               }`}
-            >
-              B
-            </div>
+          >
+            B
           </div>
+        </div>
 
           {/* Column 2: Input Field (Expands to Fill Space) */}
           <div>
-            <input
-              type="text"
-              value={toAddress}
-              onChange={handleToAddressChange}
-              className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
-            />
+          <input
+            type="text"
+            value={toAddress}
+            onChange={handleToAddressChange}
+            className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"  // här minskar vi padding och textstorlek
+          />
           </div>
 
           {/* Column 3: Clear Button (Min-Width) */}
@@ -272,6 +250,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
         )}
       </div>
     </div>
+    </>
   );
 };
 

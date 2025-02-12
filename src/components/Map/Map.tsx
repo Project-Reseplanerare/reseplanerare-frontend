@@ -1,5 +1,6 @@
 // React imports
 import { useState, useEffect } from 'react';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 
 // Leaflet imports
 import {
@@ -38,9 +39,9 @@ import FilterEventsByBounds from './FilterEventsByBounds';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 
 // Icons from Assets folder
-import busIcon from './../../assets/bus-solid.svg';
-import trainIcon from './../../assets/train-solid.svg';
-import carIcon from './../../assets/car-solid.svg';
+// import busIcon from './../../assets/bus-solid.svg';
+// import trainIcon from './../../assets/train-solid.svg';
+// import carIcon from './../../assets/car-solid.svg';
 
 function Map() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
@@ -199,13 +200,24 @@ function Map() {
               <Marker
                 key={index}
                 position={[lat, lng]}
-                icon={L.icon({
-                  iconUrl: carIcon,
-                  iconSize: [25, 41],
-                  iconAnchor: [12, 41],
+                icon={L.divIcon({
+                  className: 'custom-marker',
+                  html: `<div style="
+              display: flex; 
+              align-items: center; 
+              justify-content: center; 
+              width: 30px; 
+              height: 30px; 
+              background: white; 
+              border-radius: 50%;   
+              border: 2px solid #007bff;">
+              <i  style="color: #007bff; font-size: 16px;"></i>
+            </div>`,
+                  iconSize: [30, 30],
+                  iconAnchor: [15, 30],
                 })}
                 eventHandlers={{
-                  click: () => handleEventMarkerClick(lat, lng), // Only clickable for car markers
+                  click: () => handleEventMarkerClick(lat, lng),
                 }}
               >
                 <Popup>
@@ -226,10 +238,21 @@ function Map() {
             <Marker
               key={index}
               position={[stop.lat, stop.lon] as LatLngExpression}
-              icon={L.icon({
-                iconUrl: busIcon,
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
+              icon={L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 30px; 
+            height: 30px; 
+            background: white; 
+            border-radius: 50%; 
+            border: 2px solid #28a745;">
+            <i class="fas fa-bus" style="color: #28a745; font-size: 16px;"></i>
+          </div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
               })}
             >
               <Popup>
@@ -243,17 +266,28 @@ function Map() {
           ))}
       </MarkerClusterGroup>
 
-      {/* Tåg markers */}
+      {/* Tåg (Train) markers */}
       <MarkerClusterGroup>
         {selectedOption === 'Tåg' &&
           stops.map((stop, index) => (
             <Marker
               key={index}
               position={[stop.lat, stop.lon] as LatLngExpression}
-              icon={L.icon({
-                iconUrl: trainIcon,
-                iconSize: [25, 41],
-                iconAnchor: [12, 41],
+              icon={L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            width: 30px; 
+            height: 30px; 
+            background: white; 
+            border-radius: 50%; 
+            border: 2px solid #ff5733;">
+            <i class="fas fa-train" style="color: #ff5733; font-size: 16px;"></i>
+          </div>`,
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
               })}
             >
               <Popup>

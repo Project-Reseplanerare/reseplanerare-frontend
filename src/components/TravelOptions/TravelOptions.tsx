@@ -17,24 +17,24 @@ const TravelOptions = () => {
       {
         id: 'Bil',
         label: 'Bil',
-        icon: <FaCar className="text-3xl text-slate-700" />,
+        icon: <FaCar className="text-2xl text-blueLight" />,
       },
       {
         id: 'Buss',
         label: 'Buss',
-        icon: <FaBus className="text-3xl text-slate-700" />,
+        icon: <FaBus className="text-2xl text-blueLight" />,
       },
       {
         id: 'Tåg',
         label: 'Tåg',
-        icon: <FaTrain className="text-3xl text-slate-700" />,
+        icon: <FaTrain className="text-2xl text-blueLight" />,
       },
     ],
     []
   );
 
   return (
-    <div className="grid grid-cols-3 auto-rows-fr gap-4 ">
+    <div className="grid grid-cols-1 auto-rows-fr gap-4">
       {travelOptions.map(({ id, label, icon }) => {
         const isSelected = selectedOption === id;
         return (
@@ -43,17 +43,16 @@ const TravelOptions = () => {
             role="button"
             aria-selected={isSelected}
             tabIndex={0}
-            className={`grid place-items-center gap-2 p-4 bg-lightLight rounded-md cursor-pointer transition focus:outline-none border h-full w-full 
-          ${
-            isSelected
-              ? 'bg-slate-300 text-darkDark border border-lightBorder dark:bg-lightDark dark:text-darkDark dark:border-darkDark'
-              : 'bg-lightDark text-darkDark border border-lightBorder dark:bg-darkDark dark:text-lightDark dark:border-lightDark'
-          }`}
+            className={`grid grid-cols-2 gap-1 p-2 rounded-md cursor-pointer transition focus:outline-none border h-full w-full 
+            ${isSelected
+                ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]' 
+                : 'bg-white bg-opacity-100 text-darkDark border border-lightBorder dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark dark:border-[#333]'
+              }`}
             onClick={() => handleOptionClick(id)}
             onKeyPress={(e) => e.key === 'Enter' && handleOptionClick(id)}
           >
             {icon}
-            <span className="text-sm">{label}</span>
+            <span className="">{label}</span>
           </div>
         );
       })}

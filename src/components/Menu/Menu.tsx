@@ -7,21 +7,20 @@ const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
 
   return (
-    <section className="border border-lightBorder dark:border-white rounded-md w-full p-6 grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
+    <section className=" rounded-md w-full grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
       {/* Menu Navigation */}
-      <nav className="grid grid-cols-3 gap-2 text-center">
+      <nav className="grid grid-cols-3 gap-4 text-center justify-center">
         <button
           onClick={() =>
             setActiveComponent(
               activeComponent === 'resealternativ' ? null : 'resealternativ'
             )
           }
-          className={`p-2 border border-lightBorder dark:border-white rounded-md transition
-      ${
-        activeComponent === 'resealternativ'
-          ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
-          : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:bg-blueLight dark:hover:bg-blueDark hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
-      }`}
+          className={`px-2 py-4 border border-lightBorder dark:border-white rounded-md transition
+            ${activeComponent === 'resealternativ'
+                    ? 'bg-blueLight text-lightLight dark:text-lightLight' // Aktiverad färg
+                    : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
+                  }`}
         >
           Resealternativ
         </button>
@@ -32,26 +31,24 @@ const Menu: React.FC = () => {
               activeComponent === 'besoksmal' ? null : 'besoksmal'
             )
           }
-          className={`p-2 border border-lightBorder dark:border-white rounded-md transition
-      ${
-        activeComponent === 'besoksmal'
-          ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
-          : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:bg-blueLight dark:hover:bg-blueDark hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
-      }`}
+          className={`px-2 py-1 border border-lightBorder dark:border-white rounded-md transition
+      ${activeComponent === 'besoksmal'
+              ? 'bg-blueLight text-lightLight dark:text-lightLight' // Aktiverad färg
+              : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
+            }`}
         >
-          Se och göra i Värmland
+          Se och göra
         </button>
 
         <button
           onClick={() =>
             setActiveComponent(activeComponent === 'karta' ? null : 'karta')
           }
-          className={`p-2 border border-lightBorder dark:border-white rounded-md transition
-      ${
-        activeComponent === 'karta'
-          ? 'bg-blueLight dark:bg-blueDark text-darkDark dark:text-lightLight' // Aktiverad färg
-          : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:bg-blueLight dark:hover:bg-blueDark hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
-      }`}
+          className={`px-2 py-1 border border-lightBorder dark:border-white rounded-md transition
+            ${activeComponent === 'karta'
+                    ? 'bg-blueLight text-lightLight dark:text-lightLight' // Aktiverad färg
+                    : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight' // Hover-effekt
+                  }`}
         >
           Karta
         </button>
@@ -70,7 +67,7 @@ const Menu: React.FC = () => {
         )}
 
         {activeComponent === 'karta' && (
-          <div className="rounded-md grid grid-cols-1 h-80 z-10 border border-lightBorder border-black dark:border-white overflow-hidden">
+          <div className="rounded-md grid grid-cols-1 h-80 z-10 overflow-hidden">
             <Map />
           </div>
         )}
