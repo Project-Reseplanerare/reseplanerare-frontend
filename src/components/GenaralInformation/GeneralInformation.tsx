@@ -6,7 +6,7 @@ const GeneralInformation: React.FC = () => {
   if (!isVisible) return null; // Completely remove from DOM
 
   return (
-    <section className="w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-lightBorder dark:border-lightDark grid gap-4">
+    <section className="w-full bg-lightDark dark:bg-darkLight p-6 rounded-md border border-lightBorder dark:border-lightDark grid ">
       {/* Grid container for Close Button & Title */}
       <div className="grid grid-cols-[min-content_min-content_1fr] gap-4 items-center">
         {/* Close Button */}
@@ -28,7 +28,7 @@ const GeneralInformation: React.FC = () => {
         </h1>
       </div>
 
-      <hr className="bg-blueLight mt-4 h-0.5 mx-auto w-full"></hr>
+      <hr className="bg-blueLight h-0.5 w-full"></hr>
 
       {/* Description */}
       <p className="text-darkLight dark:text-lightDark ">

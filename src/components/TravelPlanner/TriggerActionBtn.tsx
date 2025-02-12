@@ -1,7 +1,7 @@
 import { useLocationStore } from '../../store/useLocationStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
 import { useRouteStopStore } from '../../store/useRouteStopStore';
-import { useTravelOptionsStore } from "../../store/useTravelOptionsStore"; 
+import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 
 const TriggerActionBtn = () => {
   const {
@@ -17,11 +17,11 @@ const TriggerActionBtn = () => {
 
   const { setStopsCoords, setRouteMarkers } = useRouteStopStore();
 
-  const { selectedOption } = useTravelOptionsStore(); // Get selected travel option
+  const { selectedOption } = useTravelOptionsStore();
 
   const parseCoordinates = (address: string): [number, number] | null => {
     if (!address) return null;
-    const coords = address.split(",").map((str) => str.trim());
+    const coords = address.split(',').map((str) => str.trim());
     return coords.length === 2 &&
       !isNaN(Number(coords[0])) &&
       !isNaN(Number(coords[1]))
@@ -56,18 +56,16 @@ const TriggerActionBtn = () => {
       setMarkers([]);
       setIsButtonClicked(false);
       setStopsCoords([]);
-      setRouteMarkers([]); // Clear bus route markers when stopping search
+      setRouteMarkers([]);
     } else {
       setLineDrawn(true);
 
-      if (selectedOption === "Buss") {
-        // If traveling by bus, use busRouteMarkers instead of regular markers
+      if (selectedOption === 'Buss') {
         const busMarkers = [];
         if (fromCoordinates) busMarkers.push({ coords: fromCoordinates });
         if (toCoordinates) busMarkers.push({ coords: toCoordinates });
         setRouteMarkers(busMarkers);
       } else {
-        // If traveling by car or train, use regular markers
         const newMarkers = [];
         if (fromCoordinates) newMarkers.push(fromCoordinates);
         if (toCoordinates) newMarkers.push(toCoordinates);
@@ -88,10 +86,10 @@ const TriggerActionBtn = () => {
       onClick={handleClick}
       className={`px-4 py-2 rounded-md transition text-lightLight dark:text-darkDark 
     bg-darkDark dark:bg-lightLight hover:bg-darkLight dark:hover:bg-lightDark 
-    ${isDisabled ? "opacity-50 cursor-not-allowed" : ""}`}
+    ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
       disabled={isDisabled}
     >
-      {lineDrawn ? "Sluta sök" : "Sök"}
+      {lineDrawn ? 'Sluta sök' : 'Sök'}
     </button>
   );
 };

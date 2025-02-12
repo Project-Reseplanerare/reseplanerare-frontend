@@ -9,7 +9,6 @@ const SearchInput = () => {
   const [query, setQuery] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [isFocused, setIsFocused] = useState<boolean>(false);
   const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
 
   const fetchSuggestions = async (searchQuery: string) => {
@@ -90,21 +89,10 @@ const SearchInput = () => {
     }
   };
 
-  const handleFocus = () => {
-    if (query === '') {
-      setQuery('');
-    }
-    setIsFocused(true);
-  };
-
-  const handleBlur = () => {
-    setIsFocused(false);
-  };
-
   return (
     <div className="items-center grid gap-4">
       {/* Input Section */}
-      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-lightBorder border-darkLight dark:border-lightDark rounded-lg bg-lightLight dark:bg-darkDark">
+      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-lightlightBorder dark:border-lightlightBorder rounded-lg bg-lightLight dark:bg-darkDark">
         {/* Search Icon */}
         <div className="px-3 text-darkLight dark:text-lightDark">
           <FaSearch />

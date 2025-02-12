@@ -19,13 +19,15 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     useRouteStopStore();
 
   const [fromSuggestions, setFromSuggestions] = useState<
-    { name: string; extId: string }[] 
+    { name: string; extId: string }[]
   >([]);
-  const [toSuggestions, setToSuggestions] = useState< 
+  const [toSuggestions, setToSuggestions] = useState<
     { name: string; extId: string }[]
   >([]);
 
-  const handleFromAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFromAddressChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = e.target.value;
     setFromAddress(value);
     onInputChange('from', value);
@@ -57,8 +59,9 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     }
   };
 
-
-  const handleToAddressChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleToAddressChange = async (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const value = e.target.value;
     setToAddress(value);
     onInputChange('to', value);
@@ -119,137 +122,145 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   return (
     <>
       <h4 className=" text-base font-medium text-darkDark dark:text-lightLight">
-          Vart vill du resa?
+        Vart vill du resa?
       </h4>
-    
-    <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg ">
-      {/* From Address Input */}
-      <div className="relative">
-        {/* Strict 3-Column Grid Layout */}
-        <div
-          className={`grid grid-cols-[min-content_1fr_min-content] border border-lightBorder dark:border-lightLight rounded-md bg-lightLight dark:bg-darkDark p-4 items-center gap-2 ${fromAddress ? 'border-blueLight dark:border-blueDark' : ''
+
+      <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg ">
+        {/* From Address Input */}
+        <div className="relative">
+          {/* Strict 3-Column Grid Layout */}
+          <div
+            className={`grid grid-cols-[min-content_1fr_min-content] border border-lightBorder dark:border-lightLight rounded-md bg-lightLight dark:bg-darkDark p-2 items-center gap-2 ${
+              fromAddress ? 'border-blueLight dark:border-blueDark' : ''
             }`}
-        >
-          {/* Column 1: Icon */}
-          <div>
-            <div
-              className={`w-6 h-6 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${fromAddress ? 'bg-blueLight dark:bg-blueLight dark:text-lightLight' : 'bg-darkLight dark:bg-lightDark'
+          >
+            {/* Column 1: Icon */}
+            <div>
+              <div
+                className={`w-6 h-6 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
+                  fromAddress
+                    ? 'bg-blueLight dark:bg-blueLight dark:text-lightLight'
+                    : 'bg-darkLight dark:bg-lightDark'
                 }`}
-            >
-              A
+              >
+                A
+              </div>
+            </div>
+
+            {/* Column 2: Input Field (Expands to Fill Space) */}
+            <div>
+              <input
+                type="text"
+                value={fromAddress}
+                onChange={handleFromAddressChange}
+                className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none" // här minskar vi padding och textstorlek
+              />
+            </div>
+
+            {/* Column 3: Clear Button (Min-Width) */}
+            <div>
+              {fromAddress && (
+                <button
+                  onClick={clearFromInput}
+                  className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
+                >
+                  <FaTimes className="w-4 h-4" />
+                </button>
+              )}
             </div>
           </div>
 
-          {/* Column 2: Input Field (Expands to Fill Space) */}
-          <div>
-          <input
-          type="text"
-          value={fromAddress}
-          onChange={handleFromAddressChange}
-          className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"  // här minskar vi padding och textstorlek
-        />
-          </div>
-
-          {/* Column 3: Clear Button (Min-Width) */}
-          <div>
-            {fromAddress && (
-              <button
-                onClick={clearFromInput}
-                className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
-              >
-                <FaTimes className="w-4 h-4" />
-              </button>
-            )}
-          </div>
+          {/* From Address Suggestions Dropdown */}
+          {fromSuggestions.length > 0 && (
+            <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
+              {fromSuggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  className="px-4 py-2 text-sm text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
+                  onClick={() => {
+                    setFromAddress(suggestion.name);
+                    setFromStopId(suggestion.extId);
+                    setFromSuggestions([]);
+                    onInputChange('from', suggestion.name);
+                  }}
+                >
+                  {suggestion.name}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
-        {/* From Address Suggestions Dropdown */}
-        {fromSuggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
-            {fromSuggestions.map((suggestion, index) => (
-              <li
-                key={index}
-                className="px-4 py-2 text-sm text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
-                onClick={() => {
-                  setFromAddress(suggestion.name);
-                  setFromStopId(suggestion.extId);
-                  setFromSuggestions([]);
-                  onInputChange('from', suggestion.name);
-                }}
-              >
-                {suggestion.name}
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
+        {/* Swap Button - ny komponent*/}
+        <div className="row-span-2 self-center ml-1">
+          <SwapBtn isDisabled={isSwapDisabled} onClick={swapAddresses} />
+        </div>
 
-      {/* Swap Button - ny komponent*/}
-      <div className='row-span-2 self-center ml-1'>
-        <SwapBtn isDisabled={isSwapDisabled} onClick={swapAddresses} />
-      </div>
-
-      {/* To Address Input */}
-      <div className="relative">
-        {/* Strict 3-Column Grid Layout */}
-        <div
-          className={`grid grid-cols-[min-content_1fr_min-content] border border-lightBorder dark:border-lightLight rounded-md bg-lightLight dark:bg-darkDark p-4 items-center gap-2 ${toAddress ? 'border-blueLight dark:border-blueDark' : ''
-            }`}
-        >
-          {/* Column 1: Icon */}
-          <div>
+        {/* To Address Input */}
+        <div className="relative">
+          {/* Strict 3-Column Grid Layout */}
           <div
-            className={`w-6 h-6 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${toAddress ? 'bg-blueLight dark:bg-blueLight dark:text-lightLight' : 'bg-darkLight dark:bg-lightLight'
-              }`}
+            className={`grid grid-cols-[min-content_1fr_min-content] border border-lightBorder dark:border-lightLight rounded-md bg-lightLight dark:bg-darkDark p-2 items-center gap-2 ${
+              toAddress ? 'border-blueLight dark:border-blueDark' : ''
+            }`}
           >
-            B
-          </div>
-        </div>
-
-          {/* Column 2: Input Field (Expands to Fill Space) */}
-          <div>
-          <input
-            type="text"
-            value={toAddress}
-            onChange={handleToAddressChange}
-            className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"  // här minskar vi padding och textstorlek
-          />
-          </div>
-
-          {/* Column 3: Clear Button (Min-Width) */}
-          <div>
-            {toAddress && (
-              <button
-                onClick={clearToInput}
-                className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
+            {/* Column 1: Icon */}
+            <div>
+              <div
+                className={`w-6 h-6 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
+                  toAddress
+                    ? 'bg-blueLight dark:bg-blueLight dark:text-lightLight'
+                    : 'bg-darkLight dark:bg-lightLight'
+                }`}
               >
-                <FaTimes className="w-4 h-4" />
-              </button>
-            )}
-          </div>
-        </div>
+                B
+              </div>
+            </div>
 
-        {/* To Address Suggestions Dropdown */}
-        {toSuggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
-            {toSuggestions.map((suggestion, index) => (
-              <li
-                key={index}
-                className="px-4 py-2 text-sm text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
-                onClick={() => {
-                  setToAddress(suggestion.name);
-                  setToStopId(suggestion.extId);
-                  setToSuggestions([]);
-                  onInputChange('to', suggestion.name);
-                }}
-              >
-                {suggestion.name}
-              </li>
-            ))}
-          </ul>
-        )}
+            {/* Column 2: Input Field (Expands to Fill Space) */}
+            <div>
+              <input
+                type="text"
+                value={toAddress}
+                onChange={handleToAddressChange}
+                className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none" // här minskar vi padding och textstorlek
+              />
+            </div>
+
+            {/* Column 3: Clear Button (Min-Width) */}
+            <div>
+              {toAddress && (
+                <button
+                  onClick={clearToInput}
+                  className="text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight"
+                >
+                  <FaTimes className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
+
+          {/* To Address Suggestions Dropdown */}
+          {toSuggestions.length > 0 && (
+            <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
+              {toSuggestions.map((suggestion, index) => (
+                <li
+                  key={index}
+                  className="px-4 py-2 text-sm text-darkDark dark:text-lightLight hover:bg-lightDark dark:hover:bg-darkLight cursor-pointer transition"
+                  onClick={() => {
+                    setToAddress(suggestion.name);
+                    setToStopId(suggestion.extId);
+                    setToSuggestions([]);
+                    onInputChange('to', suggestion.name);
+                  }}
+                >
+                  {suggestion.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 };
