@@ -16,7 +16,7 @@ function App() {
           <Route
             path="/"
             element={
-              <section className="p-4 sm:p-6 md:p-8 w-full lg:w-[800px] mx-auto grid gap-4 h-auto">
+              <section className="w-full p-4 lg:w-[800px] grid gap-4 h-auto">
                 <GeneralInformation />
                 <SearchInput />
                 <TravelPlannerWrapper />
