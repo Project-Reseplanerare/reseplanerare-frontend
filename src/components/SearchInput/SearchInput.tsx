@@ -90,7 +90,7 @@ const SearchInput = () => {
   };
 
   return (
-    <div className="items-center grid gap-4 ">
+    <div className="items-center grid gap-4 shadow-md">
       {/* Input Section */}
       <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full rounded border-darkLight dark:border-lightDark bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
         {/* Search Icon */}
