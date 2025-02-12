@@ -121,7 +121,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
 
   return (
     <>
-      <h4 className=" text-base font-medium text-darkDark dark:text-lightLight">
+      <h4 className=" font-bold text-xl text-darkDark dark:text-lightLight">
         Vart vill du resa?
       </h4>
 

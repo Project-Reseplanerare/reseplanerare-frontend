@@ -90,9 +90,9 @@ const SearchInput = () => {
   };
 
   return (
-    <div className="items-center grid gap-4">
+    <div className="items-center grid gap-4 ">
       {/* Input Section */}
-      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-lightlightBorder dark:border-lightlightBorder rounded-lg bg-lightLight dark:bg-darkDark">
+      <div className="relative grid grid-cols-[auto,1fr,auto] items-center w-full border border-lightlightBorder dark:border-lightlightBorder rounded bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
         {/* Search Icon */}
         <div className="px-3 text-darkLight dark:text-lightDark">
           <FaSearch />
@@ -118,7 +118,7 @@ const SearchInput = () => {
 
         {/* Dropdown Suggestions */}
         {suggestions.length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
+          <ul className="absolute top-full left-0 w-full  border border-darkLight dark:border-lightDark rounded max-h-40 overflow-y-auto z-50 mt-2 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
             {suggestions.map((title, index) => (
               <li
                 key={index}
