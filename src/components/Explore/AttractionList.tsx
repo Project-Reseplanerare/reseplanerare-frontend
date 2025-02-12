@@ -1,108 +1,106 @@
-import { useState } from 'react';
+// import { useState } from 'react';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import {
+//   faBicycle,
+//   faTicketAlt,
+//   faLandmark,
+//   faShoppingBag,
+//   faUtensils,
+//   faHotel,
+//   faChevronDown,
+//   faChevronUp,
+// } from '@fortawesome/free-solid-svg-icons';
+
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faBicycle,
-  faTicketAlt,
-  faLandmark,
-  faShoppingBag,
-  faUtensils,
-  faHotel,
-  faChevronDown,
-  faChevronUp,
-} from '@fortawesome/free-solid-svg-icons';
+import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+import { fetchCategories } from '../../utils/api/fetchCategories';
+
+import cultureIcon from '../../assets/culture.svg';
+import foodIcon from '../../assets/food.svg';
+import houseIcon from '../../assets/house.svg';
+import shoppingIcon from '../../assets/shopping.svg';
+import sportCurlingIcon from '../../assets/sport-curling.svg';
+import ticketIcon from '../../assets/ticket.svg';
 
 interface AttractionListProps {
   setSelectedCategory: (category: string) => void;
 }
 
+const iconMapping: Record<string, string> = {
+  "Kultur & historia": cultureIcon,
+  "Mat & dryck": foodIcon,
+  "Boende": houseIcon,
+  "Design & shopping": shoppingIcon,
+  "Aktiviteter": sportCurlingIcon,
+  "Evenemang": ticketIcon,
+};
+
 function AttractionList({ setSelectedCategory }: AttractionListProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [selectedSubItem, setSelectedSubItem] = useState<string | null>(null);
 
-  const items = [
-    {
-      id: 1,
-      label: 'Aktiviteter',
-      icon: faBicycle,
-      subItems: ['Bada', 'Barn & Familj', 'Cykla', 'Fiska', 'Golfa', 'Sport'],
-    },
-    {
-      id: 2,
-      label: 'Evenemang',
-      icon: faTicketAlt,
-      subItems: ['Barn', 'Dans', 'Musik', 'Sport', 'Teater'],
-    },
-    {
-      id: 3,
-      label: 'Kultur & historia',
-      icon: faLandmark,
-      subItems: ['Konst', 'Museum', 'Kyrka', 'Parker'],
-    },
-    {
-      id: 4,
-      label: 'Design & shopping',
-      icon: faShoppingBag,
-      subItems: ['Antikt', 'Gårdsbutik', 'Shopping'],
-    },
-    {
-      id: 5,
-      label: 'Mat & dryck',
-      icon: faUtensils,
-      subItems: ['Restaurang', 'Kafé', 'Pub'],
-    },
-    {
-      id: 6,
-      label: 'Boende',
-      icon: faHotel,
-      subItems: ['Hotell', 'Stugor', 'Vandrarhem'],
-    },
-  ];
+  useEffect(() => {
+    fetchCategories()
+      .then((data) => {
+        setCategories(data);
+      })
+      .catch(() => {});
+  }, []);
 
-  const handleItemClick = (id: number, label: string) => {
+  const handleItemClick = (id: number) => {
     setActiveIndex(activeIndex === id ? null : id);
-    setSelectedCategory(label);
+  };
+
+  const handleSubItemClick = (subItem: string) => {
+    setSelectedSubItem(subItem);
+    setSelectedCategory(subItem);
+    console.log("Kategori vald:", subItem);
   };
 
   return (
-    <div className="space-y-4">
-      {items.map((item) => (
-        <div key={item.id} className="w-full">
+    <div className="space-y-2">
+      {categories.map((category) => (
+        <div key={category.id} className="w-full">
           <div
-            className={`grid grid-cols-[auto_1fr_auto] items-center gap-3 p-4 rounded-md border cursor-pointer transition 
-            bg-lightDark text-darkDark border border-lightBorder dark:bg-darkDark dark:text-lightDark dark:border-lightDark
-            ${
-              activeIndex === item.id
-                ? 'bg-blueLight border-blueDark dark:bg-blueDark dark:border-blueDark'
-                : ''
-            }`}
-            onClick={() => handleItemClick(item.id, item.label)}
+            className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition 
+            ${activeIndex === category.id ? 'bg-blueLight border-blueDark dark:border-blueDark' : ''}`}
+            onClick={() => handleItemClick(category.id)}
           >
-            <FontAwesomeIcon
-              icon={item.icon}
-              className="w-6 h-6 text-darkDark dark:text-lightDark"
+            <img
+              src={iconMapping[category.label] || cultureIcon}
+              alt={`${category.label} ikon`}
+              className="w-5 h-5"
             />
-            <span className="text-sm text-darkDark dark:text-lightDark">
-              {item.label}
+            <span className={`text-xs transition-colors 
+              ${activeIndex === category.id ? 'text-lightLight' : 'text-darkDark dark:text-lightDark'}`}>
+              {category.label}
             </span>
             <FontAwesomeIcon
-              icon={activeIndex === item.id ? faChevronUp : faChevronDown}
-              className="w-4 h-4 text-darkDark dark:text-lightDark transition-transform"
+              icon={activeIndex === category.id ? faChevronUp : faChevronDown}
+              className="w-3 h-3 text-darkDark dark:text-lightDark transition-transform"
             />
           </div>
 
-          <div className="grid gap-2 mt-2">
-            {activeIndex === item.id && item.subItems ? (
-              item.subItems.map((subItem, index) => (
+          {activeIndex === category.id && category.subItems.length > 0 ? (
+            <div className="grid gap-1 mt-1">
+              {category.subItems.map((subItem: string, index: number) => (
                 <div
                   key={index}
-                  className="p-4 bg-lightLight text-darkDark border border-lightlightBorder dark:bg-darkDark dark:text-lightDark dark:border-lightDark rounded-md cursor-pointer transition hover:bg-blueLight hover:text-darkDark hover:border-blueDark dark:hover:bg-blueDark dark:hover:text-lightDark"
-                  >
-                  {subItem}
+                  className={`p-3 rounded-md cursor-pointer transition 
+                  bg-lightLight text-darkDark border-darkDark dark:bg-darkDark dark:text-lightDark dark:border-lightDark
+                  hover:text-blueLight dark:hover:text-blueLight
+                  ${selectedSubItem === subItem ? 'bg-blueDark text-dark' : ''}`}
+                  onClick={() => handleSubItemClick(subItem)}
+                >
+                  <span className="text-xs">{subItem}</span>
                 </div>
-              ))
-            ) : (
-              <div className="h-0" /> 
-            )}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="h-0" />
+          )}
         </div>
       ))}
     </div>
