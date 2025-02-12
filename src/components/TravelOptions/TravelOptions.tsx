@@ -43,12 +43,12 @@ const TravelOptions = () => {
             role="button"
             aria-selected={isSelected}
             tabIndex={0}
-            className={`grid grid-cols-2 gap-1 p-2 rounded-md cursor-pointer transition focus:outline-none border border-lightlightBorder dark:border-lightlight h-full w-full 
-            ${
-              isSelected
-                ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
-                : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
-            }`}
+            className={`grid grid-cols-[min-content_auto_minmax(0,1fr)] gap-2 p-2 rounded-md cursor-pointer transition focus:outline-none border border-lightlightBorder dark:border-lightlight h-full w-full 
+              ${
+                isSelected
+                  ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
+                  : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
+              }`}
             onClick={() => handleOptionClick(id)}
             onKeyPress={(e) => e.key === 'Enter' && handleOptionClick(id)}
           >
