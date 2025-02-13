@@ -172,10 +172,10 @@ const RouteOptionsDropdown = () => {
 
   return (
     isButtonClicked && (
-      <div className="grid gap-4 p-4 border border-darkLight dark:border-lightDark bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
-        <h2 className="text-xl font-bold border-b border-darkLight dark:border-lightDark pb-2">
-          Ruttalternativ
-        </h2>
+      <div className="grid gap-4 p-8 border border-darkLight dark:border-lightDark bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
+        <h2 className="text-xl font-bold">Resealternativ</h2>
+
+        <hr className="h-0.5 bg-blueLight" />
 
         {error && (
           <p className="text-sm bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
