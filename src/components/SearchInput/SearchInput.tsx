@@ -13,7 +13,7 @@ const SearchInput = () => {
 
   const fetchSuggestions = async (searchQuery: string) => {
     if (!searchQuery.trim()) {
-      setSuggestions([]);
+      setSuggestions([]); // Ensure suggestions are cleared when input is empty
       return;
     }
 
@@ -39,18 +39,19 @@ const SearchInput = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+    const value = e.target.value.trimStart(); // Prevent leading spaces
     setQuery(value);
-    if (value.trim()) {
+
+    if (value) {
       fetchSuggestions(value);
     } else {
-      setSuggestions([]); // Clear suggestions when input is empty
+      setSuggestions([]); // ✅ Clear suggestions when input is empty
     }
   };
 
   const clearInput = () => {
     setQuery('');
-    setSuggestions([]);
+    setSuggestions([]); // ✅ Ensure dropdown disappears immediately
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
@@ -118,7 +119,7 @@ const SearchInput = () => {
         )}
       </div>
 
-      {/* Dropdown Suggestions (Only shown when query is not empty) */}
+      {/* ✅ Dropdown Suggestions (Hidden when input is empty) */}
       {query && suggestions.length > 0 && (
         <ul className="w-full border border-darkLight dark:border-lightDark rounded max-h-40 overflow-y-auto bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight shadow-lg">
           {suggestions.map((title, index) => (
@@ -137,7 +138,7 @@ const SearchInput = () => {
         </ul>
       )}
 
-      {/* Loading Indicator (Only shown when query is not empty) */}
+      {/* ✅ Loading Indicator (Hidden when input is empty) */}
       {query && loading && (
         <p className="text-sm text-darkLight dark:text-lightDark">Loading...</p>
       )}
