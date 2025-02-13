@@ -41,7 +41,11 @@ const SearchInput = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setQuery(value);
-    if (value.trim()) fetchSuggestions(value);
+    if (value.trim()) {
+      fetchSuggestions(value);
+    } else {
+      setSuggestions([]); // Clear suggestions when input is empty
+    }
   };
 
   const clearInput = () => {
@@ -114,8 +118,8 @@ const SearchInput = () => {
         )}
       </div>
 
-      {/* Dropdown Suggestions */}
-      {suggestions.length > 0 && (
+      {/* Dropdown Suggestions (Only shown when query is not empty) */}
+      {query && suggestions.length > 0 && (
         <ul className="w-full border border-darkLight dark:border-lightDark rounded max-h-40 overflow-y-auto bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight shadow-lg">
           {suggestions.map((title, index) => (
             <li
@@ -133,8 +137,8 @@ const SearchInput = () => {
         </ul>
       )}
 
-      {/* Loading Indicator */}
-      {loading && (
+      {/* Loading Indicator (Only shown when query is not empty) */}
+      {query && loading && (
         <p className="text-sm text-darkLight dark:text-lightDark">Loading...</p>
       )}
     </div>
