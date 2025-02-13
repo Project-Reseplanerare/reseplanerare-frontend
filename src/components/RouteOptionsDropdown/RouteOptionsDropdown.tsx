@@ -214,9 +214,13 @@ const RouteOptionsDropdown = () => {
                     {routeStops[index].map((stop, sIndex) => (
                       <div
                         key={sIndex}
-                        className="grid grid-cols-2 text-sm border border-darkLight dark:border-lightDark rounded p-2"
+                        className={`grid grid-cols-2 text-sm border rounded p-2 transition 
+          border-lightlightBorder dark:border-[#444] 
+          bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark`}
                       >
-                        <span>● {stop.name}</span>
+                        <span className="flex items-center gap-2">
+                          <span className="text-blueLight">●</span> {stop.name}
+                        </span>
                         <span className="text-right">
                           {stop.depTime || stop.arrTime || ''}
                         </span>
