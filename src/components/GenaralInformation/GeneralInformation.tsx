@@ -12,7 +12,7 @@ const GeneralInformation: React.FC = () => {
         {/* Close Button */}
         <button
           onClick={() => setIsVisible(false)}
-          className="w-8 h-8 grid place-items-center text-darkLight dark:text-lightDark border border-darkLight dark:border-lightDark rounded-full font-bold transition hover:text-white hover:bg-darkLight dark:hover:text-white dark:hover:bg-lightDark"
+          className="hover:scale-105 transition-transform w-8 h-8 grid place-items-center text-lightDark rounded-full font-bold dark:hover:text-white bg-blueLight"
           aria-label="Close"
         >
           ✕
