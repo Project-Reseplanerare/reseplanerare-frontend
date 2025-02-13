@@ -104,8 +104,8 @@ const SearchInput = () => {
           type="text"
           value={query}
           onChange={handleInputChange}
-          placeholder="Sök snabbt och enkelt!"
-          className="w-full h-10 px-3 bg-transparent text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none"
+          placeholder="Sök bland tusentals evenemang och besöksmål"
+          className="w-full h-10 px-3 bg-transparent text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark placeholder-opacity-50 focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none"
         />
 
         {/* Clear Button */}
