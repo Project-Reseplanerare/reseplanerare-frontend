@@ -173,7 +173,7 @@ function Map() {
   if (!center) return <p>Loading map...</p>;
 
   return (
-    <MapContainer center={center} zoom={13} className="h-[1fr] w-[100%]">
+    <MapContainer center={center} zoom={13} className="h-[1fr] w-[100%] ">
       <TileLayer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution="&copy;"

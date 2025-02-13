@@ -7,7 +7,7 @@ const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
 
   return (
-    <section className=" rounded-md w-full grid gap-4 bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight">
+    <section className=" rounded-md w-full grid gap-4  text-darkDark dark:text-lightLight">
       {/* Menu Navigation */}
       <nav className="grid grid-cols-3 gap-4">
         <button
@@ -20,7 +20,7 @@ const Menu: React.FC = () => {
             ${
               activeComponent === 'resealternativ'
                 ? 'bg-blueLight text-lightLight dark:text-lightLight'
-                : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
+                : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
             }`}
         >
           Resealternativ
@@ -36,7 +36,7 @@ const Menu: React.FC = () => {
       ${
         activeComponent === 'besoksmal'
           ? 'bg-blueLight text-lightLight dark:text-lightLight'
-          : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
+          : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
       }`}
         >
           Se och göra
@@ -50,7 +50,7 @@ const Menu: React.FC = () => {
             ${
               activeComponent === 'karta'
                 ? 'bg-blueLight text-lightLight dark:text-lightLight'
-                : 'bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
+                : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
             }`}
         >
           Karta
@@ -68,7 +68,7 @@ const Menu: React.FC = () => {
             />
           </div>
         ) : activeComponent === 'karta' ? (
-          <div className="rounded-md grid grid-cols-1 h-80 ">
+          <div className="rounded-md  grid grid-cols-1 h-80 ">
             <Map />
           </div>
         ) : (
