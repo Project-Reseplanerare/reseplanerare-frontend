@@ -13,7 +13,7 @@ const SearchInput = () => {
 
   const fetchSuggestions = async (searchQuery: string) => {
     if (!searchQuery.trim()) {
-      setSuggestions([]); // Ensure suggestions are cleared when input is empty
+      setSuggestions([]);
       return;
     }
 
@@ -39,19 +39,19 @@ const SearchInput = () => {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trimStart(); // Prevent leading spaces
+    const value = e.target.value.trimStart();
     setQuery(value);
 
     if (value) {
       fetchSuggestions(value);
     } else {
-      setSuggestions([]); // ✅ Clear suggestions when input is empty
+      setSuggestions([]);
     }
   };
 
   const clearInput = () => {
     setQuery('');
-    setSuggestions([]); // ✅ Ensure dropdown disappears immediately
+    setSuggestions([]);
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
