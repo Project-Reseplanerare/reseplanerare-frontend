@@ -10,17 +10,15 @@ const GeneralInformation: React.FC = () => {
       {/* Grid container for Close Button & Title */}
       <div className="grid grid-cols-[min-content_min-content_1fr] gap-4 items-center">
         {/* Close Button */}
-        <div>
-          <button
-            onClick={() => setIsVisible(false)}
-            className="text-darkLight dark:text-lightDark border border-darkLight dark:border-lightDark 
-             font-bold px-3 py-1 rounded-full transition 
-             hover:text-white dark:hover:text-white 
-             hover:bg-darkLight dark:hover:bg-lightDark"
-          >
-            ✕
-          </button>
-        </div>
+        <button
+          onClick={() => setIsVisible(false)}
+          className="text-darkLight dark:text-lightDark border border-darkLight dark:border-lightDark 
+             font-bold w-8 h-8 flex items-center justify-center rounded-full transition 
+             hover:text-white dark:hover:text-white hover:bg-darkLight dark:hover:bg-lightDark"
+          aria-label="Close"
+        >
+          ✕
+        </button>
 
         {/* Title */}
         <h1 className="text-2xl font-bold text-darkDark dark:text-lightLight ">
