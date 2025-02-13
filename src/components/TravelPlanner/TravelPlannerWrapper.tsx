@@ -15,7 +15,7 @@ const TravelPlannerWrapper = () => {
   };
 
   return (
-    <section className="grid w-full p-8 shadow-md rounded border-darkLight dark:border-lightDark  backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight">
+    <section className="grid w-full p-8 shadow-md rounded border-darkLight z-0 dark:border-lightDark  backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight">
       {/* Title Section */}
       <h2 className="text-2xl font-bold text-darkDark dark:text-lightLight">
         Planera din resa
