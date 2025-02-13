@@ -178,7 +178,7 @@ const RouteOptionsDropdown = () => {
         <hr className="h-0.5 bg-blueLight" />
 
         {error && (
-          <p className="text-sm bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
+          <p className=" bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
             ⚠️ {error}
           </p>
         )}
@@ -210,14 +210,16 @@ const RouteOptionsDropdown = () => {
                 </div>
 
                 {selectedRouteIndex === index && routeStops[index] && (
-                  <div className="mt-2 p-2 border border-darkLight dark:border-lightDark rounded bg-lightLight dark:bg-darkDark space-y-1">
+                  <div className="grid gap-4 p-2">
                     {routeStops[index].map((stop, sIndex) => (
                       <div
                         key={sIndex}
-                        className="flex justify-between text-sm"
+                        className="grid grid-cols-2 text-sm border border-darkLight dark:border-lightDark rounded p-2"
                       >
                         <span>● {stop.name}</span>
-                        <span>{stop.depTime || stop.arrTime || ''}</span>
+                        <span className="text-right">
+                          {stop.depTime || stop.arrTime || ''}
+                        </span>
                       </div>
                     ))}
                   </div>
