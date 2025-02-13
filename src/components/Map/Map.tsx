@@ -37,6 +37,7 @@ import MapCenterUpdater from './MapCenterUpdater';
 import MapClickHandler from './MapClickHandler';
 import FilterEventsByBounds from './FilterEventsByBounds';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
+import TempMapCenterUpdater from './tempMapCenterUpdater';
 
 // Icons from Assets folder
 // import busIcon from './../../assets/bus-solid.svg';
@@ -179,6 +180,7 @@ function Map() {
         attribution="&copy;"
       />
 
+      <TempMapCenterUpdater/>
       <MapCenterUpdater />
       <MapClickHandler disabled={stopsCoords.length > 0} />
 
