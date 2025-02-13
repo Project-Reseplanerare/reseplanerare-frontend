@@ -37,12 +37,7 @@ import MapCenterUpdater from './MapCenterUpdater';
 import MapClickHandler from './MapClickHandler';
 import FilterEventsByBounds from './FilterEventsByBounds';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
-import TempMapCenterUpdater from './tempMapCenterUpdater';
-
-// Icons from Assets folder
-// import busIcon from './../../assets/bus-solid.svg';
-// import trainIcon from './../../assets/train-solid.svg';
-// import carIcon from './../../assets/car-solid.svg';
+import TempMapCenterUpdater from './TempMapCenterUpdater';
 
 function Map() {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
@@ -53,8 +48,6 @@ function Map() {
 
   const {
     setToLocation,
-    // setFromLocation,
-    // setFromAddress,
     setToAddress,
     lineDrawn,
     setLineDrawn,
@@ -180,7 +173,7 @@ function Map() {
         attribution="&copy;"
       />
 
-      <TempMapCenterUpdater/>
+      <TempMapCenterUpdater />
       <MapCenterUpdater />
       <MapClickHandler disabled={stopsCoords.length > 0} />
 
