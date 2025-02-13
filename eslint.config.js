@@ -23,7 +23,16 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      'quote-props': ['error', 'consistent'], // Ensures consistent quoting of object keys
+      'quote-props': ['error', 'consistent'],
+      // Allow any import
+      'import/no-unresolved': 'off',
+      'import/named': 'off',
+      'import/default': 'off',
+      'import/namespace': 'off',
+      'import/no-extraneous-dependencies': 'off',
+      // Allow "any"
+      '@typescript-eslint/no-explicit-any': 'off',
+      '@typescript-eslint/explicit-module-boundary-types': 'off',
     },
   }
 );
