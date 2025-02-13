@@ -9,7 +9,7 @@ const Menu: React.FC = () => {
   return (
     <section className=" rounded-md w-full grid gap-4  text-darkDark dark:text-lightLight">
       {/* Menu Navigation */}
-      <nav className="grid grid-cols-3 gap-4">
+      <nav className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <button
           onClick={() =>
             setActiveComponent(
