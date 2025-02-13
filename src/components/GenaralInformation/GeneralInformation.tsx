@@ -14,7 +14,7 @@ const GeneralInformation: React.FC = () => {
           <button
             onClick={() => setIsVisible(false)}
             className="text-darkLight dark:text-lightDark border border-darkLight dark:border-lightDark 
-             font-bold px-3 py-1 rounded-md text-sm transition 
+             font-bold px-3 py-1 rounded-full transition 
              hover:text-white dark:hover:text-white 
              hover:bg-darkLight dark:hover:bg-lightDark"
           >
