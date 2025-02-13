@@ -29,7 +29,9 @@ const RouteOptionsDropdown = () => {
   const [travelTimes, setTravelTimes] = useState<string[]>([]);
   const [routeStops, setRouteStops] = useState<Record<number, any[]>>({});
   const [error, setError] = useState<string | null>(null);
-  const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(null);
+  const [selectedRouteIndex, setSelectedRouteIndex] = useState<number | null>(
+    null
+  );
   const { selectedOption } = useTravelOptionsStore();
 
   useEffect(() => {
@@ -93,7 +95,6 @@ const RouteOptionsDropdown = () => {
         // Limit to 8 routes
         const limitedDepartures = filteredDepartures.slice(0, 8);
 
-
         const names = limitedDepartures.map((departure) => {
           const departureTime = departure.time;
           const arrivalTime =
@@ -117,8 +118,9 @@ const RouteOptionsDropdown = () => {
         // Fetch route stops for the first 8 departures
         limitedDepartures.forEach((departure, index) => {
           const departureTime = departure.time;
-          const arrivalTime = validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
-        
+          const arrivalTime =
+            validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
+
           fetchRouteStopsForRoute(
             index,
             fromStopId,
@@ -127,8 +129,8 @@ const RouteOptionsDropdown = () => {
             selectedOption,
             setRouteStops,
             setError,
-            departureTime, 
-            arrivalTime 
+            departureTime,
+            arrivalTime
           );
         });
       } catch (err) {
@@ -171,16 +173,16 @@ const RouteOptionsDropdown = () => {
   return (
     isButtonClicked && (
       <div className="grid gap-4 p-4 border border-darkLight dark:border-lightDark bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
-        <h2 className="text-xl font-bold text-darkDark dark:text-lightLight border-b border-darkLight dark:border-lightDark pb-2">
+        <h2 className="text-xl font-bold border-b border-darkLight dark:border-lightDark pb-2">
           Ruttalternativ
         </h2>
-  
+
         {error && (
-          <p className="text-sm text-darkDark dark:text-lightLight bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
+          <p className="text-sm bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
             ⚠️ {error}
           </p>
         )}
-  
+
         {routeNames.length > 0 ? (
           <div className="grid gap-3">
             {routeNames.map((name, index) => (
@@ -189,33 +191,30 @@ const RouteOptionsDropdown = () => {
                   onClick={() => handleRouteClick(index)}
                   className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md hover:bg-lightDark dark:hover:bg-darkLight transition"
                 >
-                  <p
-                    className="font-medium text-darkDark dark:text-lightLight truncate"
-                    title={name}
-                  >
+                  <p className="font-medium truncate" title={name}>
                     {name}
                   </p>
                   <div className="bg-lightDark dark:bg-darkLight px-3 py-1 rounded-md text-right">
-                    <p className="text-sm text-darkDark dark:text-lightLight">
+                    <p className="text-sm">
                       Restid:{' '}
                       <span className="font-bold">{travelTimes[index]}</span>
                     </p>
                   </div>
                   <span
-                    className={`text-darkDark dark:text-lightLight transition-transform ${
+                    className={`transition-transform ${
                       selectedRouteIndex === index ? 'rotate-180' : 'rotate-0'
                     }`}
                   >
                     ▼
                   </span>
                 </div>
-  
+
                 {selectedRouteIndex === index && routeStops[index] && (
-                  <div className="mt-2 p-2 border border-darkLight dark:border-lightDark  rounded bg-lightLight dark:bg-darkDark space-y-1">
+                  <div className="mt-2 p-2 border border-darkLight dark:border-lightDark rounded bg-lightLight dark:bg-darkDark space-y-1">
                     {routeStops[index].map((stop, sIndex) => (
                       <div
                         key={sIndex}
-                        className="flex justify-between text-sm text-darkDark dark:text-lightLight"
+                        className="flex justify-between text-sm"
                       >
                         <span>● {stop.name}</span>
                         <span>{stop.depTime || stop.arrTime || ''}</span>
@@ -227,9 +226,7 @@ const RouteOptionsDropdown = () => {
             ))}
           </div>
         ) : (
-          <p className="text-darkDark dark:text-lightLight text-center py-4">
-            ⏳ Laddar rutter...
-          </p>
+          <p className="text-center py-4">⏳ Laddar rutter...</p>
         )}
       </div>
     )
