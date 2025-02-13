@@ -28,7 +28,7 @@ const TravelPlannerWrapper = () => {
       </div>
 
       {/* Button Section */}
-      <div className="grid">
+      <div className="grid ">
         <TriggerActionBtn />
       </div>
     </section>

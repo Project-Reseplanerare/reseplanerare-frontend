@@ -16,7 +16,7 @@ const Menu: React.FC = () => {
               activeComponent === 'resealternativ' ? null : 'resealternativ'
             )
           }
-          className={` py-2 border border-lightlightBorder dark:border-lightlight  rounded transition
+          className={` hover:scale-105 transition-transform py-2 border border-lightlightBorder dark:border-lightlight  rounded 
             ${
               activeComponent === 'resealternativ'
                 ? 'bg-blueLight text-lightLight dark:text-lightLight'
@@ -32,7 +32,7 @@ const Menu: React.FC = () => {
               activeComponent === 'besoksmal' ? null : 'besoksmal'
             )
           }
-          className={` py-2 rounded border border-lightlightBorder dark:border-lightlight  transition
+          className={` hover:scale-105 transition-transform py-2 rounded border border-lightlightBorder dark:border-lightlight  
       ${
         activeComponent === 'besoksmal'
           ? 'bg-blueLight text-lightLight dark:text-lightLight'
@@ -46,7 +46,7 @@ const Menu: React.FC = () => {
           onClick={() =>
             setActiveComponent(activeComponent === 'karta' ? null : 'karta')
           }
-          className={` py-2 rounded border border-lightlightBorder dark:border-lightlight  transition
+          className={`hover:scale-105 transition-transform py-2 rounded border border-lightlightBorder dark:border-lightlight  
             ${
               activeComponent === 'karta'
                 ? 'bg-blueLight text-lightLight dark:text-lightLight'
