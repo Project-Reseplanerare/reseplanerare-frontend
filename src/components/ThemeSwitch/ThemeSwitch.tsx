@@ -26,7 +26,7 @@ function ThemeSwitch() {
   return (
     <button
       onClick={toggleTheme}
-      className="grid grid-cols-[min-content_1fr] items-center gap-2 p-2 rounded-md  bg-blueLight dark:bg-blueLight text-white hover:scale-105 transition-transform"
+      className="grid grid-cols-[min-content_1fr] items-center sm:gap-2 p-2 rounded-md bg-blueLight dark:bg-blueLight text-white hover:scale-105 transition-transform"
     >
       {/* Sun or Moon icon */}
       {theme === 'light' ? (
