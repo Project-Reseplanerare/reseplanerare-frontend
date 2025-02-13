@@ -172,13 +172,13 @@ const RouteOptionsDropdown = () => {
 
   return (
     isButtonClicked && (
-      <div className="grid gap-4 p-8 border border-darkLight dark:border-lightDark bg-lightDark dark:bg-darkLight text-darkDark dark:text-lightLight rounded-lg">
+      <div className="grid gap-4 p-8 border border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark rounded-lg">
         <h2 className="text-xl font-bold">Resealternativ</h2>
 
         <hr className="h-0.5 bg-blueLight" />
 
         {error && (
-          <p className=" bg-lightDark dark:bg-darkLight p-2 border border-darkLight dark:border-lightDark rounded-md">
+          <p className="bg-white dark:bg-[#1E1E1E] p-2 border border-lightlightBorder dark:border-[#444] rounded-md">
             ⚠️ {error}
           </p>
         )}
@@ -189,12 +189,12 @@ const RouteOptionsDropdown = () => {
               <div key={index} className="grid gap-2">
                 <div
                   onClick={() => handleRouteClick(index)}
-                  className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md hover:bg-lightDark dark:hover:bg-darkLight transition"
+                  className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-white dark:bg-[#1E1E1E] border border-lightlightBorder dark:border-[#444] rounded-md hover:bg-[#D3D3D3] dark:hover:bg-darkLight transition"
                 >
                   <p className="font-medium truncate" title={name}>
                     {name}
                   </p>
-                  <div className="bg-lightDark dark:bg-darkLight px-3 py-1 rounded-md text-right">
+                  <div className="bg-lightLight dark:bg-darkDark px-3 py-1 rounded-md text-right">
                     <p className="text-sm">
                       Restid:{' '}
                       <span className="font-bold">{travelTimes[index]}</span>
@@ -214,9 +214,7 @@ const RouteOptionsDropdown = () => {
                     {routeStops[index].map((stop, sIndex) => (
                       <div
                         key={sIndex}
-                        className={`grid grid-cols-2 text-sm border rounded p-2 transition 
-          border-lightlightBorder dark:border-[#444] 
-          bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark`}
+                        className="grid grid-cols-2 text-sm border rounded p-2 transition border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark"
                       >
                         <span className="flex items-center gap-2">
                           <span className="text-blueLight">●</span> {stop.name}
