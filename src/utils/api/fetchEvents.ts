@@ -19,6 +19,7 @@ export const fetchEvents = async (limit: number, totalEvents: number, page: numb
             lng: parseFloat(place.longitude) || 0,
             title: event.title || 'Unknown Event',
             description: event.sales_text || 'No description available',
+            image: event.images?.[0]?.medium || null,
           };
         });
   
