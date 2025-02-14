@@ -210,18 +210,21 @@ const RouteOptionsDropdown = () => {
                 </div>
 
                 {selectedRouteIndex === index && routeStops[index] && (
-                  <div className="grid gap-4 p-2">
+                  <div className="grid gap-2 p-2">
                     {routeStops[index].map((stop, sIndex) => (
-                      <div
-                        key={sIndex}
-                        className="grid grid-cols-2 text-sm border rounded p-2 transition border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark"
-                      >
-                        <span className="flex items-center gap-2">
-                          <span className="text-blueLight">●</span> {stop.name}
-                        </span>
-                        <span className="text-right">
-                          {stop.depTime || stop.arrTime || ''}
-                        </span>
+                      <div key={sIndex} className="grid gap-2">
+                        {sIndex > 0 && (
+                          <div className="h-5 w-1 bg-blueLight place-self-start"></div>
+                        )}
+                        <div className="grid grid-cols-2 text-sm border rounded p-2 transition border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark items-center">
+                          <span className="flex items-center gap-2">
+                            <span className="text-blueLight">●</span>{' '}
+                            {stop.name}
+                          </span>
+                          <span className="text-right">
+                            {stop.depTime || stop.arrTime || ''}
+                          </span>
+                        </div>
                       </div>
                     ))}
                   </div>
