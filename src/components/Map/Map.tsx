@@ -190,7 +190,7 @@ function Map() {
       {selectedOption === 'Bil' && (
         <MarkerClusterGroup>
           {filteredEvents.map((event, index) => {
-            const { lat, lng, title, description } = event;
+            const { lat, lng, title, description, image } = event;
             return (
               <Marker
                 key={index}
@@ -215,10 +215,25 @@ function Map() {
                   click: () => handleEventMarkerClick(lat, lng),
                 }}
               >
-                <Popup>
-                  <strong>{title}</strong>
-                  <br />
-                  {description}
+                <Popup className="text-center max-w-[150px]">
+                  <div className="flex flex-col items-start w-full">
+                    {image?.large || image?.medium || image?.small ? (
+                      <div className="w-full overflow-hidden rounded-md mb-1">
+                        <img
+                          src={image}
+                          alt={title}
+                          className="w-full h-[60px] object-cover rounded-md"
+                        />
+                      </div>
+                    ) : (
+                      <p className="text-darkDark text-xs mb-1">No image available</p>
+                    )}
+
+                    <div className="flex flex-col m-1 w-full">
+                      <strong className="text-darkDark text-xs font-semibold  p-0 m-0">{title}</strong>
+                      <p className="text-[10px] text-darkLight leading-tight">{description}</p>
+                    </div>
+                  </div>
                 </Popup>
               </Marker>
             );
