@@ -38,13 +38,19 @@ import MapClickHandler from './MapClickHandler';
 import FilterEventsByBounds from './FilterEventsByBounds';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 import TempMapCenterUpdater from './TempMapCenterUpdater';
+import FilterPlacesByBounds from './FilterPlacesByBounds';
 
-function Map() {
+interface MapProps {
+  places: any[];
+}
+
+function Map( { places }: MapProps ) {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [events, setEvents] = useState<any[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
   const [stops, setStops] = useState<any[]>([]);
+  const [filteredPlaces, setFilteredPlaces] = useState<any[]>(places);
 
   const {
     setToLocation,
@@ -181,6 +187,23 @@ function Map() {
         events={events}
         setFilteredEvents={setFilteredEvents}
       />
+
+      <FilterPlacesByBounds
+          places={filteredPlaces}
+          setFilteredPlaces={setFilteredPlaces}
+          selectedCategory={selectedOption}
+      />
+
+      {places.map((place, index) => (
+          <Marker key={index} position={[place.latitude, place.longitude]}>
+            <Popup>
+              <strong>{place.title}</strong>
+              {/* <br />
+              <p>{place.presentation}</p> */}
+            </Popup>
+          </Marker>
+        ))}
+
 
       <Marker position={center}>
         <Popup>Your current location</Popup>

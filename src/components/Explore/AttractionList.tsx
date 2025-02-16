@@ -11,8 +11,9 @@ import sportCurlingIcon from '../../assets/sport-curling.svg';
 import ticketIcon from '../../assets/ticket.svg';
 
 interface AttractionListProps {
-  setSelectedCategory: (category: string) => void;
+  setSelectedCategory: (places: any[]) => void; 
 }
+
 
 type IconCategory =
   | 'Kultur & historia'
@@ -48,10 +49,32 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
     setActiveIndex(activeIndex === id ? null : id);
   };
 
-  const handleSubItemClick = (subItem: string) => {
-    setSelectedSubItem(subItem);
-    setSelectedCategory(subItem);
-    console.log('Kategori vald:', subItem);
+  const handleSubItemClick = async (subItem: string) => {
+    try {
+  
+      const response = await fetch(
+        `https://turid.visitvarmland.com/api/v8/products?categories=${subItem.toLowerCase()}`
+      );
+  
+      const data = await response.json();
+  
+      // Hämta produkter från data.data
+      const products = Array.isArray(data.data) ? data.data : [];
+  
+      // Filtrera produkter som innehåller den valda subkategorin
+      const filteredProducts = products.filter((product: any) =>
+        product.categories.some((category: any) => category.title === subItem)
+      );
+  
+      // Hämta alla "places" från dessa produkter
+      const allPlaces = filteredProducts.flatMap((product: any) => product.places || []);
+  
+      // Uppdatera state
+      setSelectedCategory(allPlaces);
+      setSelectedSubItem(subItem);
+    } catch (error) {
+      console.error("Fel vid hämtning av platser:", error);
+    }
   };
 
   return (
@@ -72,7 +95,7 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
               onClick={() => handleItemClick(category.id)}
             >
               <img
-                src={iconMapping[category.label] || cultureIcon}
+                src={iconMapping[category.label as IconCategory] || cultureIcon}
                 alt={`${category.label} ikon`}
                 className="w-5 h-5"
               />
@@ -85,11 +108,11 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
 
             {/* Sub-items */}
             {isActive && category.subItems.length > 0 && (
-              <div className="grid gap-2 ">
-                {category.subItems.map((subItem, index) => (
+              <div className="grid gap-2">
+                {category.subItems.map((subItem: string, index: number) => (
                   <div
                     key={index}
-                    className={`p-3 rounded-md border border-lightlightBorder dark:border-lightlight  cursor-pointer transition-all
+                    className={`p-3 rounded-md border border-lightlightBorder dark:border-lightlight cursor-pointer transition-all
                     ${
                       selectedSubItem === subItem
                         ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'

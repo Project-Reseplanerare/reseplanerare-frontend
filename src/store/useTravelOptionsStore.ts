@@ -6,6 +6,6 @@ interface TravelOptionsState {
 }
 
 export const useTravelOptionsStore = create<TravelOptionsState>((set) => ({
-  selectedOption: "Bil", 
+  selectedOption: null, 
   setSelectedOption: (option) => set({ selectedOption: option }),
 }));
