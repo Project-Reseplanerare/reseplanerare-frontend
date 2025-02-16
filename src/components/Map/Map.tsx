@@ -40,6 +40,7 @@ import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 import TempMapCenterUpdater from './TempMapCenterUpdater';
 import FilterPlacesByBounds from './FilterPlacesByBounds';
 
+      {/* Kod av Linnea */}
 interface MapProps {
   places: any[];
 }
@@ -188,6 +189,7 @@ function Map( { places }: MapProps ) {
         setFilteredEvents={setFilteredEvents}
       />
 
+      {/* Kod av Linnea */}
       <FilterPlacesByBounds
           places={filteredPlaces}
           setFilteredPlaces={setFilteredPlaces}
