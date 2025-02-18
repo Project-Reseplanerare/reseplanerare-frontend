@@ -10,8 +10,9 @@ interface Event {
 }
 
 interface FilterEventsByBoundsProps {
- events: Event[];
- setFilteredEvents: React.Dispatch<React.SetStateAction<Event[]>>;
+  events: Event[];
+  setFilteredEvents: React.Dispatch<React.SetStateAction<any[]>>;
+  selectedCategory: string;
 }
 
 const FilterEventsByBounds: React.FC<FilterEventsByBoundsProps> = ({

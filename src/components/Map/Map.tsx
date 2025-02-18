@@ -40,7 +40,6 @@ import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 import TempMapCenterUpdater from './TempMapCenterUpdater';
 import FilterPlacesByBounds from './FilterPlacesByBounds';
 
-      {/* Kod av Linnea */}
 interface MapProps {
   places: any[];
 }
@@ -125,7 +124,6 @@ function Map( { places }: MapProps ) {
 
     switch (selectedOption) {
       case 'Bil':
-        fetchEvents(50, 100, 1, setLoading, setEvents);
         break;
 
       case 'Buss':
@@ -171,6 +169,11 @@ function Map( { places }: MapProps ) {
     updateRoadRoute();
   }, [stopsCoords, center]);
 
+  useEffect(() => {
+    fetchEvents(50, 100, 1, setLoading, setEvents);
+  }, []);
+  
+
   if (!center) return <p>Loading map...</p>;
 
   return (
@@ -187,9 +190,50 @@ function Map( { places }: MapProps ) {
       <FilterEventsByBounds
         events={events}
         setFilteredEvents={setFilteredEvents}
+        selectedCategory={selectedOption}
       />
 
-      {/* Kod av Linnea */}
+      <MarkerClusterGroup>
+        {filteredEvents.map((event, index) => {
+          const { lat, lng, title, image } = event;
+          return (
+            <Marker
+              key={index}
+              position={[lat, lng]}
+              icon={L.divIcon({
+                className: 'fa-marker',
+                html: `<i class="fas fa-map-marker-alt" style="color: purple; font-size: 24px;"></i>`,
+                iconSize: [30, 30],  
+                iconAnchor: [15, 30], 
+              })}
+              eventHandlers={{
+                click: () => handleEventMarkerClick(lat, lng),
+              }}
+            >
+              <Popup className="text-center max-w-[150px]">
+                <div className="flex flex-col items-start w-full">
+                  {image?.large || image?.medium || image?.small ? (
+                    <div className="w-full overflow-hidden rounded-md mb-1">
+                      <img
+                        src={image}
+                        alt={title}
+                        className="w-full h-[60px] object-cover rounded-md"
+                      />
+                    </div>
+                  ) : (
+                    <p className="text-darkDark text-xs mb-1">No image available</p>
+                  )}
+
+                  <div className="flex flex-col m-1 w-full">
+                    <strong className="text-darkDark text-xs font-semibold p-0 m-0">{title}</strong>
+                  </div>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MarkerClusterGroup>
+
       <FilterPlacesByBounds
           places={filteredPlaces}
           setFilteredPlaces={setFilteredPlaces}
@@ -210,61 +254,6 @@ function Map( { places }: MapProps ) {
       <Marker position={center}>
         <Popup>Your current location</Popup>
       </Marker>
-
-      {/* Car markers */}
-      {selectedOption === 'Bil' && (
-        <MarkerClusterGroup>
-          {filteredEvents.map((event, index) => {
-            const { lat, lng, title, description, image } = event;
-            return (
-              <Marker
-                key={index}
-                position={[lat, lng]}
-                icon={L.divIcon({
-                  className: 'custom-marker',
-                  html: `<div style="
-              display: flex; 
-              align-items: center; 
-              justify-content: center; 
-              width: 30px; 
-              height: 30px; 
-              background: white; 
-              border-radius: 50%;   
-              border: 2px solid #007bff;">
-              <i  style="color: #007bff; font-size: 16px;"></i>
-            </div>`,
-                  iconSize: [30, 30],
-                  iconAnchor: [15, 30],
-                })}
-                eventHandlers={{
-                  click: () => handleEventMarkerClick(lat, lng),
-                }}
-              >
-                <Popup className="text-center max-w-[150px]">
-                  <div className="flex flex-col items-start w-full">
-                    {image?.large || image?.medium || image?.small ? (
-                      <div className="w-full overflow-hidden rounded-md mb-1">
-                        <img
-                          src={image}
-                          alt={title}
-                          className="w-full h-[60px] object-cover rounded-md"
-                        />
-                      </div>
-                    ) : (
-                      <p className="text-darkDark text-xs mb-1">No image available</p>
-                    )}
-
-                    <div className="flex flex-col m-1 w-full">
-                      <strong className="text-darkDark text-xs font-semibold  p-0 m-0">{title}</strong>
-                      <p className="text-[10px] text-darkLight leading-tight">{description}</p>
-                    </div>
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MarkerClusterGroup>
-      )}
 
       {/* Bus markers */}
       <MarkerClusterGroup>
