@@ -14,24 +14,21 @@ const TriggerActionBtn = () => {
   } = useLocationStore();
 
   const { setIsButtonClicked } = useSearchBtnStore();
-
   const { setStopsCoords, setRouteMarkers } = useRouteStopStore();
-
   const { selectedOption } = useTravelOptionsStore();
 
   const parseCoordinates = (address: string): [number, number] | null => {
     if (!address) return null;
-    const coords = address.split(',').map((str) => str.trim());
-    return coords.length === 2 &&
-      !isNaN(Number(coords[0])) &&
-      !isNaN(Number(coords[1]))
-      ? (coords.map(Number) as [number, number])
+    const coords = address.split(',').map(Number);
+    return coords.length === 2 && coords.every((n) => !isNaN(n))
+      ? (coords as [number, number])
       : null;
   };
 
   const geocodeAddress = async (
     address: string
   ): Promise<[number, number] | null> => {
+    if (!address) return null;
     try {
       const response = await fetch(
         `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
@@ -46,9 +43,9 @@ const TriggerActionBtn = () => {
   };
 
   const handleClick = async () => {
-    const fromCoordinates =
+    const fromCoords =
       parseCoordinates(fromAddress) || (await geocodeAddress(fromAddress));
-    const toCoordinates =
+    const toCoords =
       parseCoordinates(toAddress) || (await geocodeAddress(toAddress));
 
     if (lineDrawn) {
@@ -57,37 +54,32 @@ const TriggerActionBtn = () => {
       setIsButtonClicked(false);
       setStopsCoords([]);
       setRouteMarkers([]);
+      return;
+    }
+
+    setLineDrawn(true);
+    setIsButtonClicked(true);
+
+    if (fromCoords) setTempCenter(fromCoords);
+
+    if (selectedOption === 'Buss') {
+      setRouteMarkers(
+        [fromCoords, toCoords].filter(Boolean).map((coords) => ({ coords }))
+      );
     } else {
-      setLineDrawn(true);
-
-      if (selectedOption === 'Buss') {
-        const busMarkers = [];
-        if (fromCoordinates) busMarkers.push({ coords: fromCoordinates });
-        if (toCoordinates) busMarkers.push({ coords: toCoordinates });
-        setRouteMarkers(busMarkers);
-      } else {
-        const newMarkers = [];
-        if (fromCoordinates) newMarkers.push(fromCoordinates);
-        if (toCoordinates) newMarkers.push(toCoordinates);
-        setMarkers(newMarkers);
-      }
-
-      if (fromCoordinates) {
-        setTempCenter(fromCoordinates);
-      }
-      setIsButtonClicked(true);
+      setMarkers([fromCoords, toCoords].filter(Boolean));
     }
   };
-
-  const isDisabled = !fromAddress && !toAddress && !lineDrawn;
 
   return (
     <button
       onClick={handleClick}
-      className={`px-4 py-2 w-full hover:scale-105 transition-transform items-center rounded-md  text-lightLight
-        bg-blueLight
-        ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-      disabled={isDisabled}
+      className={`px-4 py-2 w-full hover:scale-105 transition-transform items-center rounded-md text-lightLight bg-blueLight ${
+        !fromAddress && !toAddress && !lineDrawn
+          ? 'opacity-50 cursor-not-allowed'
+          : ''
+      }`}
+      disabled={!fromAddress && !toAddress && !lineDrawn}
     >
       {lineDrawn ? 'Sluta sök' : 'Sök'}
     </button>
