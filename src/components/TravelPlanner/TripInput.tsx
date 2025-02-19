@@ -28,11 +28,17 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       setSuggestions((prev) => ({ ...prev, [type]: [] }));
       return;
     }
-
+  
+    if (!selectedOption || selectedOption === "Bil") {
+      console.warn("No selected travel option. Fetching skipped.");
+      return;
+    }
+  
     const fetchFunction =
       selectedOption === 'Buss' ? fetchBusStops : fetchTrainStops;
+  
     const stops = await fetchFunction(value);
-
+  
     setSuggestions((prev) => ({
       ...prev,
       [type]: stops.map((stop: { name: string; extId: string }) => ({
@@ -41,6 +47,7 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       })),
     }));
   };
+  
 
   const handleInputChange = async (
     type: 'from' | 'to',
