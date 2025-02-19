@@ -35,24 +35,22 @@ const iconMapping: Record<IconCategory, string> = {
 function AttractionList({ setSelectedCategory }: AttractionListProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
-  const [events, setEvents] = useState<any[]>([]); // State for events
-  const [loadingCategories, setLoadingCategories] = useState<boolean>(true); // Loading state for categories
-  const [loadingEvents, setLoadingEvents] = useState<boolean>(true); // Loading state for events
+  const [events, setEvents] = useState<any[]>([]);
+  const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
+  const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [selectedSubItem, setSelectedSubItem] = useState<string | null>(null);
 
   useEffect(() => {
-    // Fetch categories
     fetchCategories()
       .then((data) => {
         setCategories(data);
-        setLoadingCategories(false); // Categories are loaded
+        setLoadingCategories(false);
       })
       .catch(() => {
-        setLoadingCategories(false); // Handle errors by setting loading to false
+        setLoadingCategories(false); 
       });
 
-    // Fetch events
-    fetchEvents(10, 50, 1, setLoadingEvents, setEvents); // Justera enligt behov
+    fetchEvents(10, 50, 1, setLoadingEvents, setEvents);
   }, []);
 
   const handleItemClick = (id: number) => {
@@ -82,9 +80,8 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
     }
   };
 
-  // Render only when both categories and events are loaded
   if (loadingCategories || loadingEvents) {
-    return null; // Don't render anything if data is still loading
+    return null;
   }
 
   return (
@@ -148,7 +145,7 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
               ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
               : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
           }`}
-          onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)} // Toggle evenemang visibility
+          onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)} 
         >
           <img
             src={ticketIcon}
