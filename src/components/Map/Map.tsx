@@ -169,9 +169,11 @@ function Map( { places }: MapProps ) {
     updateRoadRoute();
   }, [stopsCoords, center]);
 
-  useEffect(() => {
-    fetchEvents(50, 100, 1, setLoading, setEvents);
-  }, []);
+  if (places.length == 0){
+    useEffect(() => {
+      fetchEvents(50, 100, 1, setLoading, setEvents);
+    }, []);
+  }
   
 
   if (!center) return <p>Loading map...</p>;
