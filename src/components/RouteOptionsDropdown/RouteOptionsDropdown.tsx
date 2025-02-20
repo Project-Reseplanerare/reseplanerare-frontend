@@ -146,6 +146,8 @@ export const RouteOptionsDropdown = () => {
   };
 
   const formatTravelTime = (time) => {
+    if (!/^\d{1,2}:\d{2}$/.test(time)) return 'Invalid Time';
+
     const [hours, minutes] = time.split(':').map(Number);
     return new Date(0, 0, 0, hours, minutes).toLocaleTimeString([], {
       hour: '2-digit',
@@ -156,7 +158,12 @@ export const RouteOptionsDropdown = () => {
   const calculateTravelDuration = (departureTime, arrivalTime) => {
     const today = new Date().toDateString();
     const departureDate = new Date(`${today} ${departureTime}`).getTime();
-    const arrivalDate = new Date(`${today} ${arrivalTime}`).getTime();
+    let arrivalDate = new Date(`${today} ${arrivalTime}`).getTime();
+
+    // Handle next-day arrival case
+    if (arrivalDate < departureDate) {
+      arrivalDate += 24 * 60 * 60 * 1000;
+    }
 
     const duration = (arrivalDate - departureDate) / 60000;
     return duration <= 0 ? 'Arrived' : `${duration} min`;
