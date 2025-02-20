@@ -1,14 +1,14 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 
-export interface Place {
+interface Place {
   lat: number;
   lng: number;
   title?: string;
   description?: string;
 }
 
-export interface FilterPlacesByBoundsProps {
+interface FilterPlacesByBoundsProps {
   places: Place[];
   setFilteredPlaces: React.Dispatch<React.SetStateAction<Place[]>>;
   selectedCategory: string | null;
