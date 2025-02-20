@@ -4,7 +4,6 @@ import { ThemeSwitch } from '../ThemeSwitch/ThemeSwitch';
 
 export const Header = () => (
   <header className="grid grid-cols-2 items-center shadow-lg backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark p-4 dark:text-lightLight w-full">
-    {/* Logo (Column 1) */}
     <Link to="/">
       <img
         src={logo}
@@ -13,7 +12,6 @@ export const Header = () => (
       />
     </Link>
 
-    {/* Navigation (Column 2) */}
     <nav className="justify-self-end" aria-label="Main navigation">
       <ul className="flex list-none p-0 m-0 space-x-4">
         <li>
