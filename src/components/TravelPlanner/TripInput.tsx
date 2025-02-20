@@ -133,7 +133,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
         </div>
 
         {activeDropdown === type && suggestions[type].length > 0 && (
-          <ul className="bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto">
+          <ul className="bg-lightLight dark:bg-darkDark border border-lightlightBorder dark:border-lightlight rounded-md ">
             {suggestions[type].map((suggestion, index) => (
               <li
                 key={index}
