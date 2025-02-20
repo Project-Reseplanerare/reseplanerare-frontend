@@ -8,12 +8,11 @@ export const MapCenterUpdater = () => {
   const { stopsCoords } = useRouteStopStore();
 
   useEffect(() => {
-    if (stopsCoords.length > 0) {
-      const bounds = L.latLngBounds([
-        stopsCoords[0].coords,
-        stopsCoords[stopsCoords.length - 1].coords,
-      ]);
+    if (!map || stopsCoords.length === 0) return;
 
+    const bounds = L.latLngBounds(stopsCoords.map((stop) => stop.coords));
+
+    if (bounds.isValid()) {
       map.fitBounds(bounds, { padding: [50, 50] });
     }
   }, [stopsCoords, map]);
