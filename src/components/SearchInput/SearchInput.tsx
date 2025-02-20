@@ -115,7 +115,7 @@ export const SearchInput = () => {
         )}
       </div>
       {query && suggestions.length > 0 && (
-        <ul className="w-full border border-darkLight dark:border-lightDark rounded max-h-40 overflow-y-auto bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight shadow-lg">
+        <ul className="w-full border  rounded max-h-40 overflow-y-auto backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight shadow-lg">
           {suggestions.map((title, index) => (
             <li
               key={index}
