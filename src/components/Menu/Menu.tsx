@@ -46,15 +46,17 @@ export const Menu: React.FC = () => {
         {activeComponent === 'resealternativ' && <TravelOptions />}
         {activeComponent === 'besoksmal' && (
           <div className="grid grid-cols-1">
-          <AttractionList setSelectedCategory={(places) => {
-          console.log("Platser som skickas till kartan:", places);
-          setSelectedLocations(places);
-        }} />
+            <AttractionList
+              setSelectedCategory={(places) => {
+                console.log('Platser som skickas till kartan:', places);
+                setSelectedLocations(places);
+              }}
+            />
           </div>
         )}
         {activeComponent === 'karta' && (
           <div className="rounded-md grid grid-cols-1 h-80">
-           <Map places={selectedLocations} events={[]} />
+            <Map places={selectedLocations} events={[]} />
           </div>
         )}
       </div>
