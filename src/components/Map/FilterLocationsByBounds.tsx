@@ -23,7 +23,7 @@ interface FilterLocationsByBoundsProps {
   setFilteredPlaces?: React.Dispatch<React.SetStateAction<Place[]>>;
 }
 
-const FilterLocationsByBounds: React.FC<FilterLocationsByBoundsProps> = ({
+export const FilterLocationsByBounds: React.FC<FilterLocationsByBoundsProps> = ({
   events,
   places,
   setFilteredEvents,
@@ -73,5 +73,3 @@ const FilterLocationsByBounds: React.FC<FilterLocationsByBoundsProps> = ({
 
   return null;
 };
-
-export default FilterLocationsByBounds;

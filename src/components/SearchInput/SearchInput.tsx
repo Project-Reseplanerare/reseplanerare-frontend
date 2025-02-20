@@ -5,7 +5,7 @@ import { fetchAddress } from '../../utils/api/fetchAdress';
 
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
-const SearchInput = () => {
+export const SearchInput = () => {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
@@ -133,5 +133,3 @@ const SearchInput = () => {
     </div>
   );
 };
-
-export default SearchInput;

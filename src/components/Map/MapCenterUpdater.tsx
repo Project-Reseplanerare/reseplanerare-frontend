@@ -3,7 +3,7 @@ import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { useMap } from 'react-leaflet';
 import L from 'leaflet';
 
-const MapCenterUpdater = () => {
+export const MapCenterUpdater = () => {
   const map = useMap();
   const { stopsCoords } = useRouteStopStore();
 
@@ -20,5 +20,3 @@ const MapCenterUpdater = () => {
 
   return null;
 };
-
-export default MapCenterUpdater;

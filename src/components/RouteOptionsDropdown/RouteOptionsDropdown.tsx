@@ -22,7 +22,7 @@ type ResponseData<T> = {
   Arrival?: T[];
 };
 
-const RouteOptionsDropdown = () => {
+export const RouteOptionsDropdown = () => {
   const { fromStopId, toStopId } = useRouteStopStore();
   const { isButtonClicked } = useSearchBtnStore();
   const [routeNames, setRouteNames] = useState<string[]>([]);
@@ -253,5 +253,3 @@ const RouteOptionsDropdown = () => {
     )
   );
 };
-
-export default RouteOptionsDropdown;

@@ -1,6 +1,5 @@
 import { useRouteStopStore } from "../../store/useRouteStopStore";
 
-
 interface Stop {
   lon: any;
   lat: any;

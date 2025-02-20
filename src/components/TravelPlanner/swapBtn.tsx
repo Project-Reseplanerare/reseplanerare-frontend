@@ -3,7 +3,7 @@ interface SwapBtnProps {
   onClick: () => void;
 }
 
-const SwapBtn: React.FC<SwapBtnProps> = ({ isDisabled, onClick }) => (
+export const SwapBtn: React.FC<SwapBtnProps> = ({ isDisabled, onClick }) => (
   <button
     className={`flex items-center justify-center rounded-full h-10 w-10 border focus:outline-none transition-transform hover:scale-105 ${
       isDisabled ? '' : 'bg-blueLight text-lightLight'
@@ -29,5 +29,3 @@ const SwapBtn: React.FC<SwapBtnProps> = ({ isDisabled, onClick }) => (
     </svg>
   </button>
 );
-
-export default SwapBtn;

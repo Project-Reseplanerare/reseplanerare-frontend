@@ -3,7 +3,7 @@ import { useSearchBtnStore } from '../../store/useSearchBtnStore';
 import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 
-const TriggerActionBtn = () => {
+export const TriggerActionBtn = () => {
   const {
     lineDrawn,
     setLineDrawn,
@@ -85,5 +85,3 @@ const TriggerActionBtn = () => {
     </button>
   );
 };
-
-export default TriggerActionBtn;

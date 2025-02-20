@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const GeneralInformation: React.FC = () => {
+export const GeneralInformation: React.FC = () => {
   const [isVisible, setIsVisible] = useState(true);
 
   return isVisible ? (
@@ -25,4 +25,3 @@ const GeneralInformation: React.FC = () => {
   ) : null;
 };
 
-export default GeneralInformation;

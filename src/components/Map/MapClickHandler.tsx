@@ -2,7 +2,7 @@ import { useMapEvents } from 'react-leaflet';
 import { useLocationStore } from '../../store/useLocationStore';
 import { fetchAddress } from '../../utils/api/fetchAdress';
 
-const MapClickHandler = ({ disabled }: { disabled: boolean }) => {
+export const MapClickHandler = ({ disabled }: { disabled: boolean }) => {
   const { setToLocation, setFromAddress, setToAddress, setMarkers } =
     useLocationStore();
 
@@ -19,5 +19,3 @@ const MapClickHandler = ({ disabled }: { disabled: boolean }) => {
 
   return null;
 };
-
-export default MapClickHandler;

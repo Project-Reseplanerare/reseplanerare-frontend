@@ -14,7 +14,7 @@ export interface FilterPlacesByBoundsProps {
   selectedCategory: string | null;
 }
 
-const FilterPlacesByBounds: React.FC<FilterPlacesByBoundsProps> = ({
+export const FilterPlacesByBounds: React.FC<FilterPlacesByBoundsProps> = ({
   places,
   setFilteredPlaces,
 }) => {
@@ -58,5 +58,3 @@ const FilterPlacesByBounds: React.FC<FilterPlacesByBoundsProps> = ({
 
   return null;
 };
-
-export default FilterPlacesByBounds;
