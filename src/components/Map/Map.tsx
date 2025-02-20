@@ -38,16 +38,19 @@ import MapClickHandler from './MapClickHandler';
 import FilterEventsByBounds from './FilterEventsByBounds';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
 import TempMapCenterUpdater from './TempMapCenterUpdater';
-import FilterPlacesByBounds from './FilterPlacesByBounds';
+// import FilterPlacesByBounds from './FilterPlacesByBounds';
+import FilterLocationsByBounds from './FilterLocationsByBounds';
 
+// lagt till events som en prop
 interface MapProps {
   places: any[];
+  events: any[];
 }
 
-function Map( { places }: MapProps ) {
+function Map( { places, events }: MapProps ) {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [events, setEvents] = useState<any[]>([]);
+  const [eventss, setEvents] = useState<any[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
   const [stops, setStops] = useState<any[]>([]);
   const [filteredPlaces, setFilteredPlaces] = useState<any[]>(places);
@@ -124,6 +127,7 @@ function Map( { places }: MapProps ) {
 
     switch (selectedOption) {
       case 'Bil':
+        
         break;
 
       case 'Buss':
@@ -174,7 +178,6 @@ function Map( { places }: MapProps ) {
       fetchEvents(50, 100, 1, setLoading, setEvents);
     }, []);
   }
-  
 
   if (!center) return <p>Loading map...</p>;
 
@@ -189,12 +192,25 @@ function Map( { places }: MapProps ) {
       <MapCenterUpdater />
       <MapClickHandler disabled={stopsCoords.length > 0} />
 
-      <FilterEventsByBounds
-        events={events}
+       <FilterEventsByBounds
+        events={eventss}
         setFilteredEvents={setFilteredEvents}
-        selectedCategory={selectedOption}
       />
 
+      {/*<FilterPlacesByBounds
+          places={filteredPlaces}
+          setFilteredPlaces={setFilteredPlaces}
+          selectedCategory={selectedOption}
+      /> */}
+
+      <FilterLocationsByBounds
+        events={filteredEvents}
+        places={filteredPlaces}
+        setFilteredEvents={setFilteredEvents}
+        setFilteredPlaces={setFilteredPlaces}
+      />
+
+      {/*TEMP TEMP TEMP*/}
       <MarkerClusterGroup>
         {filteredEvents.map((event, index) => {
           const { lat, lng, title, image } = event;
@@ -236,23 +252,50 @@ function Map( { places }: MapProps ) {
         })}
       </MarkerClusterGroup>
 
-      <FilterPlacesByBounds
-          places={filteredPlaces}
-          setFilteredPlaces={setFilteredPlaces}
-          selectedCategory={selectedOption}
-      />
 
-      {/*NU TAR VI BÅDA JAG HITTAR INTE FELET MEN DETTA FÅR VA SÅHÄR NU*/}
-      {places.map((place, index) => (
-        <Marker
-          key={index}
-          position={[
-            place.lat || place.latitude, 
-            place.lng || place.longitude
-          ]}
-        >
-          <Popup>
-            <strong>{place.title}</strong>
+
+
+      {[...places, ...events.map(event => ({
+        lng: event.lng,
+        title: event.title,
+        image: event.image,
+        ...event
+      }))] 
+      .filter(place => !isNaN(place.lat) && !isNaN(place.lng))
+      .map((place, index) => (
+        <Marker 
+          key={index} 
+          position={[place.lat, place.lng]}
+          eventHandlers={{
+            click: () => handleEventMarkerClick(place.lat, place.lng)
+          }}
+          >
+          <Popup className="text-center max-w-[150px] p-0 m-0">
+            <div className="flex flex-col items-start w-full p-0 m-0">
+              
+              {/* Om det är ett event (dvs. place.image finns), visa event-texten */}
+              {place.image && (
+                <p className="text-darkDark text-xs font-bold p-0 m-0 leading-none">Detta är ett event</p>
+              )}
+
+              {/* Visa bild endast om det är ett event (platsen har en bild) */}
+              {place.image && (
+                <div className="w-full overflow-hidden rounded-md mb-0 p-0 m-0">
+                  <img
+                    src={place.image}
+                    alt={place.title}
+                    className="w-full h-[60px] object-cover rounded-md p-0 m-0"
+                  />
+                </div>
+              )}
+
+              {/* Om det inte är ett event, visa bara titel */}
+              <div className="flex flex-col w-full p-0 m-0">
+                <strong className="text-darkDark text-xs font-normal p-0 m-0">
+                  {place.title}
+                </strong>
+              </div>
+            </div>
           </Popup>
         </Marker>
       ))}

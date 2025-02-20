@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { fetchCategories } from '../../utils/api/fetchCategories';
-import { fetchEvents } from '../../utils/api/fetchEvents';
+import { fetchEvents } from '../../utils/api/fetchEventsAndProducts';
 
 import cultureIcon from '../../assets/culture.svg';
 import foodIcon from '../../assets/food.svg';
@@ -32,6 +32,15 @@ const iconMapping: Record<IconCategory, string> = {
   'Evenemang': ticketIcon,
 };
 
+// Funktion för att säkerställa rätt koordinater
+const normalizeCoordinates = (lat: any, lng: any) => {
+  const parsedLat = parseFloat(lat);
+  const parsedLng = parseFloat(lng);
+
+  // Returnera en objekt med lat, lng, och kollar om de är NaN
+  return isNaN(parsedLat) || isNaN(parsedLng) ? null : { lat: parsedLat, lng: parsedLng };
+};
+
 function AttractionList({ setSelectedCategory }: AttractionListProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
@@ -40,6 +49,7 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [selectedSubItem, setSelectedSubItem] = useState<string | null>(null);
 
+  // Hämtar kategorier och evenemang vid första renderingen
   useEffect(() => {
     fetchCategories()
       .then((data) => {
@@ -47,38 +57,57 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
         setLoadingCategories(false);
       })
       .catch(() => {
-        setLoadingCategories(false); 
+        setLoadingCategories(false);
       });
 
     fetchEvents(10, 50, 1, setLoadingEvents, setEvents);
   }, []);
 
-  const handleItemClick = (id: number) => {
-    setActiveIndex(activeIndex === id ? null : id);
-  };
-
+  // När en kategori väljs
   const handleSubItemClick = async (subItem: string) => {
     try {
+      setSelectedSubItem(subItem);
+
       if (subItem === 'Evenemang') {
-        setSelectedCategory(events);
-        setSelectedSubItem(subItem);
+        // Normalisera koordinaterna för evenemang
+        const validEvents = events
+          .map((event: any) => {
+            // Här normaliserar vi koordinaterna för varje evenemang
+            const { lat, lng } = normalizeCoordinates(event.lat, event.lng);
+            return { ...event, lat, lng };
+          })
+          .filter(event => event.lat !== 0 && event.lng !== 0);
+
+        setSelectedCategory(validEvents);
       } else {
         const response = await fetch(
           `https://turid.visitvarmland.com/api/v8/products?categories=${subItem.toLowerCase()}`
         );
         const data = await response.json();
+
         const products = Array.isArray(data.data) ? data.data : [];
         const filteredProducts = products.filter((product: any) =>
           product.categories.some((category: any) => category.title === subItem)
         );
-        const allPlaces = filteredProducts.flatMap((product: any) => product.places || []);
+        const allPlaces = filteredProducts
+          .flatMap((product: any) => product.places || [])
+          .map((place: any) => {
+            // Normalisera koordinaterna för varje plats
+            const { lat, lng } = normalizeCoordinates(place.latitude, place.longitude);
+            return { ...place, lat, lng };
+          })
+          .filter(place => place.lat !== 0 && place.lng !== 0);
         setSelectedCategory(allPlaces);
-        setSelectedSubItem(subItem);
       }
     } catch (error) {
       console.error('Fel vid hämtning av platser:', error);
     }
   };
+  
+  const handleItemClick = (id: number) => {
+    setActiveIndex(activeIndex === id ? null : id);
+  };
+  
 
   if (loadingCategories || loadingEvents) {
     return null;
@@ -125,7 +154,8 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
                         ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
                         : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
                     }`}
-                    onClick={() => handleSubItemClick(subItem)}
+                    onClick={() => 
+                      handleSubItemClick(subItem)}
                   >
                     <span className="text-xs">{subItem}</span>
                   </div>
