@@ -26,7 +26,6 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     null
   );
 
-  // Debounce for API calls
   const debounce = (callback: (...args: any[]) => void, delay: number) => {
     let timer: NodeJS.Timeout;
     return (...args: any[]) => {
