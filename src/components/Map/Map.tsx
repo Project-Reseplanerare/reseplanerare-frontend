@@ -47,7 +47,7 @@ interface MapProps {
   events: any[];
 }
 
-function Map( { places, events }: MapProps ) {
+function Map({ places, events }: MapProps) {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [eventss, setEvents] = useState<any[]>([]);
@@ -127,7 +127,6 @@ function Map( { places, events }: MapProps ) {
 
     switch (selectedOption) {
       case 'Bil':
-        
         break;
 
       case 'Buss':
@@ -173,11 +172,11 @@ function Map( { places, events }: MapProps ) {
     updateRoadRoute();
   }, [stopsCoords, center]);
 
-  if (places.length == 0){
-    useEffect(() => {
+  useEffect(() => {
+    if (places.length === 0) {
       fetchEvents(50, 100, 1, setLoading, setEvents);
-    }, []);
-  }
+    }
+  }, [places]);
 
   if (!center) return <p>Loading map...</p>;
 
@@ -192,7 +191,7 @@ function Map( { places, events }: MapProps ) {
       <MapCenterUpdater />
       <MapClickHandler disabled={stopsCoords.length > 0} />
 
-       <FilterEventsByBounds
+      <FilterEventsByBounds
         events={eventss}
         setFilteredEvents={setFilteredEvents}
       />
@@ -221,8 +220,8 @@ function Map( { places, events }: MapProps ) {
               icon={L.divIcon({
                 className: 'fa-marker',
                 html: `<i class="fas fa-map-marker-alt" style="color: purple; font-size: 24px;"></i>`,
-                iconSize: [30, 30],  
-                iconAnchor: [15, 30], 
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
               })}
               eventHandlers={{
                 click: () => handleEventMarkerClick(lat, lng),
@@ -239,11 +238,15 @@ function Map( { places, events }: MapProps ) {
                       />
                     </div>
                   ) : (
-                    <p className="text-darkDark text-xs mb-1">No image available</p>
+                    <p className="text-darkDark text-xs mb-1">
+                      No image available
+                    </p>
                   )}
 
                   <div className="flex flex-col m-1 w-full">
-                    <strong className="text-darkDark text-xs font-semibold p-0 m-0">{title}</strong>
+                    <strong className="text-darkDark text-xs font-semibold p-0 m-0">
+                      {title}
+                    </strong>
                   </div>
                 </div>
               </Popup>
@@ -252,53 +255,54 @@ function Map( { places, events }: MapProps ) {
         })}
       </MarkerClusterGroup>
 
-
-
-
-      {[...places, ...events.map(event => ({
-        lng: event.lng,
-        title: event.title,
-        image: event.image,
-        ...event
-      }))] 
-      .filter(place => !isNaN(place.lat) && !isNaN(place.lng))
-      .map((place, index) => (
-        <Marker 
-          key={index} 
-          position={[place.lat, place.lng]}
-          eventHandlers={{
-            click: () => handleEventMarkerClick(place.lat, place.lng)
-          }}
+      {[
+        ...places,
+        ...events.map((event) => ({
+          lng: event.lng,
+          title: event.title,
+          image: event.image,
+          ...event,
+        })),
+      ]
+        .filter((place) => !isNaN(place.lat) && !isNaN(place.lng))
+        .map((place, index) => (
+          <Marker
+            key={index}
+            position={[place.lat, place.lng]}
+            eventHandlers={{
+              click: () => handleEventMarkerClick(place.lat, place.lng),
+            }}
           >
-          <Popup className="text-center max-w-[150px] p-0 m-0">
-            <div className="flex flex-col items-start w-full p-0 m-0">
-              
-              {/* Om det är ett event (dvs. place.image finns), visa event-texten */}
-              {place.image && (
-                <p className="text-darkDark text-xs font-bold p-0 m-0 leading-none">Detta är ett event</p>
-              )}
+            <Popup className="text-center max-w-[150px] p-0 m-0">
+              <div className="flex flex-col items-start w-full p-0 m-0">
+                {/* Om det är ett event (dvs. place.image finns), visa event-texten */}
+                {place.image && (
+                  <p className="text-darkDark text-xs font-bold p-0 m-0 leading-none">
+                    Detta är ett event
+                  </p>
+                )}
 
-              {/* Visa bild endast om det är ett event (platsen har en bild) */}
-              {place.image && (
-                <div className="w-full overflow-hidden rounded-md mb-0 p-0 m-0">
-                  <img
-                    src={place.image}
-                    alt={place.title}
-                    className="w-full h-[60px] object-cover rounded-md p-0 m-0"
-                  />
+                {/* Visa bild endast om det är ett event (platsen har en bild) */}
+                {place.image && (
+                  <div className="w-full overflow-hidden rounded-md mb-0 p-0 m-0">
+                    <img
+                      src={place.image}
+                      alt={place.title}
+                      className="w-full h-[60px] object-cover rounded-md p-0 m-0"
+                    />
+                  </div>
+                )}
+
+                {/* Om det inte är ett event, visa bara titel */}
+                <div className="flex flex-col w-full p-0 m-0">
+                  <strong className="text-darkDark text-xs font-normal p-0 m-0">
+                    {place.title}
+                  </strong>
                 </div>
-              )}
-
-              {/* Om det inte är ett event, visa bara titel */}
-              <div className="flex flex-col w-full p-0 m-0">
-                <strong className="text-darkDark text-xs font-normal p-0 m-0">
-                  {place.title}
-                </strong>
               </div>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
+            </Popup>
+          </Marker>
+        ))}
 
       <Marker position={center}>
         <Popup>Your current location</Popup>
