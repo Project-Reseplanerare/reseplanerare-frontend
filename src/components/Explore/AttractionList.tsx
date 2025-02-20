@@ -26,16 +26,18 @@ type IconCategory =
 const iconMapping: Record<IconCategory, string> = {
   'Kultur & historia': cultureIcon,
   'Mat & dryck': foodIcon,
-  'Boende': houseIcon,
+  Boende: houseIcon,
   'Design & shopping': shoppingIcon,
-  'Aktiviteter': sportCurlingIcon,
-  'Evenemang': ticketIcon,
+  Aktiviteter: sportCurlingIcon,
+  Evenemang: ticketIcon,
 };
 
 const normalizeCoordinates = (lat: any, lng: any) => {
   const parsedLat = parseFloat(lat);
   const parsedLng = parseFloat(lng);
-  return isNaN(parsedLat) || isNaN(parsedLng) ? null : { lat: parsedLat, lng: parsedLng };
+  return isNaN(parsedLat) || isNaN(parsedLng)
+    ? null
+    : { lat: parsedLat, lng: parsedLng };
 };
 
 export function AttractionList({ setSelectedCategory }: AttractionListProps) {
@@ -63,7 +65,6 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
   }, []);
 
   useEffect(() => {
-  
     setLoadingEvents(true);
     fetchEvents(itemsPerPage, currentPage)
       .then(({ events: fetchedEvents, total }) => {
@@ -71,10 +72,8 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
         if (total) {
           setTotalPages(Math.ceil(total / itemsPerPage));
         } else if (fetchedEvents.length < itemsPerPage) {
-
           setTotalPages(currentPage);
         } else {
-  
           setTotalPages(null);
         }
       })
@@ -92,7 +91,7 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
             const coords = normalizeCoordinates(event.lat, event.lng);
             return coords ? { ...event, ...coords } : null;
           })
-          .filter(event => event && event.lat !== 0 && event.lng !== 0);
+          .filter((event) => event && event.lat !== 0 && event.lng !== 0);
         setSelectedCategory(validEvents);
       } else {
         const response = await fetch(
@@ -106,10 +105,13 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
         const allPlaces = filteredProducts
           .flatMap((product: any) => product.places || [])
           .map((place: any) => {
-            const coords = normalizeCoordinates(place.latitude, place.longitude);
+            const coords = normalizeCoordinates(
+              place.latitude,
+              place.longitude
+            );
             return coords ? { ...place, ...coords } : null;
           })
-          .filter(place => place && place.lat !== 0 && place.lng !== 0);
+          .filter((place) => place && place.lat !== 0 && place.lng !== 0);
         setSelectedCategory(allPlaces);
       }
     } catch (error) {
@@ -141,7 +143,11 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
               ${isActive ? 'bg-gray-300 text-black' : 'bg-white text-black'}`}
               onClick={() => handleItemClick(category.id)}
             >
-              <img src={iconMapping[category.label as IconCategory] || cultureIcon} alt="Icon" className="w-5 h-5" />
+              <img
+                src={iconMapping[category.label as IconCategory] || cultureIcon}
+                alt="Icon"
+                className="w-5 h-5"
+              />
               <span>{category.label}</span>
               <FontAwesomeIcon icon={isActive ? faChevronUp : faChevronDown} />
             </div>
@@ -151,7 +157,9 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
                 {category.subItems.map((subItem: string, index: number) => (
                   <div
                     key={index}
-                    className={`p-3 rounded-md border cursor-pointer transition-all ${selectedSubItem === subItem ? 'bg-gray-300' : 'bg-white'}`}
+                    className={`p-3 rounded-md border cursor-pointer transition-all ${
+                      selectedSubItem === subItem ? 'bg-gray-300' : 'bg-white'
+                    }`}
                     onClick={() => handleSubItemClick(subItem)}
                   >
                     <span className="text-xs">{subItem}</span>
@@ -167,12 +175,18 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
       <div className="w-full">
         <div
           className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border border-lightlightBorder dark:border-lightlight 
-          ${activeIndex === -1 ? 'bg-gray-300 text-black' : 'bg-white text-black'}`}
+          ${
+            activeIndex === -1
+              ? 'bg-gray-300 text-black'
+              : 'bg-white text-black'
+          }`}
           onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)}
         >
           <img src={ticketIcon} alt="Evenemang ikon" className="w-5 h-5" />
           <span>Evenemang</span>
-          <FontAwesomeIcon icon={activeIndex === -1 ? faChevronUp : faChevronDown} />
+          <FontAwesomeIcon
+            icon={activeIndex === -1 ? faChevronUp : faChevronDown}
+          />
         </div>
 
         {activeIndex === -1 && events.length > 0 && (
@@ -180,7 +194,9 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
             {events.map((event, index) => (
               <div
                 key={index}
-                className={`p-3 rounded-md border cursor-pointer transition-all ${selectedSubItem === event.title ? 'bg-gray-300' : 'bg-white'}`}
+                className={`p-3 rounded-md border cursor-pointer transition-all ${
+                  selectedSubItem === event.title ? 'bg-gray-300' : 'bg-white'
+                }`}
                 onClick={() => {
                   setSelectedCategory([event]);
                   setSelectedSubItem(event.title);
@@ -191,20 +207,24 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
             ))}
 
             <div className="flex justify-between items-center mt-4">
-              <button 
-                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50" 
-                onClick={() => handlePageChange(currentPage - 1)} 
+              <button
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
+                onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 Föregående
               </button>
-              <span>Sida {currentPage}{totalPages ? ` av ${totalPages}` : ''}</span>
-              <button 
-                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50" 
+              <span>
+                Sida {currentPage}
+                {totalPages ? ` av ${totalPages}` : ''}
+              </span>
+              <button
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={
-                  totalPages ? currentPage === totalPages 
-                  : events.length < itemsPerPage
+                  totalPages
+                    ? currentPage === totalPages
+                    : events.length < itemsPerPage
                 }
               >
                 Nästa
