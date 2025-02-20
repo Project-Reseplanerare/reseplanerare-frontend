@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { useLocationStore } from "../../store/useLocationStore";
 
-const TempMapCenterUpdater = () => {
+export const TempMapCenterUpdater = () => {
   const map = useMap();
   const tempCenter = useLocationStore((state) => state.tempCenter);
 
@@ -14,5 +14,3 @@ const TempMapCenterUpdater = () => {
 
   return null;
 };
-
-export default TempMapCenterUpdater

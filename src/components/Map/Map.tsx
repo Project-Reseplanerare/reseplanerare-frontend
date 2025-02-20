@@ -33,13 +33,13 @@ import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import { useRouteStopStore } from '../../store/useRouteStopStore';
 
 // Other imports
-import MapCenterUpdater from './MapCenterUpdater';
-import MapClickHandler from './MapClickHandler';
-import FilterEventsByBounds from './FilterEventsByBounds';
+import { MapCenterUpdater } from './MapCenterUpdater';
+import { MapClickHandler } from './MapClickHandler';
+import { FilterEventsByBounds } from './FilterEventsByBounds';
 import { useGeolocation } from '../../hooks/mapHooks/useGeoLocation';
-import TempMapCenterUpdater from './TempMapCenterUpdater';
-// import FilterPlacesByBounds from './FilterPlacesByBounds';
-import FilterLocationsByBounds from './FilterLocationsByBounds';
+import { TempMapCenterUpdater } from './TempMapCenterUpdater';
+// import { FilterPlacesByBounds } from './FilterPlacesByBounds';
+import { FilterLocationsByBounds } from './FilterLocationsByBounds';
 
 // lagt till events som en prop
 interface MapProps {

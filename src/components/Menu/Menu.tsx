@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import TravelOptions from '../TravelOptions/TravelOptions';
-import AttractionList from '../Explore/AttractionList';
+import { AttractionList } from '../Explore/AttractionList';
 import Map from '../Map/Map';
 
-const Menu: React.FC = () => {
+export const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
   // Ändrat från selectedCategory till selectedLocations
   const [selectedLocations, setSelectedLocations] = useState<any[]>([]);
@@ -61,5 +61,3 @@ const Menu: React.FC = () => {
     </section>
   );
 };
-
-export default Menu;

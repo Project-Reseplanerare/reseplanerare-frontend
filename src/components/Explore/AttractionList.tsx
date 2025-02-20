@@ -41,7 +41,7 @@ const normalizeCoordinates = (lat: any, lng: any) => {
   return isNaN(parsedLat) || isNaN(parsedLng) ? null : { lat: parsedLat, lng: parsedLng };
 };
 
-function AttractionList({ setSelectedCategory }: AttractionListProps) {
+export function AttractionList({ setSelectedCategory }: AttractionListProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
@@ -215,5 +215,3 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
     </div>
   );
 }
-
-export default AttractionList;

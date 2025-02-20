@@ -2,7 +2,7 @@ import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useEffect, useState } from 'react';
 
-const ThemeSwitch = () => {
+export const ThemeSwitch = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(
     (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
   );
@@ -30,5 +30,3 @@ const ThemeSwitch = () => {
     </button>
   );
 };
-
-export default ThemeSwitch;

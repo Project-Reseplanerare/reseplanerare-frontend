@@ -14,7 +14,7 @@ interface FilterEventsByBoundsProps {
   setFilteredEvents: React.Dispatch<React.SetStateAction<any[]>>;
 }
 
-const FilterEventsByBounds: React.FC<FilterEventsByBoundsProps> = ({
+export const FilterEventsByBounds: React.FC<FilterEventsByBoundsProps> = ({
  events,
  setFilteredEvents,
 }) => {
@@ -50,5 +50,3 @@ const FilterEventsByBounds: React.FC<FilterEventsByBoundsProps> = ({
 
  return null;
 };
-
-export default FilterEventsByBounds;

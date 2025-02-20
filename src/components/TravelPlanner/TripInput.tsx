@@ -5,13 +5,13 @@ import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { fetchBusStops } from '../../utils/api/fetchBusStopsVarm';
 import { fetchTrainStops } from '../../utils/api/fetchTrainStopsVarm';
-import SwapBtn from './swapBtn';
+import { SwapBtn } from './swapBtn';
 
 interface TripInputProps {
   onInputChange: (inputType: 'from' | 'to', value: string) => void;
 }
 
-const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
+export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   const { fromAddress, toAddress, setFromAddress, setToAddress } =
     useLocationStore();
   const { selectedOption } = useTravelOptionsStore();
@@ -166,5 +166,3 @@ const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     </>
   );
 };
-
-export default TripInput;
