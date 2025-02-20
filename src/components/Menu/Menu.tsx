@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 import TravelOptions from '../TravelOptions/TravelOptions';
 import { AttractionList } from '../Explore/AttractionList';
 import Map from '../Map/Map';
@@ -11,34 +12,37 @@ export const Menu: React.FC = () => {
     setActiveComponent(activeComponent === component ? null : component);
   };
 
-  const getButtonClass = (component: string) =>
-    `hover:scale-105 transition-transform py-2 rounded border border-lightlightBorder dark:border-lightlight ${
-      activeComponent === component
-        ? 'bg-blueLight text-lightLight dark:text-lightLight'
-        : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
-    }`;
-
   return (
     <section className="rounded-md w-full grid gap-4 text-darkDark dark:text-lightLight">
       <nav className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <button
-          onClick={() => toggleComponent('resealternativ')}
-          className={getButtonClass('resealternativ')}
-        >
-          Resealternativ
-        </button>
-        <button
-          onClick={() => toggleComponent('besoksmal')}
-          className={getButtonClass('besoksmal')}
-        >
-          Se och göra
-        </button>
-        <button
-          onClick={() => toggleComponent('karta')}
-          className={getButtonClass('karta')}
-        >
-          Karta
-        </button>
+        {['resealternativ', 'besoksmal', 'karta'].map((component) => (
+          <motion.button
+            key={component}
+            onClick={() => toggleComponent(component)}
+            className={`py-2 rounded border border-lightlightBorder dark:border-lightlight ${
+              activeComponent === component
+                ? 'bg-blueLight text-lightLight dark:text-lightLight'
+                : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight'
+            }`}
+            whileHover={{
+              scale: 1.08,
+              transition: { duration: 0.3, ease: 'easeOut' },
+            }}
+            whileTap={{
+              scale: 0.95,
+              transition: { duration: 0.2, ease: 'easeInOut' },
+            }}
+            style={{ display: 'inline-block', transformOrigin: 'center' }}
+          >
+            <span className="inline-block">
+              {component === 'resealternativ'
+                ? 'Resealternativ'
+                : component === 'besoksmal'
+                ? 'Se och göra'
+                : 'Karta'}
+            </span>
+          </motion.button>
+        ))}
       </nav>
 
       <div className="grid grid-cols-1">
