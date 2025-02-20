@@ -212,13 +212,25 @@ const RouteOptionsDropdown = () => {
                 {selectedRouteIndex === index && routeStops[index] && (
                   <div className="grid gap-2 p-2">
                     {routeStops[index].map((stop, sIndex) => (
-                      <div key={sIndex} className="grid gap-2">
-                        {sIndex > 0 && (
-                          <div className="h-5 w-1 bg-blueLight place-self-start"></div>
+                      <div key={sIndex} className="relative mb-6">
+                        {sIndex < routeStops[index].length - 1 && (
+                          <div className="absolute left-5 top-16 space-y-2">
+                            <span className="block h-1 w-1 bg-gray-400 rounded-full mx-auto"></span>
+                            <span className="block h-1 w-1 bg-gray-400 rounded-full mx-auto"></span>
+                          </div>
                         )}
-                        <div className="grid grid-cols-2 text-sm border rounded p-2 transition border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark items-center">
+
+                        <div className="grid grid-cols-2 text-sm border rounded-lg p-4 transition border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark items-center">
                           <span className="flex items-center gap-2">
-                            <span className="text-blueLight">●</span>{' '}
+                            <span
+                              className={`w-2.5 h-2.5 rounded-full ${
+                                sIndex === 0
+                                  ? 'bg-blueLight'
+                                  : sIndex === routeStops[index].length - 1
+                                  ? 'bg-red-500'
+                                  : 'bg-gray-600'
+                              }`}
+                            ></span>{' '}
                             {stop.name}
                           </span>
                           <span className="text-right">
