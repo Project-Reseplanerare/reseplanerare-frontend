@@ -13,46 +13,30 @@ const parseCoordinates = (lat: string | number | null | undefined, lng: string |
   };
 };
 
-export const fetchEvents = async (limit: number, totalEvents: number, page: number, setLoading: Function, setEvents: Function) => {
+export const fetchEvents = async (limit: number, page: number) => {
   try {
-    const allEvents: any[] = [];
-    let eventsFetched = 0;
-
-    setLoading(true);
-
-    while (eventsFetched < totalEvents) {
-      const response = await fetch(`${EVENTS_API}?limit=${limit}&page=${page}`);
-      if (!response.ok) break;
-
-      const data = await response.json();
-      const eventMarkers = data.data.map((event: any) => {
-        const place = event.places?.[0] || {};
-        const { lat, lng } = parseCoordinates(place.latitude, place.longitude);
-
-        return {
-          lat,
-          lng,
-          title: event.title || 'Unknown Event',
-          description: event.sales_text || 'No description available',
-          image: event.images?.[0]?.medium || null,
-        };
-      });
-
-      allEvents.push(...eventMarkers);
-      eventsFetched += eventMarkers.length;
-      page += 1;
-
-      if (eventMarkers.length < limit) break;
+    const response = await fetch(`${EVENTS_API}?limit=${limit}&page=${page}`);
+    if (!response.ok) {
+      throw new Error('Failed to fetch events');
     }
-
-    setEvents(allEvents);
+    const data = await response.json();
+    const eventMarkers = data.data.map((event: any) => {
+      const place = event.places?.[0] || {};
+      const { lat, lng } = parseCoordinates(place.latitude, place.longitude);
+      return {
+        lat,
+        lng,
+        title: event.title || 'Unknown Event',
+        description: event.sales_text || 'No description available',
+        image: event.images?.[0]?.medium || null,
+      };
+    });
+    return { events: eventMarkers, total: data.total };
   } catch (error) {
     console.error('Error fetching events:', error);
-  } finally {
-    setLoading(false);
+    return { events: [], total: 0 };
   }
 };
-
 
 export const fetchProductsByCategory = async (category: string, limit: number, page: number) => {
     try {
