@@ -168,7 +168,7 @@ const RouteOptionsDropdown = () => {
 
   return (
     isButtonClicked && (
-      <div className="grid gap-4 p-8 border border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark rounded-lg">
+      <div className="grid gap-4 p-8 border border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark rounded-md">
         <h2 className="text-xl font-bold">Resealternativ</h2>
 
         <hr className="h-0.5 bg-blueLight" />
