@@ -5,7 +5,6 @@ import Map from '../Map/Map';
 
 export const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
-  // Ändrat från selectedCategory till selectedLocations
   const [selectedLocations, setSelectedLocations] = useState<any[]>([]);
 
   const toggleComponent = (component: string) => {
