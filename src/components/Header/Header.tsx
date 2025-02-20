@@ -3,7 +3,7 @@ import logo from '../../assets/logotyp-visitvarmland.svg';
 import ThemeSwitch from '../ThemeSwitch/ThemeSwitch';
 
 const Header = () => (
-  <header className="shadow-lg backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight w-full">
+  <header className="shadow-lg backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark p-4 dark:text-lightLight w-full">
     <nav className="grid grid-cols-[auto_1fr] items-center">
       <div className="justify-self-start">
         <Link to="/">
