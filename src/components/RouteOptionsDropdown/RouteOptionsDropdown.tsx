@@ -39,7 +39,6 @@ const RouteOptionsDropdown = () => {
 
     const fetchRoutes = async () => {
       try {
-        // Fetch departures for the 'from' stop
         const fromResponse = await fetch(
           `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
@@ -52,7 +51,6 @@ const RouteOptionsDropdown = () => {
           return;
         }
 
-        // Fetch arrivals for the 'to' stop
         const toResponse = await fetch(
           `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
@@ -92,7 +90,6 @@ const RouteOptionsDropdown = () => {
           return;
         }
 
-        // Limit to 8 routes
         const limitedDepartures = filteredDepartures.slice(0, 8);
 
         const names = limitedDepartures.map((departure) => {
@@ -115,7 +112,6 @@ const RouteOptionsDropdown = () => {
         setRouteNames(names);
         setTravelTimes(times);
 
-        // Fetch route stops for the first 8 departures
         limitedDepartures.forEach((departure, index) => {
           const departureTime = departure.time;
           const arrivalTime =
@@ -234,7 +230,9 @@ const RouteOptionsDropdown = () => {
                             {stop.name}
                           </span>
                           <span className="text-right">
-                            {stop.depTime || stop.arrTime || ''}
+                            {formatTravelTime(
+                              stop.depTime || stop.arrTime || ''
+                            )}
                           </span>
                         </div>
                       </div>
