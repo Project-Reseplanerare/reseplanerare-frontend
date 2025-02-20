@@ -32,12 +32,9 @@ const iconMapping: Record<IconCategory, string> = {
   'Evenemang': ticketIcon,
 };
 
-// Funktion för att säkerställa rätt koordinater
 const normalizeCoordinates = (lat: any, lng: any) => {
   const parsedLat = parseFloat(lat);
   const parsedLng = parseFloat(lng);
-
-  // Returnera en objekt med lat, lng, och kollar om de är NaN
   return isNaN(parsedLat) || isNaN(parsedLng) ? null : { lat: parsedLat, lng: parsedLng };
 };
 
@@ -48,8 +45,12 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
   const [selectedSubItem, setSelectedSubItem] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  // Hämtar kategorier och evenemang vid första renderingen
+  const itemsPerPage = 10;
+
+  const [totalPages, setTotalPages] = useState<number | null>(null);
+
   useEffect(() => {
     fetchCategories()
       .then((data) => {
@@ -59,32 +60,45 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
       .catch(() => {
         setLoadingCategories(false);
       });
-
-    fetchEvents(10, 50, 1, setLoadingEvents, setEvents);
   }, []);
 
-  // När en kategori väljs
+  useEffect(() => {
+  
+    setLoadingEvents(true);
+    fetchEvents(itemsPerPage, currentPage)
+      .then(({ events: fetchedEvents, total }) => {
+        setEvents(fetchedEvents);
+        if (total) {
+          setTotalPages(Math.ceil(total / itemsPerPage));
+        } else if (fetchedEvents.length < itemsPerPage) {
+
+          setTotalPages(currentPage);
+        } else {
+  
+          setTotalPages(null);
+        }
+      })
+      .finally(() => {
+        setLoadingEvents(false);
+      });
+  }, [currentPage]);
+
   const handleSubItemClick = async (subItem: string) => {
     try {
       setSelectedSubItem(subItem);
-
       if (subItem === 'Evenemang') {
-        // Normalisera koordinaterna för evenemang
         const validEvents = events
           .map((event: any) => {
-            // Här normaliserar vi koordinaterna för varje evenemang
-            const { lat, lng } = normalizeCoordinates(event.lat, event.lng);
-            return { ...event, lat, lng };
+            const coords = normalizeCoordinates(event.lat, event.lng);
+            return coords ? { ...event, ...coords } : null;
           })
-          .filter(event => event.lat !== 0 && event.lng !== 0);
-
+          .filter(event => event && event.lat !== 0 && event.lng !== 0);
         setSelectedCategory(validEvents);
       } else {
         const response = await fetch(
           `https://turid.visitvarmland.com/api/v8/products?categories=${subItem.toLowerCase()}`
         );
         const data = await response.json();
-
         const products = Array.isArray(data.data) ? data.data : [];
         const filteredProducts = products.filter((product: any) =>
           product.categories.some((category: any) => category.title === subItem)
@@ -92,22 +106,24 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
         const allPlaces = filteredProducts
           .flatMap((product: any) => product.places || [])
           .map((place: any) => {
-            // Normalisera koordinaterna för varje plats
-            const { lat, lng } = normalizeCoordinates(place.latitude, place.longitude);
-            return { ...place, lat, lng };
+            const coords = normalizeCoordinates(place.latitude, place.longitude);
+            return coords ? { ...place, ...coords } : null;
           })
-          .filter(place => place.lat !== 0 && place.lng !== 0);
+          .filter(place => place && place.lat !== 0 && place.lng !== 0);
         setSelectedCategory(allPlaces);
       }
     } catch (error) {
       console.error('Fel vid hämtning av platser:', error);
     }
   };
-  
+
   const handleItemClick = (id: number) => {
     setActiveIndex(activeIndex === id ? null : id);
   };
-  
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
 
   if (loadingCategories || loadingEvents) {
     return null;
@@ -120,42 +136,23 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
 
         return (
           <div key={category.id} className="w-full">
-            {/* Category Item */}
             <div
               className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border border-lightlightBorder dark:border-lightlight 
-              ${
-                isActive
-                  ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
-                  : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
-              }`}
+              ${isActive ? 'bg-gray-300 text-black' : 'bg-white text-black'}`}
               onClick={() => handleItemClick(category.id)}
             >
-              <img
-                src={iconMapping[category.label as IconCategory] || cultureIcon}
-                alt={`${category.label} ikon`}
-                className="w-5 h-5"
-              />
+              <img src={iconMapping[category.label as IconCategory] || cultureIcon} alt="Icon" className="w-5 h-5" />
               <span>{category.label}</span>
-              <FontAwesomeIcon
-                icon={isActive ? faChevronUp : faChevronDown}
-                className="transition-transform"
-              />
+              <FontAwesomeIcon icon={isActive ? faChevronUp : faChevronDown} />
             </div>
 
-            {/* Sub-items */}
             {isActive && category.subItems.length > 0 && (
               <div className="grid gap-2">
                 {category.subItems.map((subItem: string, index: number) => (
                   <div
                     key={index}
-                    className={`p-3 rounded-md border border-lightlightBorder dark:border-lightlight cursor-pointer transition-all
-                    ${
-                      selectedSubItem === subItem
-                        ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
-                        : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
-                    }`}
-                    onClick={() => 
-                      handleSubItemClick(subItem)}
+                    className={`p-3 rounded-md border cursor-pointer transition-all ${selectedSubItem === subItem ? 'bg-gray-300' : 'bg-white'}`}
+                    onClick={() => handleSubItemClick(subItem)}
                   >
                     <span className="text-xs">{subItem}</span>
                   </div>
@@ -166,41 +163,24 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
         );
       })}
 
-      {/* Evenemang (Events) */}
+      {/* Evenemang section */}
       <div className="w-full">
         <div
           className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border border-lightlightBorder dark:border-lightlight 
-          ${
-            activeIndex === -1
-              ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
-              : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
-          }`}
-          onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)} 
+          ${activeIndex === -1 ? 'bg-gray-300 text-black' : 'bg-white text-black'}`}
+          onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)}
         >
-          <img
-            src={ticketIcon}
-            alt="Evenemang ikon"
-            className="w-5 h-5"
-          />
+          <img src={ticketIcon} alt="Evenemang ikon" className="w-5 h-5" />
           <span>Evenemang</span>
-          <FontAwesomeIcon
-            icon={activeIndex === -1 ? faChevronUp : faChevronDown}
-            className="transition-transform"
-          />
+          <FontAwesomeIcon icon={activeIndex === -1 ? faChevronUp : faChevronDown} />
         </div>
 
-        {/* Show events */}
         {activeIndex === -1 && events.length > 0 && (
           <div className="grid gap-2">
             {events.map((event, index) => (
               <div
                 key={index}
-                className={`p-3 rounded-md border border-lightlightBorder dark:border-lightlight cursor-pointer transition-all
-                  ${
-                    selectedSubItem === event.title
-                      ? 'bg-[#D3D3D3] bg-opacity-80 text-darkDark border border-lightlightBorder dark:bg-white dark:bg-opacity-100 dark:text-darkDark dark:border-[#444]'
-                      : 'bg-white bg-opacity-100 text-darkDark border-lightlightBorder dark:border-lightlight dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark '
-                  }`}
+                className={`p-3 rounded-md border cursor-pointer transition-all ${selectedSubItem === event.title ? 'bg-gray-300' : 'bg-white'}`}
                 onClick={() => {
                   setSelectedCategory([event]);
                   setSelectedSubItem(event.title);
@@ -209,6 +189,27 @@ function AttractionList({ setSelectedCategory }: AttractionListProps) {
                 <span className="text-xs">{event.title}</span>
               </div>
             ))}
+
+            <div className="flex justify-between items-center mt-4">
+              <button 
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50" 
+                onClick={() => handlePageChange(currentPage - 1)} 
+                disabled={currentPage === 1}
+              >
+                Föregående
+              </button>
+              <span>Sida {currentPage}{totalPages ? ` av ${totalPages}` : ''}</span>
+              <button 
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50" 
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={
+                  totalPages ? currentPage === totalPages 
+                  : events.length < itemsPerPage
+                }
+              >
+                Nästa
+              </button>
+            </div>
           </div>
         )}
       </div>
