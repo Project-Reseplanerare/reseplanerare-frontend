@@ -35,7 +35,7 @@ export const ThemeSwitch = () => {
         />
       </motion.div>
       <span className="text-sm text-white hidden sm:inline">
-        {theme === 'light' ? 'Dark Mode' : 'Light Mode'}
+        {theme === 'light' ? 'Mörkt Läge' : 'Ljust Läge'}
       </span>
     </motion.button>
   );
