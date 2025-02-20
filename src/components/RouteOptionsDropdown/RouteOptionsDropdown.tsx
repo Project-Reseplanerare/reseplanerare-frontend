@@ -160,7 +160,6 @@ export const RouteOptionsDropdown = () => {
     const departureDate = new Date(`${today} ${departureTime}`).getTime();
     let arrivalDate = new Date(`${today} ${arrivalTime}`).getTime();
 
-    // Handle next-day arrival case
     if (arrivalDate < departureDate) {
       arrivalDate += 24 * 60 * 60 * 1000;
     }
