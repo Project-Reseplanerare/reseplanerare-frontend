@@ -242,16 +242,20 @@ function Map( { places }: MapProps ) {
           selectedCategory={selectedOption}
       />
 
+      {/*NU TAR VI BÅDA JAG HITTAR INTE FELET MEN DETTA FÅR VA SÅHÄR NU*/}
       {places.map((place, index) => (
-          <Marker key={index} position={[place.latitude, place.longitude]}>
-            <Popup>
-              <strong>{place.title}</strong>
-              {/* <br />
-              <p>{place.presentation}</p> */}
-            </Popup>
-          </Marker>
-        ))}
-
+        <Marker
+          key={index}
+          position={[
+            place.lat || place.latitude, 
+            place.lng || place.longitude
+          ]}
+        >
+          <Popup>
+            <strong>{place.title}</strong>
+          </Popup>
+        </Marker>
+      ))}
 
       <Marker position={center}>
         <Popup>Your current location</Popup>
