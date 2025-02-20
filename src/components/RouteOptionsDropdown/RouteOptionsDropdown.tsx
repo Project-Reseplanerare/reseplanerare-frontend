@@ -145,11 +145,12 @@ export const RouteOptionsDropdown = () => {
     }
   };
 
-  const formatTravelTime = (time: string) => {
-    const [hours, minutes] = time.split(':');
-    const date = new Date();
-    date.setHours(Number(hours), Number(minutes), 0);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const formatTravelTime = (time) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    return new Date(0, 0, 0, hours, minutes).toLocaleTimeString([], {
+      hour: '2-digit',
+      minute: '2-digit',
+    });
   };
 
   const calculateTravelDuration = (departureTime, arrivalTime) => {
