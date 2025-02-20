@@ -5,7 +5,8 @@ import Map from '../Map/Map';
 
 const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
-  const [selectedPlaces, setSelectedPlaces] = useState<any[]>([]);
+  // Ändrat från selectedCategory till selectedLocations
+  const [selectedLocations, setSelectedLocations] = useState<any[]>([]);
 
   return (
     <section className="rounded-md w-full grid gap-4 text-darkDark dark:text-lightLight">
@@ -64,13 +65,13 @@ const Menu: React.FC = () => {
           <div className="grid grid-cols-1">
           <AttractionList setSelectedCategory={(places) => {
           console.log("Platser som skickas till kartan:", places);
-          setSelectedPlaces(places);
+          setSelectedLocations(places);
         }} />
 
           </div>
         ) : activeComponent === 'karta' ? (
           <div className="rounded-md grid grid-cols-1 h-80">
-           <Map places={selectedPlaces} />
+           <Map places={selectedLocations} events={[]} />
           </div>
         ) : (
           <div className="hidden"></div>

@@ -6,7 +6,6 @@ export const fetchCategories = async () => {
         if (!response.ok) throw new Error('Failed to fetch');
 
         const data = await response.json();
-        console.log("API Response:", data);
 
         if (!data || !data.data) {
             console.error("No data received from API");
@@ -21,7 +20,6 @@ export const fetchCategories = async () => {
             subItems: category.children?.map((child: any) => child.title) || []
         }));
 
-        console.log("Formatted Categories:", formattedCategories); 
         return formattedCategories;
     } 
     catch (error) {
