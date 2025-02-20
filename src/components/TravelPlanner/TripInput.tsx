@@ -22,10 +22,22 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     from: [],
     to: [],
   });
+  const [activeDropdown, setActiveDropdown] = useState<'from' | 'to' | null>(
+    null
+  );
+
+  // Debounce for API calls
+  const debounce = (callback: (...args: any[]) => void, delay: number) => {
+    let timer: NodeJS.Timeout;
+    return (...args: any[]) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => callback(...args), delay);
+    };
+  };
 
   const fetchStops = async (type: 'from' | 'to', value: string) => {
     if (!value.trim()) {
-      setSuggestions((prev) => ({ ...prev, [type]: [] }));
+      setSuggestions({ from: [], to: [] });
       return;
     }
 
@@ -36,19 +48,19 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
 
     const fetchFunction =
       selectedOption === 'Buss' ? fetchBusStops : fetchTrainStops;
-
     const stops = await fetchFunction(value);
 
-    setSuggestions((prev) => ({
-      ...prev,
-      [type]: stops.map((stop: { name: string; extId: string }) => ({
-        name: stop.name,
-        extId: stop.extId,
-      })),
+    setSuggestions((prevSuggestions) => ({
+      ...prevSuggestions,
+      [type]: stops.map((stop) => ({ name: stop.name, extId: stop.extId })),
     }));
+
+    setActiveDropdown(type);
   };
 
-  const handleInputChange = async (
+  const debouncedFetchStops = debounce(fetchStops, 300);
+
+  const handleInputChange = (
     type: 'from' | 'to',
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -59,7 +71,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       setToAddress(value);
     }
     onInputChange(type, value);
-    fetchStops(type, value);
+    debouncedFetchStops(type, value);
   };
 
   const clearInput = (type: 'from' | 'to') => {
@@ -70,7 +82,8 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       setToAddress('');
       setToStopId('');
     }
-    setSuggestions((prev) => ({ ...prev, [type]: [] }));
+    setSuggestions({ from: [], to: [] });
+    setActiveDropdown(null);
   };
 
   const swapAddresses = () => {
@@ -90,7 +103,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     const borderColor = address ? 'border-blueLight dark:border-blueDark' : '';
 
     return (
-      <div className="relative">
+      <div className="grid gap-1">
         <div
           className={`grid grid-cols-[min-content_1fr_min-content] border border-lightBorder dark:border-lightLight rounded-md backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 p-2 items-center gap-2 ${borderColor}`}
         >
@@ -108,6 +121,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
             value={address}
             onChange={(e) => handleInputChange(type, e)}
             className="w-full text-darkDark dark:text-lightLight bg-transparent border-none outline-none"
+            onFocus={() => setActiveDropdown(type)}
           />
           {address && (
             <button
@@ -119,8 +133,8 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
           )}
         </div>
 
-        {suggestions[type].length > 0 && (
-          <ul className="absolute top-full left-0 w-full bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto z-50 mt-1">
+        {activeDropdown === type && suggestions[type].length > 0 && (
+          <ul className="bg-lightLight dark:bg-darkDark border border-darkLight dark:border-lightDark rounded-md shadow-md max-h-40 overflow-y-auto">
             {suggestions[type].map((suggestion, index) => (
               <li
                 key={index}
@@ -133,7 +147,8 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
                     setToAddress(suggestion.name);
                     setToStopId(suggestion.extId);
                   }
-                  setSuggestions((prev) => ({ ...prev, [type]: [] }));
+                  setSuggestions({ from: [], to: [] });
+                  setActiveDropdown(null);
                   onInputChange(type, suggestion.name);
                 }}
               >
@@ -152,7 +167,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
         Vart vill du resa?
       </h4>
 
-      <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-center rounded-lg">
+      <div className="grid grid-cols-[1fr_min-content] gap-4 w-full items-start rounded-lg">
         {renderInputField('from', 'A')}
         <div className="row-span-2 self-center ml-1">
           <SwapBtn
