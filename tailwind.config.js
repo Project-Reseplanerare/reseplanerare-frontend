@@ -4,6 +4,10 @@ export default {
   darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Noto Sans', 'sans-serif'],
+        serif: ['Noto Serif', 'serif'],
+      },
       colors: {
         // Primary Light
         lightLight: '#F9F9F9',
@@ -22,7 +26,7 @@ export default {
         blueDark: '#005B79',
 
         // Border
-        lightBorder:'#727272',
+        lightBorder: '#727272',
         lightlightBorder: '#D9D9D9',
       },
     },

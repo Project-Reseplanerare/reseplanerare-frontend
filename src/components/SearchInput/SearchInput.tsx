@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FaSearch, FaTimes } from 'react-icons/fa';
 import { useLocationStore } from '../../store/useLocationStore';
 import { fetchAddress } from '../../utils/api/fetchAdress';
@@ -8,50 +8,50 @@ const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 const SearchInput = () => {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
-  const [loading, setLoading] = useState(false);
   const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
 
-  const fetchSuggestions = async (searchQuery: string) => {
+  useEffect(() => {
+    const cachedData = localStorage.getItem('eventSuggestions');
+    if (!cachedData) {
+      fetchInitialData();
+    }
+  }, []);
+
+  const fetchInitialData = async () => {
+    try {
+      const response = await fetch(`${EVENTS_API}?limit=1000`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch event data');
+      }
+      const data = await response.json();
+      localStorage.setItem(
+        'eventSuggestions',
+        JSON.stringify(data.data.map((event: { title: string }) => event.title))
+      );
+    } catch (error) {
+      console.error('Error fetching initial event data:', error);
+    }
+  };
+
+  const fetchSuggestions = (searchQuery: string) => {
     if (!searchQuery.trim()) {
       setSuggestions([]);
       return;
     }
-
-    try {
-      setLoading(true);
-      const response = await fetch(
-        `${EVENTS_API}?search=${searchQuery}&limit=10`
+    const cachedSuggestions = localStorage.getItem('eventSuggestions');
+    if (cachedSuggestions) {
+      const filteredSuggestions = JSON.parse(cachedSuggestions).filter(
+        (title: string) =>
+          title.toLowerCase().startsWith(searchQuery.toLowerCase())
       );
-      if (response.ok) {
-        const data = await response.json();
-        setSuggestions(
-          data.data.map((event: { title: string }) => event.title)
-        );
-      } else {
-        setSuggestions([]);
-      }
-    } catch (error) {
-      console.error('Error fetching suggestions:', error);
-      setSuggestions([]);
-    } finally {
-      setLoading(false);
+      setSuggestions(filteredSuggestions);
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.trimStart();
     setQuery(value);
-
-    if (value) {
-      fetchSuggestions(value);
-    } else {
-      setSuggestions([]);
-    }
-  };
-
-  const clearInput = () => {
-    setQuery('');
-    setSuggestions([]);
+    fetchSuggestions(value);
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
@@ -59,25 +59,23 @@ const SearchInput = () => {
       const response = await fetch(
         `${EVENTS_API}?search=${eventTitle}&limit=1`
       );
-      if (!response.ok) return;
-
+      if (!response.ok) {
+        throw new Error('Failed to fetch event coordinates');
+      }
       const data = await response.json();
-      const event = data.data[0];
+      const event = data.data?.[0]?.places?.[0];
 
-      if (event?.places?.[0]?.latitude && event?.places?.[0]?.longitude) {
-        const { latitude, longitude, name } = event.places[0];
+      if (event?.latitude && event?.longitude) {
         const latlng: [number, number] = [
-          parseFloat(latitude),
-          parseFloat(longitude),
+          parseFloat(event.latitude),
+          parseFloat(event.longitude),
         ];
-
         setTempCenter(latlng);
         setToLocation(latlng);
-        setToAddress(name);
-
+        setToAddress(event.name);
         await fetchAddress(
-          latitude,
-          longitude,
+          event.latitude,
+          event.longitude,
           'to',
           setToAddress,
           setToAddress
@@ -92,14 +90,10 @@ const SearchInput = () => {
 
   return (
     <div className="grid gap-2 w-full shadow-md">
-      {/* Input Section */}
-      <div className="grid grid-cols-[auto,1fr,auto] items-center w-full rounded  border-darkLight dark:border-lightDark backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight">
-        {/* Search Icon */}
+      <div className="grid grid-cols-[auto,1fr,auto] items-center w-full rounded border-darkLight dark:border-lightDark backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight">
         <div className="px-3 text-darkLight dark:text-lightDark">
           <FaSearch />
         </div>
-
-        {/* Input Field */}
         <input
           type="text"
           value={query}
@@ -107,19 +101,18 @@ const SearchInput = () => {
           placeholder="Sök bland tusentals evenemang och besöksmål"
           className="w-full h-10 px-3 bg-transparent text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark placeholder-opacity-50 focus:ring-2 focus:ring-darkLight dark:focus:ring-lightDark focus:outline-none"
         />
-
-        {/* Clear Button */}
         {query && (
           <button
-            onClick={clearInput}
+            onClick={() => {
+              setQuery('');
+              setSuggestions([]);
+            }}
             className="px-3 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight transition"
           >
             <FaTimes className="w-4 h-4" />
           </button>
         )}
       </div>
-
-      {/* ✅ Dropdown Suggestions (Hidden when input is empty) */}
       {query && suggestions.length > 0 && (
         <ul className="w-full border border-darkLight dark:border-lightDark rounded max-h-40 overflow-y-auto bg-lightDark dark:bg-darkDark text-darkDark dark:text-lightLight shadow-lg">
           {suggestions.map((title, index) => (
@@ -136,11 +129,6 @@ const SearchInput = () => {
             </li>
           ))}
         </ul>
-      )}
-
-      {/* ✅ Loading Indicator (Hidden when input is empty) */}
-      {query && loading && (
-        <p className="text-sm text-darkLight dark:text-lightDark">Loading...</p>
       )}
     </div>
   );

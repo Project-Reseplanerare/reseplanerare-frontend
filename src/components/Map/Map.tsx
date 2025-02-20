@@ -254,6 +254,7 @@ function Map( { places, events }: MapProps ) {
 
 
 
+
       {[...places, ...events.map(event => ({
         lng: event.lng,
         title: event.title,

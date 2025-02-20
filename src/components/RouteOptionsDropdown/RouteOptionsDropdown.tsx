@@ -39,7 +39,6 @@ const RouteOptionsDropdown = () => {
 
     const fetchRoutes = async () => {
       try {
-        // Fetch departures for the 'from' stop
         const fromResponse = await fetch(
           `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
@@ -52,7 +51,6 @@ const RouteOptionsDropdown = () => {
           return;
         }
 
-        // Fetch arrivals for the 'to' stop
         const toResponse = await fetch(
           `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
@@ -92,7 +90,6 @@ const RouteOptionsDropdown = () => {
           return;
         }
 
-        // Limit to 8 routes
         const limitedDepartures = filteredDepartures.slice(0, 8);
 
         const names = limitedDepartures.map((departure) => {
@@ -115,7 +112,6 @@ const RouteOptionsDropdown = () => {
         setRouteNames(names);
         setTravelTimes(times);
 
-        // Fetch route stops for the first 8 departures
         limitedDepartures.forEach((departure, index) => {
           const departureTime = departure.time;
           const arrivalTime =
@@ -172,7 +168,11 @@ const RouteOptionsDropdown = () => {
 
   return (
     isButtonClicked && (
-      <div className="grid gap-4 p-8 border border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark rounded-lg">
+      <div
+        className="grid gap-4 p-8 border border-lightlightBorder dark:border-[#444] bg-opacity-100 dark:bg-opacity-100  rounded-md backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight
+      
+      "
+      >
         <h2 className="text-xl font-bold">Resealternativ</h2>
 
         <hr className="h-0.5 bg-blueLight" />
@@ -212,17 +212,31 @@ const RouteOptionsDropdown = () => {
                 {selectedRouteIndex === index && routeStops[index] && (
                   <div className="grid gap-2 p-2">
                     {routeStops[index].map((stop, sIndex) => (
-                      <div key={sIndex} className="grid gap-2">
-                        {sIndex > 0 && (
-                          <div className="h-5 w-1 bg-blueLight place-self-start"></div>
+                      <div key={sIndex} className="relative mb-6">
+                        {sIndex < routeStops[index].length - 1 && (
+                          <div className="absolute left-5 top-16 space-y-2">
+                            <span className="block h-1 w-1 bg-gray-400 rounded-full mx-auto"></span>
+                            <span className="block h-1 w-1 bg-gray-400 rounded-full mx-auto"></span>
+                          </div>
                         )}
-                        <div className="grid grid-cols-2 text-sm border rounded p-2 transition border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark items-center">
+
+                        <div className="grid grid-cols-2 text-sm border rounded-lg p-4 transition border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark items-center">
                           <span className="flex items-center gap-2">
-                            <span className="text-blueLight">●</span>{' '}
+                            <span
+                              className={`w-2.5 h-2.5 rounded-full ${
+                                sIndex === 0
+                                  ? 'bg-blueLight'
+                                  : sIndex === routeStops[index].length - 1
+                                  ? 'bg-red-500'
+                                  : 'bg-gray-600'
+                              }`}
+                            ></span>{' '}
                             {stop.name}
                           </span>
                           <span className="text-right">
-                            {stop.depTime || stop.arrTime || ''}
+                            {formatTravelTime(
+                              stop.depTime || stop.arrTime || ''
+                            )}
                           </span>
                         </div>
                       </div>

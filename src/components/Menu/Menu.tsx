@@ -8,73 +8,54 @@ const Menu: React.FC = () => {
   // Ändrat från selectedCategory till selectedLocations
   const [selectedLocations, setSelectedLocations] = useState<any[]>([]);
 
+  const toggleComponent = (component: string) => {
+    setActiveComponent(activeComponent === component ? null : component);
+  };
+
+  const getButtonClass = (component: string) =>
+    `hover:scale-105 transition-transform py-2 rounded border border-lightlightBorder dark:border-lightlight ${
+      activeComponent === component
+        ? 'bg-blueLight text-lightLight dark:text-lightLight'
+        : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
+    }`;
+
   return (
     <section className="rounded-md w-full grid gap-4 text-darkDark dark:text-lightLight">
-      {/* Menu Navigation */}
       <nav className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <button
-          onClick={() =>
-            setActiveComponent(
-              activeComponent === 'resealternativ' ? null : 'resealternativ'
-            )
-          }
-          className={`hover:scale-105 transition-transform py-2 border border-lightlightBorder dark:border-lightlight rounded 
-            ${
-              activeComponent === 'resealternativ'
-                ? 'bg-blueLight text-lightLight dark:text-lightLight'
-                : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
-            }`}
+          onClick={() => toggleComponent('resealternativ')}
+          className={getButtonClass('resealternativ')}
         >
           Resealternativ
         </button>
-
         <button
-          onClick={() =>
-            setActiveComponent(activeComponent === 'besoksmal' ? null : 'besoksmal')
-          }
-          className={`hover:scale-105 transition-transform py-2 rounded border border-lightlightBorder dark:border-lightlight  
-          ${
-            activeComponent === 'besoksmal'
-              ? 'bg-blueLight text-lightLight dark:text-lightLight'
-              : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
-          }`}
+          onClick={() => toggleComponent('besoksmal')}
+          className={getButtonClass('besoksmal')}
         >
           Se och göra
         </button>
-
         <button
-          onClick={() =>
-            setActiveComponent(activeComponent === 'karta' ? null : 'karta')
-          }
-          className={`hover:scale-105 transition-transform py-2 rounded border border-lightlightBorder dark:border-lightlight  
-            ${
-              activeComponent === 'karta'
-                ? 'bg-blueLight text-lightLight dark:text-lightLight'
-                : 'bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight hover:text-darkDark dark:hover:text-lightLight'
-            }`}
+          onClick={() => toggleComponent('karta')}
+          className={getButtonClass('karta')}
         >
           Karta
         </button>
       </nav>
 
-      {/* Display Components Based on Selection */}
       <div className="grid grid-cols-1">
-        {activeComponent === 'resealternativ' ? (
-          <TravelOptions />
-        ) : activeComponent === 'besoksmal' ? (
+        {activeComponent === 'resealternativ' && <TravelOptions />}
+        {activeComponent === 'besoksmal' && (
           <div className="grid grid-cols-1">
           <AttractionList setSelectedCategory={(places) => {
           console.log("Platser som skickas till kartan:", places);
           setSelectedLocations(places);
         }} />
-
           </div>
-        ) : activeComponent === 'karta' ? (
+        )}
+        {activeComponent === 'karta' && (
           <div className="rounded-md grid grid-cols-1 h-80">
            <Map places={selectedLocations} events={[]} />
           </div>
-        ) : (
-          <div className="hidden"></div>
         )}
       </div>
     </section>
