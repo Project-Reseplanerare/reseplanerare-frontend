@@ -152,22 +152,18 @@ export const RouteOptionsDropdown = () => {
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   };
 
-  const calculateTravelDuration = (
-    departureTime: string,
-    arrivalTime: string
-  ) => {
-    const departureDate = new Date(
-      `${new Date().toDateString()} ${departureTime}`
-    );
-    const arrivalDate = new Date(`${new Date().toDateString()} ${arrivalTime}`);
-    const duration =
-      (arrivalDate.getTime() - departureDate.getTime()) / (1000 * 60);
-    if (duration <= 0) return 'Arrived';
-    return `${duration} min`;
+  const calculateTravelDuration = (departureTime, arrivalTime) => {
+    const today = new Date().toDateString();
+    const departureDate = new Date(`${today} ${departureTime}`).getTime();
+    const arrivalDate = new Date(`${today} ${arrivalTime}`).getTime();
+
+    const duration = (arrivalDate - departureDate) / 60000;
+    return duration <= 0 ? 'Arrived' : `${duration} min`;
   };
 
   return (
-    isButtonClicked && (selectedOption === 'Buss' || selectedOption === 'Tåg') && (
+    isButtonClicked &&
+    (selectedOption === 'Buss' || selectedOption === 'Tåg') && (
       <div
         className="grid gap-4 p-8 border border-lightlightBorder dark:border-[#444] bg-opacity-100 dark:bg-opacity-100  rounded-md backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight
       
