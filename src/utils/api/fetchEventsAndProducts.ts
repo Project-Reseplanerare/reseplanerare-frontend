@@ -45,12 +45,12 @@ export const fetchEvents = async (limit: number, page: number) => {
 
     return { events: eventMarkers, total: data.total || 0 };
   } catch (error) {
-    console.error('Error fetching events:', error);
+    console.error(`Error fetching events: ${error.message}`);
     return { events: [], total: 0 };
   }
 };
 
-export const fetchProductsByCategory = async (
+export const fetchCategoryProducts = async (
   category: string,
   limit: number,
   page: number
@@ -76,7 +76,7 @@ export const fetchProductsByCategory = async (
       );
     }
 
-    return data.data.map((product: any) => {
+    const products = data.data.map((product: any) => {
       const { lat, lng } = parseCoordinates(
         product.latitude,
         product.longitude
@@ -89,15 +89,17 @@ export const fetchProductsByCategory = async (
         description: product.description?.trim() || 'No description available',
       };
     });
+
+    return { products, total: data.total || 0 };
   } catch (error) {
-    console.error(`Error fetching category "${category}":`, error);
-    return [];
+    console.error(`Error fetching category "${category}": ${error.message}`);
+    return { products: [], total: 0 };
   }
 };
 
 const createCategoryFetcher = (category: string) => {
   return (limit: number, page: number) =>
-    fetchProductsByCategory(category, limit, page);
+    fetchCategoryProducts(category, limit, page);
 };
 
 export const fetchFoodDrinks = createCategoryFetcher('mat-dryck');
