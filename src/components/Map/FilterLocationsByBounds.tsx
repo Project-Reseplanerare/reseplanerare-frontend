@@ -23,51 +23,39 @@ interface FilterLocationsByBoundsProps {
   setFilteredPlaces?: React.Dispatch<React.SetStateAction<Place[]>>;
 }
 
-export const FilterLocationsByBounds: React.FC<FilterLocationsByBoundsProps> = ({
-  events,
-  places,
-  setFilteredEvents,
-  setFilteredPlaces,
-}) => {
+export const FilterLocationsByBounds: React.FC<
+  FilterLocationsByBoundsProps
+> = ({ events, places, setFilteredEvents, setFilteredPlaces }) => {
   const map = useMap();
   const timeoutRef = useRef<number>();
 
   const updateFilteredLocations = useCallback(() => {
     const bounds = map.getBounds();
 
-    // Filtrera evenemang om de finns
-    if (events && setFilteredEvents) {
-      const filteredEvents = events.filter((event) =>
-        bounds.contains([event.lat, event.lng])
+    if (events?.length && setFilteredEvents) {
+      setFilteredEvents(
+        events.filter((event) => bounds.contains([event.lat, event.lng]))
       );
-      setFilteredEvents(filteredEvents);
     }
 
-    // Filtrera platser om de finns
-    if (places && setFilteredPlaces) {
-      const filteredPlaces = places.filter((place) =>
-        bounds.contains([place.lat, place.lng])
+    if (places?.length && setFilteredPlaces) {
+      setFilteredPlaces(
+        places.filter((place) => bounds.contains([place.lat, place.lng]))
       );
-      setFilteredPlaces(filteredPlaces);
     }
   }, [map, events, places, setFilteredEvents, setFilteredPlaces]);
 
   useEffect(() => {
     const debouncedUpdate = () => {
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-      }
+      window.clearTimeout(timeoutRef.current);
       timeoutRef.current = window.setTimeout(updateFilteredLocations, 200);
     };
 
-    debouncedUpdate();
     map.on('moveend', debouncedUpdate);
 
     return () => {
       map.off('moveend', debouncedUpdate);
-      if (timeoutRef.current) {
-        window.clearTimeout(timeoutRef.current);
-      }
+      window.clearTimeout(timeoutRef.current);
     };
   }, [map, updateFilteredLocations]);
 
