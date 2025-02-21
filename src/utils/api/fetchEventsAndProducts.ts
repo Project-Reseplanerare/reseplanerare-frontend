@@ -95,22 +95,13 @@ export const fetchProductsByCategory = async (
   }
 };
 
-export const fetchFoodDrinks = async (limit: number, page: number) => {
-  return fetchProductsByCategory('mat-dryck', limit, page);
+const createCategoryFetcher = (category: string) => {
+  return (limit: number, page: number) =>
+    fetchProductsByCategory(category, limit, page);
 };
 
-export const fetchCultureHistory = async (limit: number, page: number) => {
-  return fetchProductsByCategory('kultur-historia', limit, page);
-};
-
-export const fetchDesignShopping = async (limit: number, page: number) => {
-  return fetchProductsByCategory('design-shopping', limit, page);
-};
-
-export const fetchAccommodation = async (limit: number, page: number) => {
-  return fetchProductsByCategory('boende', limit, page);
-};
-
-export const fetchActivities = async (limit: number, page: number) => {
-  return fetchProductsByCategory('aktiviteter', limit, page);
-};
+export const fetchFoodDrinks = createCategoryFetcher('mat-dryck');
+export const fetchCultureHistory = createCategoryFetcher('kultur-historia');
+export const fetchDesignShopping = createCategoryFetcher('design-shopping');
+export const fetchAccommodation = createCategoryFetcher('boende');
+export const fetchActivities = createCategoryFetcher('aktiviteter');
