@@ -17,22 +17,33 @@ const parseCoordinates = (
 export const fetchEvents = async (limit: number, page: number) => {
   try {
     const response = await fetch(`${EVENTS_API}?limit=${limit}&page=${page}`);
+
     if (!response.ok) {
-      throw new Error('Failed to fetch events');
+      throw new Error(
+        `Failed to fetch events: ${response.status} ${response.statusText}`
+      );
     }
+
     const data = await response.json();
+
+    if (!Array.isArray(data.data)) {
+      throw new Error('Invalid response format: Expected an array');
+    }
+
     const eventMarkers = data.data.map((event: any) => {
       const place = event.places?.[0] || {};
       const { lat, lng } = parseCoordinates(place.latitude, place.longitude);
+
       return {
         lat,
         lng,
-        title: event.title || 'Unknown Event',
-        description: event.sales_text || 'No description available',
+        title: event.title?.trim() || 'Unknown Event',
+        description: event.sales_text?.trim() || 'No description available',
         image: event.images?.[0]?.medium || null,
       };
     });
-    return { events: eventMarkers, total: data.total };
+
+    return { events: eventMarkers, total: data.total || 0 };
   } catch (error) {
     console.error('Error fetching events:', error);
     return { events: [], total: 0 };
