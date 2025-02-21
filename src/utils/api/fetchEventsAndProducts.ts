@@ -1,15 +1,16 @@
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 const BASE_API = 'https://turid.visitvarmland.com/api/v8/products';
 
-// satt ihop en funktion som tar emot lat och lng som strängar och returnerar ett objekt med lat och lng som nummer
-const parseCoordinates = (lat: string | number | null | undefined, lng: string | number | null | undefined) => {
+const parseCoordinates = (
+  lat: string | number | null | undefined,
+  lng: string | number | null | undefined
+) => {
   const parsedLat = typeof lat === 'string' ? parseFloat(lat) : lat;
   const parsedLng = typeof lng === 'string' ? parseFloat(lng) : lng;
 
-  // Om lat eller lng är ogiltiga eller saknas, sätt dem till 0
   return {
-    lat: (isNaN(parsedLat) || parsedLat === undefined || parsedLat === null) ? 0 : parsedLat,
-    lng: (isNaN(parsedLng) || parsedLng === undefined || parsedLng === null) ? 0 : parsedLng,
+    lat: Number.isFinite(parsedLat) ? parsedLat : 0,
+    lng: Number.isFinite(parsedLng) ? parsedLng : 0,
   };
 };
 
@@ -38,40 +39,46 @@ export const fetchEvents = async (limit: number, page: number) => {
   }
 };
 
-export const fetchProductsByCategory = async (category: string, limit: number, page: number) => {
-    try {
-        const response = await fetch(`${BASE_API}?categories=${category}&limit=${limit}&page=${page}`);
-        if (!response.ok) throw new Error(`Failed to fetch ${category}`);
+export const fetchProductsByCategory = async (
+  category: string,
+  limit: number,
+  page: number
+) => {
+  try {
+    const response = await fetch(
+      `${BASE_API}?categories=${category}&limit=${limit}&page=${page}`
+    );
+    if (!response.ok) throw new Error(`Failed to fetch ${category}`);
 
-        const data = await response.json();
-        return data.data.map((product: any) => ({
-            lat: parseFloat(product.latitude) || 0,
-            lng: parseFloat(product.longitude) || 0,
-            title: product.name || 'Unknown Product',
-            description: product.description || 'No description available',
-        }));
-    } catch (error) {
-        console.error(`Error fetching ${category}:`, error);
-        return [];
-    }
+    const data = await response.json();
+    return data.data.map((product: any) => ({
+      lat: parseFloat(product.latitude) || 0,
+      lng: parseFloat(product.longitude) || 0,
+      title: product.name || 'Unknown Product',
+      description: product.description || 'No description available',
+    }));
+  } catch (error) {
+    console.error(`Error fetching ${category}:`, error);
+    return [];
+  }
 };
 
 export const fetchFoodDrinks = async (limit: number, page: number) => {
-    return fetchProductsByCategory('mat-dryck', limit, page);
+  return fetchProductsByCategory('mat-dryck', limit, page);
 };
 
 export const fetchCultureHistory = async (limit: number, page: number) => {
-    return fetchProductsByCategory('kultur-historia', limit, page);
+  return fetchProductsByCategory('kultur-historia', limit, page);
 };
 
 export const fetchDesignShopping = async (limit: number, page: number) => {
-    return fetchProductsByCategory('design-shopping', limit, page);
+  return fetchProductsByCategory('design-shopping', limit, page);
 };
 
 export const fetchAccommodation = async (limit: number, page: number) => {
-    return fetchProductsByCategory('boende', limit, page);
+  return fetchProductsByCategory('boende', limit, page);
 };
 
 export const fetchActivities = async (limit: number, page: number) => {
-    return fetchProductsByCategory('aktiviteter', limit, page);
+  return fetchProductsByCategory('aktiviteter', limit, page);
 };
