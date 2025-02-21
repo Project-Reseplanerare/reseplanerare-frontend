@@ -403,7 +403,7 @@ function Map({ places, events }: MapProps) {
             }
           >
             <Popup>
-              Latitude: {lat.toFixed(4)}, Longitude: {lng.toFixed(4)}
+              Latitud: {lat.toFixed(4)}, Longitud: {lng.toFixed(4)}
             </Popup>
           </Marker>
         );
