@@ -77,30 +77,38 @@ function Map({ places, events }: MapProps) {
     }
   }, [lineDrawn, setMarkers]);
 
-  useEffect(() => {
-    const updateRoute = async () => {
-      if (from && markers.length > 0 && lineDrawn) {
-        let routeData: LatLngExpression[] = [];
+useEffect(() => {
+  const updateRoute = async () => {
+    if (from && markers.length > 0 && lineDrawn) {
+      let routeData: LatLngExpression[] = [];
 
-        const firstSegment = await getRoute(from, markers[0], setLoading);
-        routeData = [...routeData, ...firstSegment];
+      // Convert 'from' string ("lat, lng") into a LatLngExpression [lat, lng]
+      const fromLatLng: LatLngExpression | null = from
+        ? (from.split(', ').map(Number) as [number, number])
+        : null;
 
-        for (let i = 0; i < markers.length - 1; i++) {
-          const segmentRoute = await getRoute(
-            markers[i],
-            markers[i + 1],
-            setLoading
-          );
-          routeData = [...routeData, ...segmentRoute];
-        }
-        setRoute(routeData);
-      } else {
-        setRoute([]);
+      if (!fromLatLng) return;
+
+      const firstSegment = await getRoute(fromLatLng, markers[0], setLoading);
+      routeData = [...routeData, ...firstSegment];
+
+      for (let i = 0; i < markers.length - 1; i++) {
+        const segmentRoute = await getRoute(
+          markers[i],
+          markers[i + 1],
+          setLoading
+        );
+        routeData = [...routeData, ...segmentRoute];
       }
-    };
+      setRoute(routeData);
+    } else {
+      setRoute([]);
+    }
+  };
 
-    updateRoute();
-  }, [from, markers, lineDrawn]);
+  updateRoute();
+}, [from, markers, lineDrawn]);
+
 
   const calculatePolylineDistance = (route: LatLngExpression[]): number => {
     let totalDistance = 0;
@@ -403,7 +411,7 @@ function Map({ places, events }: MapProps) {
             }
           >
             <Popup>
-              Latitud: {lat.toFixed(4)}, Longitud: {lng.toFixed(4)}
+              Latitude: {lat.toFixed(4)}, Longitude: {lng.toFixed(4)}
             </Popup>
           </Marker>
         );
