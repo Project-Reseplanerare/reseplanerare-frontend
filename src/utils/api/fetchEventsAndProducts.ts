@@ -57,19 +57,40 @@ export const fetchProductsByCategory = async (
 ) => {
   try {
     const response = await fetch(
-      `${BASE_API}?categories=${category}&limit=${limit}&page=${page}`
+      `${BASE_API}?categories=${encodeURIComponent(
+        category
+      )}&limit=${limit}&page=${page}`
     );
-    if (!response.ok) throw new Error(`Failed to fetch ${category}`);
+
+    if (!response.ok) {
+      throw new Error(
+        `Failed to fetch category "${category}": ${response.status} ${response.statusText}`
+      );
+    }
 
     const data = await response.json();
-    return data.data.map((product: any) => ({
-      lat: parseFloat(product.latitude) || 0,
-      lng: parseFloat(product.longitude) || 0,
-      title: product.name || 'Unknown Product',
-      description: product.description || 'No description available',
-    }));
+
+    if (!Array.isArray(data.data)) {
+      throw new Error(
+        `Invalid response format: Expected an array for category "${category}"`
+      );
+    }
+
+    return data.data.map((product: any) => {
+      const { lat, lng } = parseCoordinates(
+        product.latitude,
+        product.longitude
+      );
+
+      return {
+        lat,
+        lng,
+        title: product.name?.trim() || 'Unknown Product',
+        description: product.description?.trim() || 'No description available',
+      };
+    });
   } catch (error) {
-    console.error(`Error fetching ${category}:`, error);
+    console.error(`Error fetching category "${category}":`, error);
     return [];
   }
 };
