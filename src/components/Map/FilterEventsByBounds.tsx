@@ -19,32 +19,31 @@ export const FilterEventsByBounds: React.FC<FilterEventsByBoundsProps> = ({
   setFilteredEvents,
 }) => {
   const map = useMap();
-  const timeoutRef = useRef<number | null>(null);
+  const timeoutRef = useRef<number>(0);
 
   const updateFilteredEvents = useCallback(() => {
+    if (!map) return;
     const bounds = map.getBounds();
     setFilteredEvents(
       events.filter((event) => bounds.contains([event.lat, event.lng]))
     );
   }, [map, events, setFilteredEvents]);
 
+  const debouncedUpdate = useCallback(() => {
+    if (timeoutRef.current) {
+      window.clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = window.setTimeout(updateFilteredEvents, 100);
+  }, [updateFilteredEvents]);
+
   useEffect(() => {
-    const debouncedUpdate = () => {
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
-      }
-      timeoutRef.current = window.setTimeout(updateFilteredEvents, 100);
-    };
-
+    if (!map) return;
     map.on('moveend', debouncedUpdate);
-
     return () => {
       map.off('moveend', debouncedUpdate);
-      if (timeoutRef.current !== null) {
-        window.clearTimeout(timeoutRef.current);
-      }
+      window.clearTimeout(timeoutRef.current);
     };
-  }, [map, updateFilteredEvents]);
+  }, [map, debouncedUpdate]);
 
   return null;
 };
