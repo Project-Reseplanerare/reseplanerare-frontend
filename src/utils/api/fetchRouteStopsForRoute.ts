@@ -1,8 +1,8 @@
-import { useRouteStopStore } from "../../store/useRouteStopStore";
+import { useRouteStopStore } from '../../store/useRouteStopStore';
 
 interface Stop {
-  lon: any;
-  lat: any;
+  lon: number;
+  lat: number;
   extId: string;
   name: string;
   depTime?: string;
@@ -11,7 +11,7 @@ interface Stop {
 
 interface TripLeg {
   Stops?: { Stop: Stop[] };
-  Product?: { catOut: string }[]; 
+  Product?: { catOut: string }[];
 }
 
 interface Trip {
@@ -22,6 +22,11 @@ interface ApiResponse {
   Trip?: Trip[];
 }
 
+const BASE_ROUTE_API = 'https://api.resrobot.se/v2.1/trip';
+
+/**
+ * Fetch route stops for a given trip.
+ */
 export const fetchRouteStopsForRoute = async (
   index: number,
   fromStopId: string,
@@ -31,26 +36,37 @@ export const fetchRouteStopsForRoute = async (
   setRouteStops: React.Dispatch<React.SetStateAction<Record<number, Stop[]>>>,
   setError: React.Dispatch<React.SetStateAction<string | null>>,
   departureTime: string,
-  arrivalTime: string 
+  arrivalTime: string
 ): Promise<void> => {
   try {
-    const expectedCatOut = selectedOption === "Tåg" ? "JLT" : "BLT"; 
-
-    const url = `https://api.resrobot.se/v2.1/trip?format=json&originId=${fromStopId}&destId=${toStopId}&passlist=true&showPassingPoints=true&accessId=${apiKey}`;
-    const response = await fetch(url);
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    const data: ApiResponse = await response.json();
-    if (!data.Trip || data.Trip.length === 0) {
-      setError("No trips found.");
+    if (!selectedOption) {
+      setError('No transport type selected.');
       return;
     }
 
+    const expectedCatOut = selectedOption === 'Tåg' ? 'JLT' : 'BLT';
+
+    const url = `${BASE_ROUTE_API}?format=json&originId=${fromStopId}&destId=${toStopId}&passlist=true&showPassingPoints=true&accessId=${apiKey}`;
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(
+        `HTTP error! Status: ${response.status} ${response.statusText}`
+      );
+    }
+
+    const data: ApiResponse = await response.json();
+
+    if (!Array.isArray(data.Trip) || data.Trip.length === 0) {
+      setError('No trips found.');
+      return;
+    }
+
+    // Filter valid trips based on expected transport type
     const validTrips = data.Trip.filter((trip) =>
-      trip.LegList?.Leg.some((leg) => leg.Product?.some((prod) => prod.catOut === expectedCatOut))
+      trip.LegList?.Leg.some((leg) =>
+        leg.Product?.some((prod) => prod.catOut === expectedCatOut)
+      )
     );
 
     if (validTrips.length === 0) {
@@ -58,54 +74,66 @@ export const fetchRouteStopsForRoute = async (
       return;
     }
 
-    const trip = validTrips[index] || validTrips[0];
-    let stops: Stop[] = [];
+    const selectedTrip = validTrips[index] || validTrips[0];
 
-    trip.LegList?.Leg.forEach((leg) => {
-      if (leg.Product?.some((prod) => prod.catOut === expectedCatOut) && leg.Stops?.Stop) {
-        stops = stops.concat(leg.Stops.Stop);
-      }
-    });
+    // Extract all valid stops from selected trip
+    const stops =
+      selectedTrip.LegList?.Leg.reduce<Stop[]>((acc, leg) => {
+        if (
+          leg.Product?.some((prod) => prod.catOut === expectedCatOut) &&
+          leg.Stops?.Stop
+        ) {
+          acc.push(...leg.Stops.Stop);
+        }
+        return acc;
+      }, []) ?? [];
 
-    stops = stops.filter((stop) => stop.depTime || stop.arrTime);
+    // Filter stops that have either departure or arrival time
+    const filteredStops = stops.filter((stop) => stop.depTime || stop.arrTime);
 
-    if (stops.length === 0) {
+    if (filteredStops.length === 0) {
       setError(`No valid stops found for ${selectedOption}.`);
       return;
     }
 
+    // Deduplicate stops based on extId and time
     const uniqueStops = Array.from(
-      new Map(stops.map((stop) => [`${stop.extId}-${stop.depTime || stop.arrTime}`, stop])).values()
+      new Map(
+        filteredStops.map((stop) => [
+          `${stop.extId}-${stop.depTime || stop.arrTime}`,
+          stop,
+        ])
+      ).values()
     );
 
+    // Sort stops by departure/arrival time
     uniqueStops.sort((a, b) => {
-      const timeA = a.depTime || a.arrTime || "23:59:59"; 
-      const timeB = b.depTime || b.arrTime || "23:59:59";
+      const timeA = a.depTime || a.arrTime || '23:59:59';
+      const timeB = b.depTime || b.arrTime || '23:59:59';
       return timeA.localeCompare(timeB);
     });
 
+    // Ensure first and last stop have correct departure/arrival times
     if (uniqueStops.length > 0) {
       uniqueStops[0].depTime = departureTime;
-    }
-
-    if (uniqueStops.length > 0) {
       uniqueStops[uniqueStops.length - 1].arrTime = arrivalTime;
     }
 
+    // Update the route stops state
     setRouteStops((prev) => ({ ...prev, [index]: uniqueStops }));
 
+    // Extract stops with valid coordinates
     const stopsWithCoords = uniqueStops
-      .filter((stop) => typeof stop.lat === "number" && typeof stop.lon === "number")
+      .filter((stop) => Number.isFinite(stop.lat) && Number.isFinite(stop.lon))
       .map((stop) => ({
         coords: [stop.lat, stop.lon] as [number, number],
         name: stop.name,
       }));
 
-
     if (stopsWithCoords.length > 0) {
       useRouteStopStore.getState().setStopsCoords(stopsWithCoords);
     }
-  } catch (err) {
-    setError(`Error fetching stops: ${(err as Error).message}`);
+  } catch (error) {
+    setError(`Error fetching stops: ${(error as Error).message}`);
   }
 };
