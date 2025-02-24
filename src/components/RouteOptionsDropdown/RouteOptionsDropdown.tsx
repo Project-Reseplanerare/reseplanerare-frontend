@@ -6,21 +6,8 @@ import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 
-type Departure = {
-  JourneyDetailRef: { ref: string };
-  ProductAtStop?: { catOut: string; name: string };
-  time: string;
-};
 
-type Arrival = {
-  JourneyDetailRef: { ref: string };
-  time: string;
-};
-
-type ResponseData<T> = {
-  Departure?: T[];
-  Arrival?: T[];
-};
+import { Departure, Arrival, ResponseData  } from '../../types/routeoptionsTypes/routeOptionsDropdown_types';
 
 export const RouteOptionsDropdown = () => {
   const { fromStopId, toStopId } = useRouteStopStore();

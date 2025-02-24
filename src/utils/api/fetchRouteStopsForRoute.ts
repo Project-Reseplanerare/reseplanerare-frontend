@@ -1,26 +1,8 @@
 import { useRouteStopStore } from '../../store/useRouteStopStore';
-
-interface Stop {
-  lon: number;
-  lat: number;
-  extId: string;
-  name: string;
-  depTime?: string;
-  arrTime?: string;
-}
-
-interface TripLeg {
-  Stops?: { Stop: Stop[] };
-  Product?: { catOut: string }[];
-}
-
-interface Trip {
-  LegList?: { Leg: TripLeg[] };
-}
-
-interface ApiResponse {
-  Trip?: Trip[];
-}
+import {
+  Stop,
+  ApiResponse,
+} from './.././../interfaces/utilsInterfaces/routeStops_interfaces';
 
 const BASE_ROUTE_API = 'https://api.resrobot.se/v2.1/trip';
 

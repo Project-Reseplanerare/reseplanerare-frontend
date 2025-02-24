@@ -11,25 +11,17 @@ import shoppingIcon from '../../assets/shopping.svg';
 import sportCurlingIcon from '../../assets/sport-curling.svg';
 import ticketIcon from '../../assets/ticket.svg';
 
-interface AttractionListProps {
-  setSelectedCategory: (places: any[]) => void;
-}
+import AttractionListProps from '../../interfaces/exploreInterfaces/attractionList_interfaces';
 
-type IconCategory =
-  | 'Kultur & historia'
-  | 'Mat & dryck'
-  | 'Boende'
-  | 'Design & shopping'
-  | 'Aktiviteter'
-  | 'Evenemang';
+import { IconCategory } from '../../types/attractionlistTypes/AttractionList_types';
 
 const iconMapping: Record<IconCategory, string> = {
   'Kultur & historia': cultureIcon,
   'Mat & dryck': foodIcon,
-  'Boende': houseIcon,
   'Design & shopping': shoppingIcon,
-  'Aktiviteter': sportCurlingIcon,
-  'Evenemang': ticketIcon,
+  Boende: houseIcon,
+  Aktiviteter: sportCurlingIcon,
+  Evenemang: ticketIcon,
 };
 
 const normalizeCoordinates = (lat: any, lng: any) => {
@@ -161,11 +153,11 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
                 {category.subItems.map((subItem: string, index: number) => (
                   <div
                     key={index}
-                    className={`p-3 rounded-md border cursor-pointer transition-all 
-    ${selectedSubItem === subItem
-                        ? 'bg-gray-300 border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-                        : 'bg-white border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
-                      }`}
+
+                    className={`p-3 rounded-md border cursor-pointer transition-all ${
+                      selectedSubItem === subItem ? 'bg-gray-300' : 'bg-white'
+                    }`}
+
                     onClick={() => handleSubItemClick(subItem)}
                   >
                     <span className="text-xs">{subItem}</span>
@@ -181,11 +173,13 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
       {/* Evenemang section */}
       <div className="w-full">
         <div
-          className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
-  ${activeIndex === -1
-              ? 'bg-gray-300 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-              : 'bg-white text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
-            }`}
+
+          className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border border-lightlightBorder dark:border-lightlight 
+          ${
+            activeIndex === -1
+              ? 'bg-gray-300 text-black'
+              : 'bg-white text-black'
+          }`}
 
           onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)}
         >
@@ -204,8 +198,11 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
             {events.map((event, index) => (
               <div
                 key={index}
-                className={`p-3 rounded-md border cursor-pointer transition-all ${selectedSubItem === event.title ? 'bg-gray-300 ' : 'bg-white   dark:bg-darkDark dark:text-lightLight'
-                  }`}
+
+                className={`p-3 rounded-md border cursor-pointer transition-all ${
+                  selectedSubItem === event.title ? 'bg-gray-300' : 'bg-white'
+                }`}
+
                 onClick={() => {
                   setSelectedCategory([event]);
                   setSelectedSubItem(event.title);

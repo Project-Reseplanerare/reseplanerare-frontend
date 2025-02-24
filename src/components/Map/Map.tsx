@@ -42,10 +42,7 @@ import { TempMapCenterUpdater } from './TempMapCenterUpdater';
 import { FilterLocationsByBounds } from './FilterLocationsByBounds';
 
 // lagt till events som en prop
-interface MapProps {
-  places: any[];
-  events: any[];
-}
+import MapProps from '../../interfaces/mapInterfaces/map_interfaces';
 
 function Map({ places, events }: MapProps) {
   const [route, setRoute] = useState<LatLngExpression[]>([]);
@@ -77,38 +74,37 @@ function Map({ places, events }: MapProps) {
     }
   }, [lineDrawn, setMarkers]);
 
-useEffect(() => {
-  const updateRoute = async () => {
-    if (from && markers.length > 0 && lineDrawn) {
-      let routeData: LatLngExpression[] = [];
+  useEffect(() => {
+    const updateRoute = async () => {
+      if (from && markers.length > 0 && lineDrawn) {
+        let routeData: LatLngExpression[] = [];
 
-      // Convert 'from' string ("lat, lng") into a LatLngExpression [lat, lng]
-      const fromLatLng: LatLngExpression | null = from
-        ? (from.split(', ').map(Number) as [number, number])
-        : null;
+        // Convert 'from' string ("lat, lng") into a LatLngExpression [lat, lng]
+        const fromLatLng: LatLngExpression | null = from
+          ? (from.split(', ').map(Number) as [number, number])
+          : null;
 
-      if (!fromLatLng) return;
+        if (!fromLatLng) return;
 
-      const firstSegment = await getRoute(fromLatLng, markers[0], setLoading);
-      routeData = [...routeData, ...firstSegment];
+        const firstSegment = await getRoute(fromLatLng, markers[0], setLoading);
+        routeData = [...routeData, ...firstSegment];
 
-      for (let i = 0; i < markers.length - 1; i++) {
-        const segmentRoute = await getRoute(
-          markers[i],
-          markers[i + 1],
-          setLoading
-        );
-        routeData = [...routeData, ...segmentRoute];
+        for (let i = 0; i < markers.length - 1; i++) {
+          const segmentRoute = await getRoute(
+            markers[i],
+            markers[i + 1],
+            setLoading
+          );
+          routeData = [...routeData, ...segmentRoute];
+        }
+        setRoute(routeData);
+      } else {
+        setRoute([]);
       }
-      setRoute(routeData);
-    } else {
-      setRoute([]);
-    }
-  };
+    };
 
-  updateRoute();
-}, [from, markers, lineDrawn]);
-
+    updateRoute();
+  }, [from, markers, lineDrawn]);
 
   const calculatePolylineDistance = (route: LatLngExpression[]): number => {
     let totalDistance = 0;

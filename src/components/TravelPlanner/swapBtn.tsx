@@ -1,14 +1,11 @@
 import { motion } from 'framer-motion';
-
-interface SwapBtnProps {
-  isDisabled: boolean;
-  onClick: () => void;
-}
+import SwapBtnProps from '../../interfaces/travelPlannerInterfaces/swapBtn_interfaces';
 
 export const SwapBtn: React.FC<SwapBtnProps> = ({ isDisabled, onClick }) => (
   <motion.button
-    className={`grid place-items-center rounded-full h-10 w-10 border focus:outline-none transition-transform hover:scale-105 ${isDisabled ? '' : 'bg-blueLight text-lightLight'
-      }`}
+    className={`grid place-items-center rounded-full h-10 w-10 border focus:outline-none transition-transform hover:scale-105 ${
+      isDisabled ? '' : 'bg-blueLight text-lightLight'
+    }`}
     onClick={onClick}
     aria-label="Swap addresses"
     title="Swap addresses"

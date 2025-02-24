@@ -1,20 +1,7 @@
-interface ProductAtStop {
-  cls: string;
-}
-
-interface StopLocation {
-  id: string;
-  name: string;
-  productAtStop: ProductAtStop[];
-}
-
-interface StopLocationResponse {
-  StopLocation: StopLocation;
-}
-
-interface FetchStopsResponse {
-  stopLocationOrCoordLocation: StopLocationResponse[];
-}
+import {
+  StopLocation,
+  FetchStopsResponse,
+} from './../../interfaces/utilsInterfaces/nearbyStops_interfaces';
 
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 

@@ -1,11 +1,7 @@
-import {create} from 'zustand';
-
-interface TravelOptionsState {
-  selectedOption: string | null;
-  setSelectedOption: (option: string) => void;
-}
+import { create } from 'zustand';
+import TravelOptionsState from '../interfaces/storeInterfaces/travelOptions_interfaces';
 
 export const useTravelOptionsStore = create<TravelOptionsState>((set) => ({
-  selectedOption: null, 
+  selectedOption: null,
   setSelectedOption: (option) => set({ selectedOption: option }),
 }));

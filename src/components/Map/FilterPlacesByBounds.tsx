@@ -1,18 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useMap } from 'react-leaflet';
-
-interface Place {
-  lat: number;
-  lng: number;
-  title?: string;
-  description?: string;
-}
-
-interface FilterPlacesByBoundsProps {
-  places: Place[];
-  setFilteredPlaces: React.Dispatch<React.SetStateAction<Place[]>>;
-  selectedCategory: string | null;
-}
+import { FilterPlacesByBoundsProps } from './../../interfaces/mapInterfaces/placesByBounds_interfaces';
 
 export const FilterPlacesByBounds: React.FC<FilterPlacesByBoundsProps> = ({
   places,
