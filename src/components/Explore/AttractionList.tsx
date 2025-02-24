@@ -132,11 +132,11 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
           <div key={category.id} className="w-full">
             <div
               className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
-  ${isActive
-                  ? 'bg-gray-300 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-                  : 'bg-lightLight text-darkDark border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
-                }`}
-
+  ${
+    isActive
+      ? 'bg-gray-300 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+      : 'bg-lightLight text-darkDark border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+  }`}
               onClick={() => handleItemClick(category.id)}
             >
               <img
@@ -153,19 +153,19 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
                 {category.subItems.map((subItem: string, index: number) => (
                   <div
                     key={index}
-
-                    className={`p-3 rounded-md border cursor-pointer transition-all ${
-                      selectedSubItem === subItem ? 'bg-gray-300' : 'bg-white'
-                    }`}
-
+                    className={`p-3 rounded-md border cursor-pointer transition-all 
+    ${
+      selectedSubItem === subItem
+        ? 'bg-gray-300 border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+        : 'bg-white border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+    }`}
                     onClick={() => handleSubItemClick(subItem)}
                   >
                     <span className="text-xs">{subItem}</span>
                   </div>
                 ))}
               </div>
-            )
-            }
+            )}
           </div>
         );
       })}
@@ -173,20 +173,19 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
       {/* Evenemang section */}
       <div className="w-full">
         <div
-
-          className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border border-lightlightBorder dark:border-lightlight 
-          ${
-            activeIndex === -1
-              ? 'bg-gray-300 text-black'
-              : 'bg-white text-black'
-          }`}
-
+          className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
+  ${
+    activeIndex === -1
+      ? 'bg-gray-300 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+      : 'bg-white text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+  }`}
           onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)}
         >
           <img
             src={ticketIcon}
             alt="Evenemang ikon"
-            className="w-5 h-5 dark:filter dark:invert dark:hue-rotate-180" />
+            className="w-5 h-5 dark:filter dark:invert dark:hue-rotate-180"
+          />
           <span>Evenemang</span>
           <FontAwesomeIcon
             icon={activeIndex === -1 ? faChevronUp : faChevronDown}
@@ -198,11 +197,11 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
             {events.map((event, index) => (
               <div
                 key={index}
-
                 className={`p-3 rounded-md border cursor-pointer transition-all ${
-                  selectedSubItem === event.title ? 'bg-gray-300' : 'bg-white'
+                  selectedSubItem === event.title
+                    ? 'bg-gray-300 '
+                    : 'bg-white   dark:bg-darkDark dark:text-lightLight'
                 }`}
-
                 onClick={() => {
                   setSelectedCategory([event]);
                   setSelectedSubItem(event.title);
@@ -239,6 +238,6 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }
