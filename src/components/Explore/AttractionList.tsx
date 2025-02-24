@@ -13,13 +13,7 @@ import ticketIcon from '../../assets/ticket.svg';
 
 import AttractionListProps from '../../interfaces/exploreInterfaces/attractionList_interfaces';
 
-type IconCategory =
-  | 'Kultur & historia'
-  | 'Mat & dryck'
-  | 'Boende'
-  | 'Design & shopping'
-  | 'Aktiviteter'
-  | 'Evenemang';
+import { IconCategory } from '../../types/attractionlistTypes/AttractionList_types';
 
 const iconMapping: Record<IconCategory, string> = {
   'Kultur & historia': cultureIcon,
