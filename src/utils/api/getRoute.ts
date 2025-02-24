@@ -1,10 +1,9 @@
+//import leaflet
 import { LatLngExpression, LatLngTuple } from 'leaflet';
 
+//osrm driving road routes
 const OSRM_API = 'https://router.project-osrm.org/route/v1/driving';
 
-/**
- * Fetch route between two coordinates.
- */
 export const getRoute = async (
   start: LatLngExpression,
   end: LatLngExpression,
@@ -54,18 +53,12 @@ export const getRoute = async (
   }
 };
 
-/**
- * Normalize LatLngExpression into a LatLngTuple.
- */
 const normalizeLatLng = (coords: LatLngExpression): LatLngTuple => {
   return Array.isArray(coords)
     ? (coords as LatLngTuple)
     : [coords.lat, coords.lng];
 };
 
-/**
- * Validate if coordinates are within valid latitude and longitude ranges.
- */
 const isValidLatLng = (coords: LatLngTuple): boolean => {
   return (
     coords.length === 2 &&
@@ -78,9 +71,6 @@ const isValidLatLng = (coords: LatLngTuple): boolean => {
   );
 };
 
-/**
- * Check if two points are too close to each other to require routing.
- */
 const arePointsTooClose = (start: LatLngTuple, end: LatLngTuple): boolean => {
   const threshold = 0.0001;
   return (
@@ -89,8 +79,5 @@ const arePointsTooClose = (start: LatLngTuple, end: LatLngTuple): boolean => {
   );
 };
 
-/**
- * Format coordinates for the OSRM API (lng,lat format).
- */
 const formatCoords = (coords: LatLngTuple): string =>
   `${coords[1]},${coords[0]}`;

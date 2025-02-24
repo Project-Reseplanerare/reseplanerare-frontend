@@ -1,18 +1,17 @@
+//import nearbystops interface
 import {
   StopLocation,
   FetchStopsResponse,
 } from './../../interfaces/utilsInterfaces/nearbyStops_interfaces';
 
+//trafiklab api key
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
-
+//nearbystops trafiklab key
 const BASE_TRAFFIC_API = 'https://api.resrobot.se/v2.1/location.nearbystops';
 
-/**
- * Generic function to fetch nearby stops (bus or train)
- */
 const fetchNearbyStops = async (
   center: [number, number] | null,
-  validCls: string[], // List of valid `cls` values for filtering stops
+  validCls: string[],
   setLoading: (loading: boolean) => void,
   setStops: (stops: StopLocation[]) => void
 ): Promise<void> => {
@@ -51,18 +50,12 @@ const fetchNearbyStops = async (
   }
 };
 
-/**
- * Fetch nearby bus stops
- */
 export const fetchNearbyBusStops = (
   center: [number, number] | null,
   setLoading: (loading: boolean) => void,
   setStops: (stops: StopLocation[]) => void
 ) => fetchNearbyStops(center, ['128', '8'], setLoading, setStops);
 
-/**
- * Fetch nearby train stops
- */
 export const fetchNearbyTrains = (
   center: [number, number] | null,
   setLoading: (loading: boolean) => void,

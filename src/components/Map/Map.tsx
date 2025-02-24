@@ -68,6 +68,7 @@ function Map({ places, events }: MapProps) {
 
   const center = useGeolocation();
 
+  // to small to be a seperate hook
   useEffect(() => {
     if (!lineDrawn) {
       setMarkers([]);
@@ -106,6 +107,7 @@ function Map({ places, events }: MapProps) {
     updateRoute();
   }, [from, markers, lineDrawn]);
 
+  //make this a utility function
   const calculatePolylineDistance = (route: LatLngExpression[]): number => {
     let totalDistance = 0;
 
@@ -150,6 +152,7 @@ function Map({ places, events }: MapProps) {
     }
   }, [selectedOption, center]);
 
+  // make into a utility function
   const handleEventMarkerClick = async (lat: number, lng: number) => {
     setToLocation([lat, lng]);
     await fetchAddress(lat, lng, 'to', setToAddress, setToAddress);

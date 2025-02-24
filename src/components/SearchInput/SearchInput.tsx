@@ -1,8 +1,13 @@
+// React Imports
 import { useState, useEffect } from 'react';
+// Icons Imports
 import { FaSearch, FaTimes } from 'react-icons/fa';
+// Store Imports
 import { useLocationStore } from '../../store/useLocationStore';
+// Utils Imports
 import { fetchAddress } from '../../utils/api/fetchAdress';
 
+//events api endpoint
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
 export const SearchInput = () => {

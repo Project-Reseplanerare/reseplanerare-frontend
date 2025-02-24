@@ -1,3 +1,4 @@
+//markerstore interface
 interface MarkerStore {
   centerMarker: [number, number] | null;
   setCenterMarker: (center: [number, number]) => void;

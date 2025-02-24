@@ -1,6 +1,9 @@
-import { useEffect } from "react";
-import { useMap } from "react-leaflet";
-import { useLocationStore } from "../../store/useLocationStore";
+//default react imports
+import { useEffect } from 'react';
+//react-leaflet imports
+import { useMap } from 'react-leaflet';
+//import uselocation store
+import { useLocationStore } from '../../store/useLocationStore';
 
 export const TempMapCenterUpdater = () => {
   const map = useMap();

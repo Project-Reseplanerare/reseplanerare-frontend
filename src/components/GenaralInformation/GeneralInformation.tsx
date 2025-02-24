@@ -1,3 +1,4 @@
+// React import
 import { useState } from 'react';
 
 export const GeneralInformation: React.FC = () => {

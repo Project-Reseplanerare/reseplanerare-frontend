@@ -1,5 +1,7 @@
+//react leaflet import
 import { LatLngExpression } from 'leaflet';
 
+//locationstore interface
 interface LocationStore {
   from: string;
   to: string;

@@ -1,3 +1,4 @@
+//searchbtnstore interface
 interface searchBtnStore {
   isButtonClicked: boolean;
   setIsButtonClicked: (status: boolean) => void;

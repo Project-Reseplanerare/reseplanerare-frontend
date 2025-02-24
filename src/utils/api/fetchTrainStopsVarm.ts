@@ -1,9 +1,8 @@
+//trafiklab api key
 const API_KEY = import.meta.env.VITE_TRAFIKLAB_KEY;
+//trafiklab api endpoint
 const BASE_TRAIN_API = 'https://api.resrobot.se/v2.1/location.name';
 
-/**
- * Fetch train stops based on a search query.
- */
 export const fetchTrainStops = async (
   searchString: string,
   maxResults = 3,

@@ -1,3 +1,4 @@
+//trafiklab events api endpoint
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
 export const fetchEvents = async (

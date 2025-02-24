@@ -1,3 +1,4 @@
+//iconcategory types
 export type IconCategory =
   | 'Kultur & historia'
   | 'Mat & dryck'

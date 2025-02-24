@@ -1,5 +1,8 @@
+// React imports
 import { useEffect, useCallback, useRef } from 'react';
+// Leaflet imports
 import { useMap } from 'react-leaflet';
+// interface import
 import { FilterEventsByBoundsProps } from './../../interfaces/mapInterfaces/eventsByBounds_interfaces';
 
 export const FilterEventsByBounds: React.FC<FilterEventsByBoundsProps> = ({

@@ -1,7 +1,10 @@
+// React imports
+import { useEffect, useState } from 'react';
+// icon import
 import { faMoon, faSun } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// Framer-motion imports
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
 
 export const ThemeSwitch = () => {
   const [theme, setTheme] = useState<'light' | 'dark'>(

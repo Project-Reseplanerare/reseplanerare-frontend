@@ -1,5 +1,8 @@
+// React imorts
 import { Link } from 'react-router-dom';
+// (svg) Logo import
 import logo from '../../assets/logotyp-visitvarmland.svg';
+// ThemeSwitch component import
 import { ThemeSwitch } from '../ThemeSwitch/ThemeSwitch';
 
 export const Header = () => (

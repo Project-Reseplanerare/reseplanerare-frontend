@@ -5,13 +5,11 @@ export const handleRemoveMarker = (
   setToAddress: React.Dispatch<React.SetStateAction<string>>,
   setLineDrawn: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
-  // Validate the index
   if (typeof index !== 'number' || index < 0) {
     console.error('Invalid index provided to handleRemoveMarker:', index);
     return;
   }
 
-  // Ensure state setter functions are valid
   if (
     typeof setMarkers !== 'function' ||
     typeof setToAddress !== 'function' ||
@@ -23,7 +21,6 @@ export const handleRemoveMarker = (
     return;
   }
 
-  // If a line has been drawn, reset everything
   if (lineDrawn) {
     setMarkers([]);
     setToAddress('');
@@ -31,11 +28,10 @@ export const handleRemoveMarker = (
     return;
   }
 
-  // Remove marker safely
   setMarkers((prev) => {
     if (!Array.isArray(prev)) {
       console.error('Expected markers to be an array but received:', prev);
-      return prev; // Return current state to avoid breaking state updates
+      return prev;
     }
 
     const newMarkers = prev.filter((_, i) => i !== index);

@@ -1,4 +1,6 @@
+// Import Zustand
 import { create } from 'zustand';
+// import routestopstore interface
 import RouteStopStore from '../interfaces/storeInterfaces/routeStop_interfaces';
 
 export const useRouteStopStore = create<RouteStopStore>((set) => ({
