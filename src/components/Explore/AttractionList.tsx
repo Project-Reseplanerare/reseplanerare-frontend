@@ -11,9 +11,7 @@ import shoppingIcon from '../../assets/shopping.svg';
 import sportCurlingIcon from '../../assets/sport-curling.svg';
 import ticketIcon from '../../assets/ticket.svg';
 
-interface AttractionListProps {
-  setSelectedCategory: (places: any[]) => void;
-}
+import AttractionListProps from '../../interfaces/exploreInterfaces/attractionList_interfaces';
 
 type IconCategory =
   | 'Kultur & historia'
