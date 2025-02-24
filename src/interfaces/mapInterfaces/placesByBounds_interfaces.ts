@@ -1,3 +1,4 @@
+//interface for place
 export interface Place {
   lat: number;
   lng: number;
@@ -5,6 +6,7 @@ export interface Place {
   description?: string;
 }
 
+//interface for FilterPlacesByBoundsProps
 export interface FilterPlacesByBoundsProps {
   places: Place[];
   setFilteredPlaces: React.Dispatch<React.SetStateAction<Place[]>>;

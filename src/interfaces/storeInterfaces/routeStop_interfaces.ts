@@ -1,3 +1,4 @@
+// RouteStopsRoute interface
 interface RouteStopStore {
   fromStopId: string;
   toStopId: string;

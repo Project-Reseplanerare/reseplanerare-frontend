@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+//default react imports
+import { useState } from 'react';
+// TravelOptions Component imports
 import TravelOptions from '../TravelOptions/TravelOptions';
-import { AttractionList } from '../Explore/AttractionList';
+// ActivityList Component imports
+import { ActivityList } from '../ActivityList/ActivityList';
+//import map component
 import Map from '../Map/Map';
+// Dependency: Animation import
+import { motion } from 'framer-motion';
 
 export const Menu: React.FC = () => {
   const [activeComponent, setActiveComponent] = useState<string | null>(null);
@@ -49,7 +54,7 @@ export const Menu: React.FC = () => {
         {activeComponent === 'resealternativ' && <TravelOptions />}
         {activeComponent === 'besoksmal' && (
           <div className="grid grid-cols-1">
-            <AttractionList
+            <ActivityList
               setSelectedCategory={(places) => {
                 console.log('Platser som skickas till kartan:', places);
                 setSelectedLocations(places);

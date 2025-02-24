@@ -1,5 +1,8 @@
+// react-leaflet imports
 import { useMapEvents } from 'react-leaflet';
+//import uselocationstore
 import { useLocationStore } from '../../store/useLocationStore';
+// import fetchadress api util
 import { fetchAddress } from '../../utils/api/fetchAdress';
 
 export const MapClickHandler = ({ disabled }: { disabled: boolean }) => {

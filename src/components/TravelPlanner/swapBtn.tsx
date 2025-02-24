@@ -1,4 +1,6 @@
+//import framer for animations
 import { motion } from 'framer-motion';
+//import swap button component
 import SwapBtnProps from '../../interfaces/travelPlannerInterfaces/swapBtn_interfaces';
 
 export const SwapBtn: React.FC<SwapBtnProps> = ({ isDisabled, onClick }) => (

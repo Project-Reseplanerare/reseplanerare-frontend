@@ -1,3 +1,4 @@
+//imports store to store data with when clicking button
 import { useLocationStore } from '../../store/useLocationStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
 import { useRouteStopStore } from '../../store/useRouteStopStore';

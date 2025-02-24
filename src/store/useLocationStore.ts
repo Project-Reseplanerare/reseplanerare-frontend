@@ -1,4 +1,6 @@
+// Import Zustand
 import { create } from 'zustand';
+// Import locationStore Interfaces
 import LocationStore from '../interfaces/storeInterfaces/locationStore_interfaces';
 
 export const useLocationStore = create<LocationStore>((set) => ({

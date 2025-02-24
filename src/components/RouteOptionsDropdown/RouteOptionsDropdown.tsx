@@ -1,16 +1,21 @@
+// react imports
 import { useEffect, useState } from 'react';
+// store imports
 import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { useSearchBtnStore } from '../../store/useSearchBtnStore';
-import { fetchRouteStopsForRoute } from '../../utils/api/fetchRouteStopsForRoute';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
+//import utility function to map out stops for a route
+import { fetchRouteStopsForRoute } from '../../utils/api/fetchRouteStopsForRoute';
 
-const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
-
+//import ts types for routeoptionsdropdown
 import {
   Departure,
   Arrival,
   ResponseData,
-} from '../../types/routeoptionsTypes/routeOptionsDropdown_types';
+} from '../../types/RouteOptionsTypes/routeOptionsDropdown_types';
+
+//trafiklab key from .env
+const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 
 export const RouteOptionsDropdown = () => {
   const { fromStopId, toStopId } = useRouteStopStore();

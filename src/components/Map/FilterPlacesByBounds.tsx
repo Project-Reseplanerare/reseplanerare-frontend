@@ -1,5 +1,8 @@
+// deafult react imports
 import { useEffect, useCallback, useRef } from 'react';
+//react-leaflet import
 import { useMap } from 'react-leaflet';
+// interface import
 import { FilterPlacesByBoundsProps } from './../../interfaces/mapInterfaces/placesByBounds_interfaces';
 
 export const FilterPlacesByBounds: React.FC<FilterPlacesByBoundsProps> = ({

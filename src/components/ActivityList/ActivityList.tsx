@@ -1,19 +1,22 @@
+// React import
 import { useState, useEffect } from 'react';
+// import icons
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp } from '@fortawesome/free-solid-svg-icons';
+// utils Imports
 import { fetchCategories } from '../../utils/api/fetchCategories';
 import { fetchEvents } from '../../utils/api/fetchEventsAndProducts';
-
+// import icons
 import cultureIcon from '../../assets/culture.svg';
 import foodIcon from '../../assets/food.svg';
 import houseIcon from '../../assets/house.svg';
 import shoppingIcon from '../../assets/shopping.svg';
 import sportCurlingIcon from '../../assets/sport-curling.svg';
 import ticketIcon from '../../assets/ticket.svg';
-
-import AttractionListProps from '../../interfaces/exploreInterfaces/attractionList_interfaces';
-
-import { IconCategory } from '../../types/attractionlistTypes/AttractionList_types';
+// interface import
+import ActivityListProps from '../../interfaces/ActivityInterfaces/ActivityList_interfaces';
+//type import
+import { IconCategory } from '../../types/ActivityListTypes/ActivityList_types';
 
 const iconMapping: Record<IconCategory, string> = {
   'Kultur & historia': cultureIcon,
@@ -24,6 +27,7 @@ const iconMapping: Record<IconCategory, string> = {
   Evenemang: ticketIcon,
 };
 
+// Move to utility
 const normalizeCoordinates = (lat: any, lng: any) => {
   const parsedLat = parseFloat(lat);
   const parsedLng = parseFloat(lng);
@@ -32,7 +36,7 @@ const normalizeCoordinates = (lat: any, lng: any) => {
     : { lat: parsedLat, lng: parsedLng };
 };
 
-export function AttractionList({ setSelectedCategory }: AttractionListProps) {
+export function ActivityList({ setSelectedCategory }: ActivityListProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
   const [events, setEvents] = useState<any[]>([]);
@@ -45,6 +49,7 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
 
   const [totalPages, setTotalPages] = useState<number | null>(null);
 
+  //move to hooks
   useEffect(() => {
     fetchCategories()
       .then((data) => {
@@ -56,6 +61,7 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
       });
   }, []);
 
+  //move to hooks (pagination)
   useEffect(() => {
     setLoadingEvents(true);
     fetchEvents(itemsPerPage, currentPage)

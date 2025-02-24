@@ -1,9 +1,12 @@
+//import routestopstore
 import { useRouteStopStore } from '../../store/useRouteStopStore';
+//import interfaces for routestops
 import {
   Stop,
   ApiResponse,
 } from './.././../interfaces/utilsInterfaces/routeStops_interfaces';
 
+//resrobot route api
 const BASE_ROUTE_API = 'https://api.resrobot.se/v2.1/trip';
 
 /**

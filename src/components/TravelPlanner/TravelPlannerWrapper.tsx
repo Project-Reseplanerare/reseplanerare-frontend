@@ -1,6 +1,10 @@
+//import store
 import { useLocationStore } from '../../store/useLocationStore';
+//imoirt tripinput component
 import { TripInput } from './TripInput';
+//import main search button
 import { TriggerActionBtn } from './TriggerActionBtn';
+//import menu component
 import { Menu } from '../Menu/Menu';
 
 export const TravelPlannerWrapper = () => {
@@ -16,18 +20,13 @@ export const TravelPlannerWrapper = () => {
 
   return (
     <section className="grid w-full p-8 shadow-md rounded border-darkLight z-0 dark:border-lightDark  backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight">
-      {/* Title Section */}
       <h2 className="text-2xl font-bold text-darkDark dark:text-lightLight">
         Planera din resa
       </h2>
-
-      {/* Input Section */}
       <div className="grid gap-4">
         <Menu />
         <TripInput onInputChange={handleInputChange} />
       </div>
-
-      {/* Button Section */}
       <div className="grid ">
         <TriggerActionBtn />
       </div>

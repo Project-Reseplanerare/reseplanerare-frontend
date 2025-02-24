@@ -1,4 +1,6 @@
+//event api endpoint turid
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
+//products api endpoint turid
 const BASE_API = 'https://turid.visitvarmland.com/api/v8/products';
 
 const parseCoordinates = (

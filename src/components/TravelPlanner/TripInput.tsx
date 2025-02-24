@@ -1,11 +1,17 @@
+//react imports
 import { useState, useEffect } from 'react';
+//import icons
 import { FaTimes } from 'react-icons/fa';
+//import stores to store/check current state
 import { useLocationStore } from '../../store/useLocationStore';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 import { useRouteStopStore } from '../../store/useRouteStopStore';
+//api utils for fetching
 import { fetchBusStops } from '../../utils/api/fetchBusStopsVarm';
 import { fetchTrainStops } from '../../utils/api/fetchTrainStopsVarm';
+//import swapbtn component
 import { SwapBtn } from './swapBtn';
+//import tripinput interface
 import TripInputProps from '../../interfaces/travelPlannerInterfaces/tripInput_interfaces';
 
 export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {

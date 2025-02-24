@@ -1,4 +1,6 @@
+//Genaeral styling
 import './App.css';
+//Component Imports
 import { Header } from './components/Header/Header';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { TravelPlannerWrapper } from './components/TravelPlanner/TravelPlannerWrapper';
@@ -10,7 +12,6 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        {/* Header and Routes */}
         <Header />
         <Routes>
           <Route
