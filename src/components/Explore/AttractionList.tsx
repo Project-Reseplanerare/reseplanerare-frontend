@@ -18,8 +18,8 @@ import { IconCategory } from '../../types/attractionlistTypes/AttractionList_typ
 const iconMapping: Record<IconCategory, string> = {
   'Kultur & historia': cultureIcon,
   'Mat & dryck': foodIcon,
-  Boende: houseIcon,
   'Design & shopping': shoppingIcon,
+  Boende: houseIcon,
   Aktiviteter: sportCurlingIcon,
   Evenemang: ticketIcon,
 };
