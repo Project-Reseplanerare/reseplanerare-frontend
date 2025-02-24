@@ -6,8 +6,11 @@ import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 
-
-import { Departure, Arrival, ResponseData  } from '../../types/routeoptionsTypes/routeOptionsDropdown_types';
+import {
+  Departure,
+  Arrival,
+  ResponseData,
+} from '../../types/routeoptionsTypes/routeOptionsDropdown_types';
 
 export const RouteOptionsDropdown = () => {
   const { fromStopId, toStopId } = useRouteStopStore();
@@ -173,7 +176,7 @@ export const RouteOptionsDropdown = () => {
               <div key={index} className="grid gap-2">
                 <div
                   onClick={() => handleRouteClick(index)}
-                  className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-white dark:bg-[#1E1E1E] border border-lightlightBorder dark:border-[#444] rounded-md hover:bg-[#D3D3D3] dark:hover:bg-darkLight transition"
+                  className="cursor-pointer grid grid-cols-[1fr_auto_auto] items-center p-3 bg-white dark:bg-[#1E1E1E] border border-lightlightBorder dark:border-[#444] rounded-md hover:bg-[#D3D3D3] dark:hover:bg-darkLight transition gap-2"
                 >
                   <p className="font-medium truncate" title={name}>
                     {name}
