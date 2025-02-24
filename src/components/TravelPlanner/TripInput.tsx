@@ -6,10 +6,7 @@ import { useRouteStopStore } from '../../store/useRouteStopStore';
 import { fetchBusStops } from '../../utils/api/fetchBusStopsVarm';
 import { fetchTrainStops } from '../../utils/api/fetchTrainStopsVarm';
 import { SwapBtn } from './swapBtn';
-
-interface TripInputProps {
-  onInputChange: (inputType: 'from' | 'to', value: string) => void;
-}
+import TripInputProps from '../../interfaces/travelPlannerInterfaces/tripInput_interfaces';
 
 export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
   const { fromAddress, toAddress, setFromAddress, setToAddress } =

@@ -1,20 +1,10 @@
-import { create } from "zustand";
-
-interface RouteStopStore {
-  fromStopId: string;
-  toStopId: string;
-  routeMarkers: { coords: [number, number]; name?: string }[]; 
-  setRouteMarkers: (stops: { coords: [number, number]; name?: string }[]) => void;
-  stopsCoords: { coords: [number, number]; name?: string }[];
-  setStopsCoords: (stops: { coords: [number, number]; name?: string }[]) => void;
-  setFromStopId: (id: string) => void;
-  setToStopId: (id: string) => void;
-}
+import { create } from 'zustand';
+import RouteStopStore from '../interfaces/storeInterfaces/routeStop_interfaces';
 
 export const useRouteStopStore = create<RouteStopStore>((set) => ({
-  fromStopId: "",
-  toStopId: "",
-  routeMarkers: [], 
+  fromStopId: '',
+  toStopId: '',
+  routeMarkers: [],
   setRouteMarkers: (stops) => set({ routeMarkers: stops }),
   stopsCoords: [],
   setStopsCoords: (stops) => set({ stopsCoords: stops }),

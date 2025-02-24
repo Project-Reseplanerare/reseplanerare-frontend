@@ -1,18 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { useMap } from 'react-leaflet';
-
-interface Event {
-  lat: number;
-  lng: number;
-  title?: string;
-  description?: string;
-  image?: string | null;
-}
-
-interface FilterEventsByBoundsProps {
-  events: Event[];
-  setFilteredEvents: React.Dispatch<React.SetStateAction<any[]>>;
-}
+import { FilterEventsByBoundsProps } from './../../interfaces/mapInterfaces/eventsByBounds_interfaces';
 
 export const FilterEventsByBounds: React.FC<FilterEventsByBoundsProps> = ({
   events,
