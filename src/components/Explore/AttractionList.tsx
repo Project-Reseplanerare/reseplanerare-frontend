@@ -134,7 +134,7 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
               className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
   ${
     isActive
-      ? 'bg-gray-300 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+      ? 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
       : 'bg-lightLight text-darkDark border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
   }`}
               onClick={() => handleItemClick(category.id)}
@@ -156,7 +156,7 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
                     className={`p-3 rounded-md border cursor-pointer transition-all 
     ${
       selectedSubItem === subItem
-        ? 'bg-gray-300 border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+        ? 'bg-[#D3D3D3] bg-opacity-80 border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
         : 'bg-white border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
     }`}
                     onClick={() => handleSubItemClick(subItem)}
@@ -176,7 +176,7 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
           className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
   ${
     activeIndex === -1
-      ? 'bg-gray-300 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+      ? 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
       : 'bg-white text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
   }`}
           onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)}
@@ -199,8 +199,8 @@ export function AttractionList({ setSelectedCategory }: AttractionListProps) {
                 key={index}
                 className={`p-3 rounded-md border cursor-pointer transition-all ${
                   selectedSubItem === event.title
-                    ? 'bg-gray-300 '
-                    : 'bg-white   dark:bg-darkDark dark:text-lightLight'
+                    ? 'bg-[#D3D3D3] bg-opacity-80 dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+                    : 'bg-white dark:bg-darkDark dark:text-lightLight'
                 }`}
                 onClick={() => {
                   setSelectedCategory([event]);

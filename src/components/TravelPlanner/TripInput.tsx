@@ -101,7 +101,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     return (
       <div className="grid gap-1">
         <div
-          className={`grid grid-cols-[min-content_1fr_min-content] border border-lightlightBorder dark:border-lightlight rounded-md backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 p-2 items-center gap-2 ${borderColor}`}
+          className={`grid grid-cols-[min-content_1fr_min-content] border border-lightlightBorder dark:border-lightlight rounded-md backdrop-blur-md bg-white light dark:bg-darkDark/90 p-2 items-center gap-2 ${borderColor}`}
         >
           <div
             className={`w-6 h-6 flex items-center justify-center text-lightLight dark:text-darkDark rounded-md font-bold ${
