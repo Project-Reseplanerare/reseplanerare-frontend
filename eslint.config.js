@@ -23,7 +23,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
-      'quote-props': ['error', 'consistent'],
+      'quote-props': ['error', 'as-needed'],
       // Allow any import
       'import/no-unresolved': 'off',
       'import/named': 'off',
