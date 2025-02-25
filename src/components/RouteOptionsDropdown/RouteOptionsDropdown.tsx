@@ -29,116 +29,114 @@ export const RouteOptionsDropdown = () => {
   );
   const { selectedOption } = useTravelOptionsStore();
 
-  useEffect(() => {
-    if (!isButtonClicked || !fromStopId || !toStopId) return;
-
-    const fetchRoutes = async () => {
-      try {
-        const fromResponse = await fetch(
-          `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
+    useEffect(() => {
+      if (!isButtonClicked || !fromStopId || !toStopId) return;
+    
+      const fetchRoutes = async () => {
+        try {
+          const fromResponse = await fetch(
+            `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
+          );
+          if (!fromResponse.ok) throw new Error(`Error: ${fromResponse.status}`);
+    
+          const fromData: ResponseData<Departure> = await fromResponse.json();
+          if (!fromData.Departure) {
+            setRouteNames([]);
+            setTravelTimes([]);
+            return;
+          }
+    
+          const toResponse = await fetch(
+            `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
+          );
+          if (!toResponse.ok) throw new Error(`Error: ${toResponse.status}`);
+    
+          const toData: ResponseData<Arrival> = await toResponse.json();
+          if (!toData.Arrival) {
+            setRouteNames([]);
+            setTravelTimes([]);
+            return;
+          }
+    
+          const validJourneyRefs = new Map<string, string>();
+          toData.Arrival.forEach((arrival) => {
+            validJourneyRefs.set(arrival.JourneyDetailRef.ref, arrival.time);
+          });
+    
+          let filteredDepartures: Departure[] = [];
+    
+          if (selectedOption === 'buss') {
+            filteredDepartures = fromData.Departure.filter(
+              (departure) =>
+                validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
+                departure.ProductAtStop?.catOut === 'BLT'
+            );
+          } else if (selectedOption === 'tåg') {
+            filteredDepartures = fromData.Departure.filter(
+              (departure) =>
+                validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
+                departure.ProductAtStop?.catOut === 'JLT'
+            );
+          }
+    
+          if (filteredDepartures.length === 0) {
+            setRouteNames([]);
+            setTravelTimes([]);
+            return;
+          }
+    
+          const limitedDepartures = filteredDepartures.slice(0, 8);
+    
+          const names = limitedDepartures.map((departure) => {
+            const departureTime = departure.time;
+            const arrivalTime =
+              validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
+            return `${
+              departure.ProductAtStop?.name || 'N/A'
+            } — ${formatTravelTime(departureTime)} - ${formatTravelTime(
+              arrivalTime
+            )}`;
+          });
+    
+          const times = limitedDepartures.map((departure) => {
+            const arrivalTime =
+              validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
+            return calculateTravelDuration(departure.time, arrivalTime);
+          });
+    
+          setRouteNames(names);
+          setTravelTimes(times);
+        } catch (err) {
+          setError((err as Error).message);
+        }
+      };
+    
+      fetchRoutes();
+    }, [fromStopId, toStopId, isButtonClicked, selectedOption]);
+    
+    const handleRouteClick = (index: number) => {
+      if (selectedRouteIndex === index) {
+        setSelectedRouteIndex(null);
+      } else {
+        setSelectedRouteIndex(index);
+        
+        const selectedRoute = routeNames[index];
+        const departureTime = selectedRoute.split(' — ')[1]?.split(' - ')[0] || '';
+        const arrivalTime = selectedRoute.split(' — ')[1]?.split(' - ')[1] || '';
+        
+        fetchRouteStopsForRoute(
+          index,
+          fromStopId,
+          toStopId,
+          apiKey,
+          selectedOption,
+          setRouteStops,
+          setError,
+          departureTime,
+          arrivalTime
         );
-        if (!fromResponse.ok) throw new Error(`Error: ${fromResponse.status}`);
-
-        const fromData: ResponseData<Departure> = await fromResponse.json();
-        if (!fromData.Departure) {
-          setRouteNames([]);
-          setTravelTimes([]);
-          return;
-        }
-
-        const toResponse = await fetch(
-          `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
-        );
-        if (!toResponse.ok) throw new Error(`Error: ${toResponse.status}`);
-
-        const toData: ResponseData<Arrival> = await toResponse.json();
-        if (!toData.Arrival) {
-          setRouteNames([]);
-          setTravelTimes([]);
-          return;
-        }
-
-        const validJourneyRefs = new Map<string, string>();
-        toData.Arrival.forEach((arrival) => {
-          validJourneyRefs.set(arrival.JourneyDetailRef.ref, arrival.time);
-        });
-
-        let filteredDepartures: Departure[] = [];
-
-        if (selectedOption === 'buss') {
-          filteredDepartures = fromData.Departure.filter(
-            (departure) =>
-              validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
-              departure.ProductAtStop?.catOut === 'BLT'
-          );
-        } else if (selectedOption === 'tåg') {
-          filteredDepartures = fromData.Departure.filter(
-            (departure) =>
-              validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
-              departure.ProductAtStop?.catOut === 'JLT'
-          );
-        }
-
-        if (filteredDepartures.length === 0) {
-          setRouteNames([]);
-          setTravelTimes([]);
-          return;
-        }
-
-        const limitedDepartures = filteredDepartures.slice(0, 8);
-
-        const names = limitedDepartures.map((departure) => {
-          const departureTime = departure.time;
-          const arrivalTime =
-            validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
-          return `${
-            departure.ProductAtStop?.name || 'N/A'
-          } — ${formatTravelTime(departureTime)} - ${formatTravelTime(
-            arrivalTime
-          )}`;
-        });
-
-        const times = limitedDepartures.map((departure) => {
-          const arrivalTime =
-            validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
-          return calculateTravelDuration(departure.time, arrivalTime);
-        });
-
-        setRouteNames(names);
-        setTravelTimes(times);
-
-        limitedDepartures.forEach((departure, index) => {
-          const departureTime = departure.time;
-          const arrivalTime =
-            validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
-
-          fetchRouteStopsForRoute(
-            index,
-            fromStopId,
-            toStopId,
-            apiKey,
-            selectedOption,
-            setRouteStops,
-            setError,
-            departureTime,
-            arrivalTime
-          );
-        });
-      } catch (err) {
-        setError((err as Error).message);
       }
     };
-
-    fetchRoutes();
-  }, [fromStopId, toStopId, isButtonClicked, selectedOption]);
-
-  const handleRouteClick = (index: number) => {
-    if (selectedRouteIndex === index) {
-      setSelectedRouteIndex(null);
-    } else {
-      setSelectedRouteIndex(index);
-    }
-  };
 
   const formatTravelTime = (time) => {
     const [hours, minutes] = time.split(':').map(Number);
