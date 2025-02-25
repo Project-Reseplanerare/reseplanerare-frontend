@@ -7,7 +7,7 @@ import {
 //trafiklab api key
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;
 //nearbystops trafiklab key
-const BASE_TRAFFIC_API = 'https://api.resrobot.se/v2.1/location.nearbystops';
+const BASE_TRAFFIC_API = import.meta.env.VITE_NEARBYSTOPS_API;
 
 const fetchNearbyStops = async (
   center: [number, number] | null,

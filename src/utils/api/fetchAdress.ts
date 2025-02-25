@@ -1,5 +1,5 @@
 //reverse geode api
-const REVERSE_GEOCODE_API = 'https://nominatim.openstreetmap.org/reverse';
+const REVERSE_GEOCODE_API = import.meta.env.VITE_REVERSE_GEOCODE_API;
 // interface for SetAdress
 import { SetAddressFunction } from '../../types/SetAdress/SetAdress_type';
 

@@ -43,7 +43,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       return;
     }
 
-    if (!selectedOption || selectedOption === 'Bil') {
+    if (!selectedOption || selectedOption === 'bil') {
       console.warn('No selected travel option. Fetching skipped.');
       return;
     }

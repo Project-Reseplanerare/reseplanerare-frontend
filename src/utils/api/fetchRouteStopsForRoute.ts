@@ -7,7 +7,7 @@ import {
 } from './.././../interfaces/utilsInterfaces/routeStops_interfaces';
 
 //resrobot route api
-const BASE_ROUTE_API = 'https://api.resrobot.se/v2.1/trip';
+const BASE_ROUTE_API = import.meta.env.VITE_TRIP_API;
 
 /**
  * Fetch route stops for a given trip.

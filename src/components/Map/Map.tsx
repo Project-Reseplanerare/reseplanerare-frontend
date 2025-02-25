@@ -132,16 +132,16 @@ function Map({ places, events }: MapProps) {
     setStops([]);
 
     switch (selectedOption) {
-      case 'Bil':
+      case 'bil':
         break;
 
-      case 'Buss':
+      case 'buss':
         if (Array.isArray(center) && center.length === 2) {
           fetchNearbyBusStops(center as [number, number], setLoading, setStops);
         }
         break;
 
-      case 'Tåg':
+      case 'tåg':
         if (Array.isArray(center) && center.length === 2) {
           fetchNearbyTrains(center as [number, number], setLoading, setStops);
         }

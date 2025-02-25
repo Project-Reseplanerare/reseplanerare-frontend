@@ -12,7 +12,7 @@ import {
   Departure,
   Arrival,
   ResponseData,
-} from '../../types/RouteOptionsTypes/routeOptionsDropdown_types';
+} from '../../types/routeoptionsTypes/routeOptionsDropdown_types';
 
 //trafiklab key from .env
 const apiKey = import.meta.env.VITE_TRAFIKLAB_KEY;

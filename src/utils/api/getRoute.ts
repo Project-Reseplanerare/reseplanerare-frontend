@@ -2,7 +2,7 @@
 import { LatLngExpression, LatLngTuple } from 'leaflet';
 
 //osrm driving road routes
-const OSRM_API = 'https://router.project-osrm.org/route/v1/driving';
+const OSRM_API = import.meta.env.VITE_ROAD_API;
 
 export const getRoute = async (
   start: LatLngExpression,
