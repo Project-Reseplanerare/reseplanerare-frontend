@@ -84,7 +84,7 @@ export const SearchInput = () => {
           value={query}
           onChange={(e) => {
             setQuery(e.target.value.trimStart());
-            setSelectionMade(false); // Clear selection when user manually types
+            setSelectionMade(false);
           }}
           placeholder="Sök bland tusentals evenemang och besöksmål"
           className="w-full h-10 px-3 bg-transparent text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark placeholder-opacity-50 border focus:border-blueLight focus:ring-0 focus:outline-none"
