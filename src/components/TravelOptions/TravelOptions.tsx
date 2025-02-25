@@ -4,9 +4,12 @@ import { memo, useCallback, useMemo } from 'react';
 import { useTravelOptionsStore } from '../../store/useTravelOptionsStore';
 //import icons
 import { FaTrain, FaBus, FaCar } from 'react-icons/fa';
+import { useUrlSync } from '../../hooks/urlHooks/useUrlSync';
 
 const TravelOptions = () => {
   const { selectedOption, setSelectedOption } = useTravelOptionsStore();
+ 
+  useUrlSync(selectedOption, setSelectedOption)
 
   const handleOptionClick = useCallback(
     (id: string) => {

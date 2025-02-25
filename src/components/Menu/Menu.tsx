@@ -10,7 +10,7 @@ import Map from '../Map/Map';
 import { motion } from 'framer-motion';
 
 export const Menu: React.FC = () => {
-  const [activeComponent, setActiveComponent] = useState<string | null>(null);
+  const [activeComponent, setActiveComponent] = useState<string>('resealternativ');
   const [selectedLocations, setSelectedLocations] = useState<any[]>([]);
 
   const toggleComponent = (component: string) => {
