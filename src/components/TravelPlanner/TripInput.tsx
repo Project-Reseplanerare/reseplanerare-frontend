@@ -175,7 +175,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
         {renderInputField('from', 'A')}
         <div className="row-span-2 self-center ml-1">
           <SwapBtn
-            isDisabled={!fromAddress && !toAddress}
+            isDisabled={!fromAddress || !toAddress}
             onClick={swapAddresses}
           />
         </div>
