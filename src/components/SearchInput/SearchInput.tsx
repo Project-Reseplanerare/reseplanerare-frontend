@@ -9,19 +9,19 @@ const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 export const SearchInput = () => {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectionMade, setSelectionMade] = useState(false);
   const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
 
   useEffect(() => {
-    if (query.trim()) {
+    if (query.trim() && !selectionMade) {
       const timeoutId = setTimeout(() => {
         fetchSuggestions(query);
-      }, 300); 
-
-      return () => clearTimeout(timeoutId); 
+      }, 300);
+      return () => clearTimeout(timeoutId);
     } else {
       setSuggestions([]);
     }
-  }, [query]);
+  }, [query, selectionMade]);
 
   const fetchSuggestions = async (searchQuery: string) => {
     try {
@@ -31,10 +31,10 @@ export const SearchInput = () => {
       }
       const data = await response.json();
       const filteredSuggestions = data.data
-      .map((event: { title: string }) => event.title)
-      .filter((title) =>
-        title.toLowerCase().startsWith(searchQuery.toLowerCase())
-      );
+        .map((event: { title: string }) => event.title)
+        .filter((title) =>
+          title.toLowerCase().startsWith(searchQuery.toLowerCase())
+        );
       setSuggestions(filteredSuggestions);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
@@ -58,7 +58,13 @@ export const SearchInput = () => {
         setTempCenter(latlng);
         setToLocation(latlng);
         setToAddress(event.name);
-        await fetchAddress(event.latitude, event.longitude, 'to', setToAddress, setToAddress);
+        await fetchAddress(
+          event.latitude,
+          event.longitude,
+          'to',
+          setToAddress,
+          setToAddress
+        );
       } else {
         console.error('Coordinates not found for the event.');
       }
@@ -76,7 +82,10 @@ export const SearchInput = () => {
         <input
           type="text"
           value={query}
-          onChange={(e) => setQuery(e.target.value.trimStart())}
+          onChange={(e) => {
+            setQuery(e.target.value.trimStart());
+            setSelectionMade(false); // Clear selection when user manually types
+          }}
           placeholder="Sök bland tusentals evenemang och besöksmål"
           className="w-full h-10 px-3 bg-transparent text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark placeholder-opacity-50 border focus:border-blueLight focus:ring-0 focus:outline-none"
         />
@@ -85,6 +94,7 @@ export const SearchInput = () => {
             onClick={() => {
               setQuery('');
               setSuggestions([]);
+              setSelectionMade(false);
             }}
             className="px-3 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight transition"
           >
@@ -92,6 +102,7 @@ export const SearchInput = () => {
           </button>
         )}
       </div>
+
       {query && suggestions.length > 0 && (
         <ul className="w-full border rounded max-h-40 overflow-y-auto backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight shadow-lg">
           {suggestions.map((title, index) => (
@@ -101,6 +112,7 @@ export const SearchInput = () => {
               onClick={() => {
                 setQuery(title);
                 setSuggestions([]);
+                setSelectionMade(true); 
                 fetchEventCoordinates(title);
               }}
             >
