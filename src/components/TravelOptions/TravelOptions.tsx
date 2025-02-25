@@ -9,6 +9,7 @@ import { useUrlSync } from '../../hooks/urlHooks/useUrlSync';
 const TravelOptions = () => {
   const { selectedOption, setSelectedOption } = useTravelOptionsStore();
  
+  //url sync func
   useUrlSync(selectedOption, setSelectedOption)
 
   const handleOptionClick = useCallback(
