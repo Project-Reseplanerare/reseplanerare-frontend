@@ -65,13 +65,13 @@ export const RouteOptionsDropdown = () => {
 
         let filteredDepartures: Departure[] = [];
 
-        if (selectedOption === 'Buss') {
+        if (selectedOption === 'buss') {
           filteredDepartures = fromData.Departure.filter(
             (departure) =>
               validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
               departure.ProductAtStop?.catOut === 'BLT'
           );
-        } else if (selectedOption === 'Tåg') {
+        } else if (selectedOption === 'tåg') {
           filteredDepartures = fromData.Departure.filter(
             (departure) =>
               validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
@@ -159,7 +159,7 @@ export const RouteOptionsDropdown = () => {
 
   return (
     isButtonClicked &&
-    (selectedOption === 'Buss' || selectedOption === 'Tåg') && (
+    (selectedOption === 'buss' || selectedOption === 'tåg') && (
       <div
         className="grid gap-4 p-8 border border-lightlightBorder dark:border-[#444] bg-opacity-100 dark:bg-opacity-100  rounded-md backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight
       

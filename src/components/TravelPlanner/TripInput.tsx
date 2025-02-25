@@ -49,7 +49,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     }
 
     const fetchFunction =
-      selectedOption === 'Buss' ? fetchBusStops : fetchTrainStops;
+      selectedOption === 'buss' ? fetchBusStops : fetchTrainStops;
     const stops = await fetchFunction(value);
 
     setSuggestions((prevSuggestions) => ({
@@ -99,6 +99,8 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     console.log('Updated fromStopId:', fromStopId);
     console.log('Updated toStopId:', toStopId);
   }, [fromStopId, toStopId]);
+
+  if(!selectedOption) return null;
 
   const renderInputField = (type: 'from' | 'to', label: string) => {
     const address = type === 'from' ? fromAddress : toAddress;
@@ -173,7 +175,7 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
         {renderInputField('from', 'A')}
         <div className="row-span-2 self-center ml-1">
           <SwapBtn
-            isDisabled={!fromAddress || !toAddress}
+            isDisabled={!fromAddress && !toAddress}
             onClick={swapAddresses}
           />
         </div>
