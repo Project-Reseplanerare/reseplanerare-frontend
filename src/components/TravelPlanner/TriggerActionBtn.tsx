@@ -63,7 +63,7 @@ export const TriggerActionBtn = () => {
 
     if (fromCoords) setTempCenter(fromCoords);
 
-    if (selectedOption === 'Buss') {
+    if (selectedOption === 'buss') {
       setRouteMarkers(
         [fromCoords, toCoords].filter(Boolean).map((coords) => ({ coords }))
       );
