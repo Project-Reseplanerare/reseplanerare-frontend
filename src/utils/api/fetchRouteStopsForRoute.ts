@@ -7,7 +7,7 @@ import {
 } from './.././../interfaces/utilsInterfaces/routeStops_interfaces';
 
 //resrobot route api
-const BASE_ROUTE_API = 'https://api.resrobot.se/v2.1/trip';
+const BASE_ROUTE_API = import.meta.env.VITE_TRIP_API;
 
 /**
  * Fetch route stops for a given trip.
@@ -29,7 +29,7 @@ export const fetchRouteStopsForRoute = async (
       return;
     }
 
-    const expectedCatOut = selectedOption === 'Tåg' ? 'JLT' : 'BLT';
+    const expectedCatOut = selectedOption === 'tåg' ? 'JLT' : 'BLT';
 
     const url = `${BASE_ROUTE_API}?format=json&originId=${fromStopId}&destId=${toStopId}&passlist=true&showPassingPoints=true&accessId=${apiKey}`;
     const response = await fetch(url);

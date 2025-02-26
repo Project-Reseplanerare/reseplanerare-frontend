@@ -43,13 +43,13 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
       return;
     }
 
-    if (!selectedOption || selectedOption === 'Bil') {
+    if (!selectedOption || selectedOption === 'bil') {
       console.warn('No selected travel option. Fetching skipped.');
       return;
     }
 
     const fetchFunction =
-      selectedOption === 'Buss' ? fetchBusStops : fetchTrainStops;
+      selectedOption === 'buss' ? fetchBusStops : fetchTrainStops;
     const stops = await fetchFunction(value);
 
     setSuggestions((prevSuggestions) => ({
@@ -99,6 +99,8 @@ export const TripInput: React.FC<TripInputProps> = ({ onInputChange }) => {
     console.log('Updated fromStopId:', fromStopId);
     console.log('Updated toStopId:', toStopId);
   }, [fromStopId, toStopId]);
+
+  if(!selectedOption) return null;
 
   const renderInputField = (type: 'from' | 'to', label: string) => {
     const address = type === 'from' ? fromAddress : toAddress;

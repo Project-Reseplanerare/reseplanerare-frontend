@@ -1,69 +1,49 @@
-// React Imports
 import { useState, useEffect } from 'react';
-// Icons Imports
 import { FaSearch, FaTimes } from 'react-icons/fa';
-// Store Imports
 import { useLocationStore } from '../../store/useLocationStore';
-// Utils Imports
 import { fetchAddress } from '../../utils/api/fetchAdress';
 
-//events api endpoint
+// events API endpoint
 const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 
 export const SearchInput = () => {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [selectionMade, setSelectionMade] = useState(false);
   const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
 
   useEffect(() => {
-    const cachedData = localStorage.getItem('eventSuggestions');
-    if (!cachedData) {
-      fetchInitialData();
+    if (query.trim() && !selectionMade) {
+      const timeoutId = setTimeout(() => {
+        fetchSuggestions(query);
+      }, 300);
+      return () => clearTimeout(timeoutId);
+    } else {
+      setSuggestions([]);
     }
-  }, []);
+  }, [query, selectionMade]);
 
-  const fetchInitialData = async () => {
+  const fetchSuggestions = async (searchQuery: string) => {
     try {
-      const response = await fetch(`${EVENTS_API}?limit=1000`);
+      const response = await fetch(`${EVENTS_API}?search=${searchQuery}&limit=1000`);
       if (!response.ok) {
-        throw new Error('Failed to fetch event data');
+        throw new Error('Failed to fetch event suggestions');
       }
       const data = await response.json();
-      localStorage.setItem(
-        'eventSuggestions',
-        JSON.stringify(data.data.map((event: { title: string }) => event.title))
-      );
-    } catch (error) {
-      console.error('Error fetching initial event data:', error);
-    }
-  };
-
-  const fetchSuggestions = (searchQuery: string) => {
-    if (!searchQuery.trim()) {
-      setSuggestions([]);
-      return;
-    }
-    const cachedSuggestions = localStorage.getItem('eventSuggestions');
-    if (cachedSuggestions) {
-      const filteredSuggestions = JSON.parse(cachedSuggestions).filter(
-        (title: string) =>
+      const filteredSuggestions = data.data
+        .map((event: { title: string }) => event.title)
+        .filter((title) =>
           title.toLowerCase().startsWith(searchQuery.toLowerCase())
-      );
+        );
       setSuggestions(filteredSuggestions);
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
     }
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value.trimStart();
-    setQuery(value);
-    fetchSuggestions(value);
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
     try {
-      const response = await fetch(
-        `${EVENTS_API}?search=${eventTitle}&limit=1`
-      );
+      const response = await fetch(`${EVENTS_API}?search=${eventTitle}&limit=1`);
       if (!response.ok) {
         throw new Error('Failed to fetch event coordinates');
       }
@@ -102,16 +82,19 @@ export const SearchInput = () => {
         <input
           type="text"
           value={query}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            setQuery(e.target.value.trimStart());
+            setSelectionMade(false);
+          }}
           placeholder="Sök bland tusentals evenemang och besöksmål"
           className="w-full h-10 px-3 bg-transparent text-darkDark dark:text-lightLight placeholder-darkLight dark:placeholder-lightDark placeholder-opacity-50 border focus:border-blueLight focus:ring-0 focus:outline-none"
         />
-
         {query && (
           <button
             onClick={() => {
               setQuery('');
               setSuggestions([]);
+              setSelectionMade(false);
             }}
             className="px-3 text-darkLight dark:text-lightDark hover:text-darkDark dark:hover:text-lightLight transition"
           >
@@ -119,8 +102,9 @@ export const SearchInput = () => {
           </button>
         )}
       </div>
+
       {query && suggestions.length > 0 && (
-        <ul className="w-full border  rounded max-h-40 overflow-y-auto backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight shadow-lg">
+        <ul className="w-full border rounded max-h-40 overflow-y-auto backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight shadow-lg">
           {suggestions.map((title, index) => (
             <li
               key={index}
@@ -128,6 +112,7 @@ export const SearchInput = () => {
               onClick={() => {
                 setQuery(title);
                 setSuggestions([]);
+                setSelectionMade(true); 
                 fetchEventCoordinates(title);
               }}
             >

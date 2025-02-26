@@ -9,6 +9,7 @@ import { useUrlSync } from '../../hooks/urlHooks/useUrlSync';
 const TravelOptions = () => {
   const { selectedOption, setSelectedOption } = useTravelOptionsStore();
  
+  //url sync func
   useUrlSync(selectedOption, setSelectedOption)
 
   const handleOptionClick = useCallback(
@@ -21,18 +22,18 @@ const TravelOptions = () => {
   const travelOptions = useMemo(
     () => [
       {
-        id: 'Bil',
-        label: 'Bil',
+        id: 'bil',
+        label: 'bil',
         icon: <FaCar className="text-2xl text-blueLight" />,
       },
       {
-        id: 'Buss',
-        label: 'Buss',
+        id: 'buss',
+        label: 'buss',
         icon: <FaBus className="text-2xl text-blueLight" />,
       },
       {
-        id: 'Tåg',
-        label: 'Tåg',
+        id: 'tåg',
+        label: 'tåg',
         icon: <FaTrain className="text-2xl text-blueLight" />,
       },
     ],

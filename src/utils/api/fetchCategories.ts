@@ -1,5 +1,5 @@
 //trafiklap api for categories
-const CATEGORIES_API = 'https://turid.visitvarmland.com/api/v8/categories';
+const CATEGORIES_API = import.meta.env.VITE_CATEGORIES_API;
 
 export const fetchCategories = async () => {
   try {

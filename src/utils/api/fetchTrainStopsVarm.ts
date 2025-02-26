@@ -1,7 +1,7 @@
 //trafiklab api key
 const API_KEY = import.meta.env.VITE_TRAFIKLAB_KEY;
 //trafiklab api endpoint
-const BASE_TRAIN_API = 'https://api.resrobot.se/v2.1/location.name';
+const BASE_TRAIN_API = import.meta.env.VITE_STOPS_LOOKUP_API;
 
 export const fetchTrainStops = async (
   searchString: string,

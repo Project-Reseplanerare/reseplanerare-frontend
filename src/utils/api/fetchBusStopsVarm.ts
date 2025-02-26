@@ -6,7 +6,7 @@ export const fetchBusStops = async (
   maxResults = 3,
   lang = 'sv'
 ) => {
-  const baseUrl = 'https://api.resrobot.se/v2.1/location.name';
+  const baseUrl = import.meta.env.VITE_STOPS_LOOKUP_API;
   const url = `${baseUrl}?input=${encodeURIComponent(
     searchString
   )}&format=json&accessId=${apiKey}&maxNo=${maxResults}&lang=${lang}`;

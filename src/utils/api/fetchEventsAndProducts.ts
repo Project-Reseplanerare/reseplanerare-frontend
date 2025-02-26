@@ -1,7 +1,7 @@
 //event api endpoint turid
-const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
+const EVENTS_API = import.meta.env.VITE_EVENTS_API;
 //products api endpoint turid
-const BASE_API = 'https://turid.visitvarmland.com/api/v8/products';
+const BASE_API = import.meta.env.VITE_PRODUCTS_API;
 
 const parseCoordinates = (
   lat: string | number | null | undefined,
