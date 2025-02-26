@@ -137,12 +137,12 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
         return (
           <div key={category.id} className="w-full">
             <div
-              className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
-  ${
-    isActive
-      ? 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-      : 'bg-lightLight text-darkDark border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
-  }`}
+              className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border border-lightlightBorder dark:border-lightlight 
+            ${
+              isActive
+                ? 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlight Border dark:bg-darkDark dark:text-lightLight dark:border-white'
+                : 'bg-[#F9F9F9] text-darkDark border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-white'
+            }`}
               onClick={() => handleItemClick(category.id)}
             >
               <img
@@ -159,12 +159,11 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
                 {category.subItems.map((subItem: string, index: number) => (
                   <div
                     key={index}
-                    className={`p-3 rounded-md border cursor-pointer transition-all 
-    ${
-      selectedSubItem === subItem
-        ? 'bg-[#D3D3D3] bg-opacity-80 border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-        : 'bg-white border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
-    }`}
+                    className={`p-3 rounded-md cursor-pointer transition-all border border-lightlightBorder dark:border-lightlight ${
+                      selectedSubItem === subItem
+                        ? 'border border-lightlightBorder bg-[#D3D3D3] bg-opacity-80 dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+                        : 'border-none bg-white dark:bg-darkDark dark:text-lightLight'
+                    }`}
                     onClick={() => handleSubItemClick(subItem)}
                   >
                     <span className="text-xs">{subItem}</span>
@@ -179,10 +178,10 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
       {/* Evenemang section */}
       <div className="w-full">
         <div
-          className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
+          className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border border-lightlightBorder dark:border-lightlight
   ${
     activeIndex === -1
-      ? 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+      ? 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlight Border dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
       : 'bg-white text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
   }`}
           onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)}
@@ -203,10 +202,10 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
             {events.map((event, index) => (
               <div
                 key={index}
-                className={`p-3 rounded-md border cursor-pointer transition-all ${
+                className={`p-3 rounded-md cursor-pointer transition-all border border-lightlightBorder dark:border-lightlight ${
                   selectedSubItem === event.title
-                    ? 'bg-[#D3D3D3] bg-opacity-80 dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-                    : 'bg-white dark:bg-darkDark dark:text-lightLight'
+                    ? 'border border-lightlightBorder bg-[#D3D3D3] bg-opacity-80 dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+                    : 'border-none bg-white dark:bg-darkDark dark:text-lightLight'
                 }`}
                 onClick={() => {
                   setSelectedCategory([event]);
