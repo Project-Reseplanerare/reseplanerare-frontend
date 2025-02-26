@@ -1,48 +1,49 @@
-# Projektbeskrivning
+## RESEPLANERARE
 
 ## Beställare
 
 **Visit Värmland**
 
-## Kontaktpersoner
+## Huvudpersoner
 
-- **Nicklas Wikman**: Projektör
-- **Frida Högberg**: Kommunikatör
-- **Sofie Grahn**: Medkravställare
-- **Jessica Carlsson**: Medkravställare
+- **Nicklas Wikman** – Projektör
+- **Frida Högberg** – Kommunikatör
+- **Sofie Grahn** – Medkravställare (Värmlandstrafik)
+- **Jessica Carlsson** – Medkravställare
+
+## Projektdeltagare och ansvarsområden
+
+- **Marcus Widén** – Scrum Master / Kodlogik
+- **Tobias Andersson** – Kodlogik / Frontend
+- **Linnéa Sjöholm** – Frontendutveckling
+- **Emma Dybdorf** – Frontendutveckling
+- **Katarzyna Joanna Potarowicz** – Frontendutveckling
 
 ## Handledare
 
 - **Christoffer Wallenberg**
 
-## Syfte
+# Projektbeskrivning
 
-Projektet syftar till att utveckla en digital plattform för att underlätta reseplanering inom Värmland.
+Projektet syftar till att utveckla en digital plattform som förenklar reseplanering inom Värmland. Plattformen ska tillhandahålla intuitiva verktyg för att skapa reseförslag baserat på användarens önskemål. Den ska även visa aktuella evenemang och aktiviteter. Dessutom ska den samla relevant information om lokala sevärdheter.
+
+Målet är att stärka Värmlands attraktionskraft som resmål genom att skapa en effektiv och tillgänglig lösning. Plattformen ska gynna både turister och lokala aktörer genom att underlätta planering och genomförande av reseupplevelser.
 
 ## Funktioner
 
-Plattformen ska erbjuda:
+Plattformen kommer att erbjuda:
 
-- Användarvänliga funktioner för reseförslag baserade på användarens preferenser.
+- Användarvänliga funktioner för reseplanering, anpassade efter användarens preferenser.
 - Integrerad information om lokala attraktioner och evenemang.
 
 ## Mål
 
-Målet är att skapa en lösning som:
+Målet är att:
 
-- Utveckla en användarvänlig digital plattform som hjälper användare att planera resor inom Värmland.
-- Stärker Värmlands attraktionskraft som resmål.
-- Underlättar för både turister och lokala aktörer att planera och genomföra reseupplevelser.
+- Utveckla en intuitiv och användarvänlig digital plattform för reseplanering inom Värmland.
+- Stärka Värmlands attraktionskraft som resmål.
+- Underlätta för både turister och lokala aktörer att planera och genomföra reseupplevelser.
 
-## Projektdeltagare och ansvarsområden
+## Utveckling
 
-- **Marcus Widén**  
-  **Ansvarsområde**: Scrum Master, Backend & Frontend
-- **Tobias Andersson**  
-  **Ansvarsområde**: Backendutveckling
-- **Linnéa Sjöholm**  
-  **Ansvarsområde**: Frontendutveckling
-- **Emma Dybdorf**  
-  **Ansvarsområde**: Frontendutveckling
-- **Katarzyna Joanna Potarowicz**  
-  **Ansvarsområde**: Frontendutveckling
+Projektet har utvecklats inom ramen för Lärande i Arbete (LIA), 50 YH-poäng, som en del av utbildningen JavaScript- och Frontendutvecklare vid Folkuniversitetet Göteborg, 2025.
