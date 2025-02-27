@@ -141,26 +141,22 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
 
         return (
           <div key={category.id} className="w-full">
-            <div key={category.id} className="w-full">
-              <div
-                className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border
-      ${
-        isActive
-          ? 'bg-[#D3D3D3] bg-opacity-80 text-black dark:bg-darkDark dark:text-lightLight dark:border-white'
-          : 'bg-[#F9F9F9] text-darkDark dark:bg-darkDark dark:text-lightLight dark:border-white'
-      } border-lightlightBorder dark:border-lightlight`}
-                onClick={() => handleItemClick(category.id)}
-              >
-                <img
-                  src={iconMapping[category.label] || cultureIcon}
-                  alt="Icon"
-                  className="w-5 h-5 dark:filter dark:invert dark:hue-rotate-180"
-                />
-                <span>{category.label}</span>
-                <FontAwesomeIcon
-                  icon={isActive ? faChevronUp : faChevronDown}
-                />
-              </div>
+            <div
+              className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border
+                ${
+                  isActive
+                    ? 'bg-[#D3D3D3] bg-opacity-80 text-black dark:bg-darkDark dark:text-lightLight dark:border-white'
+                    : 'bg-[#F9F9F9] text-darkDark dark:bg-darkDark dark:text-lightLight dark:border-white'
+                } border-lightlightBorder dark:border-lightlight`}
+              onClick={() => handleItemClick(category.id)}
+            >
+              <img
+                src={iconMapping[category.label] || cultureIcon}
+                alt="Icon"
+                className="w-5 h-5 dark:filter dark:invert dark:hue-rotate-180"
+              />
+              <span>{category.label}</span>
+              <FontAwesomeIcon icon={isActive ? faChevronUp : faChevronDown} />
             </div>
 
             {isActive && category.subItems.length > 0 && (
@@ -188,12 +184,12 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
       <div className="w-full">
         <div
           className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
-    ${
-      activeIndex === -1
-        ? 'bg-[#D3D3D3] bg-opacity-80 text-black dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-        : 'bg-white text-black dark:bg-darkDark dark:text-lightLight'
-    } 
-    border-lightlightBorder dark:border-lightlight`}
+            ${
+              activeIndex === -1
+                ? 'bg-[#D3D3D3] bg-opacity-80 text-black dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+                : 'bg-white text-black dark:bg-darkDark dark:text-lightLight'
+            } 
+            border-lightlightBorder dark:border-lightlight`}
           onClick={() => setActiveIndex(activeIndex === -1 ? null : -1)}
         >
           <img
@@ -226,14 +222,14 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
               </div>
             ))}
 
-            <div className="grid grid-cols-3 gap-4 items-center  ">
+            <div className="grid grid-cols-3 gap-4 items-center">
               <button
                 className={`px-4 py-2 rounded disabled:opacity-50 justify-self-start transition-all border 
-    ${
-      currentPage === 1
-        ? 'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-darkDark dark:text-lightLight'
-        : 'bg-[#D3D3D3] bg-opacity-80 text-black dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
-    }`}
+                  ${
+                    currentPage === 1
+                      ? 'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-darkDark dark:text-lightLight'
+                      : 'bg-[#D3D3D3] bg-opacity-80 text-black dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+                  }`}
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
@@ -244,14 +240,15 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
                 Sida {currentPage}
                 {totalPages ? ` av ${totalPages}` : ''}
               </span>
+
               <button
                 className={`px-4 py-2 rounded disabled:opacity-50 justify-self-end transition-all border 
-    ${
-      (totalPages && currentPage === totalPages) ||
-      (!totalPages && events.length < itemsPerPage)
-        ? 'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-darkDark dark:text-lightLight'
-        : 'bg-[#D3D3D3] bg-opacity-80 text-black dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
-    }`}
+                  ${
+                    (totalPages && currentPage === totalPages) ||
+                    (!totalPages && events.length < itemsPerPage)
+                      ? 'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-darkDark dark:text-lightLight'
+                      : 'bg-[#D3D3D3] bg-opacity-80 text-black dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+                  }`}
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={
                   totalPages
