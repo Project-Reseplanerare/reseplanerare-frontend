@@ -216,20 +216,34 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
               </div>
             ))}
 
-            <div className="flex justify-between items-center mt-4">
+            <div className="grid grid-cols-3 gap-4 items-center  ">
               <button
-                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 dark:text-darkDark"
+                className={`px-4 py-2 rounded disabled:opacity-50 justify-self-start transition-all
+      ${
+        currentPage === 1
+          ? 'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-darkDark dark:text-lightLight'
+          : 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlight dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+      }`}
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 1}
               >
                 Föregående
               </button>
-              <span>
+              <span className="justify-self-center text-darkDark dark:text-lightLight">
                 Sida {currentPage}
                 {totalPages ? ` av ${totalPages}` : ''}
               </span>
               <button
-                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50  dark:text-darkDark"
+                className={`px-4 py-2 rounded disabled:opacity-50 justify-self-end transition-all
+      ${
+        totalPages
+          ? currentPage === totalPages
+            ? 'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-darkDark dark:text-lightLight'
+            : 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlight dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+          : events.length < itemsPerPage
+          ? 'bg-gray-200 text-gray-500 cursor-not-allowed dark:bg-darkDark dark:text-lightLight'
+          : 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlight dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+      }`}
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={
                   totalPages
