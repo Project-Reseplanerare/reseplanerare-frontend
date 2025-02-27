@@ -22,6 +22,7 @@
 ## Handledare
 
 - **Christoffer Wallenberg**
+- **Rachel Richter**
 
 # Projektbeskrivning
 
