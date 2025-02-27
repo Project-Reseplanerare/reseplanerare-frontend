@@ -118,15 +118,20 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
   };
 
   const handleItemClick = (id: number) => {
-    setActiveIndex(activeIndex === id ? null : id);
+    setActiveIndex((prevIndex) => (prevIndex === id ? null : id));
   };
 
   const handlePageChange = (newPage: number) => {
+    if (!Number.isInteger(newPage) || newPage < 1) return;
     setCurrentPage(newPage);
   };
 
   if (loadingCategories || loadingEvents) {
-    return null;
+    return (
+      <div className="loading-container">
+        <p>Loading data, please wait...</p>
+      </div>
+    );
   }
 
   return (
