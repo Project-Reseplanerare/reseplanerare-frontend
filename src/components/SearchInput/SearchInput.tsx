@@ -118,7 +118,7 @@ export const SearchInput = () => {
       </div>
 
       {loading && (
-        <div className="loading-container text-center text-darkLight dark:text-lightDark">
+        <div className="grid place-items-start w-full rounded border-darkLight dark:border-lightDark backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight shadow-md p-4">
           <p>Loading data, please wait...</p>
         </div>
       )}
