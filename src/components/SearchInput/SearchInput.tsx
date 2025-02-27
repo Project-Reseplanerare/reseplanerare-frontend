@@ -9,15 +9,20 @@ const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
 export const SearchInput = () => {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [loading, setLoading] = useState(false);
   const [selectionMade, setSelectionMade] = useState(false);
   const { setTempCenter, setToLocation, setToAddress } = useLocationStore();
 
   useEffect(() => {
     if (query.trim() && !selectionMade) {
+      setLoading(true);
       const timeoutId = setTimeout(() => {
         fetchSuggestions(query);
       }, 300);
-      return () => clearTimeout(timeoutId);
+      return () => {
+        clearTimeout(timeoutId);
+        setLoading(false);
+      };
     } else {
       setSuggestions([]);
     }
@@ -25,7 +30,9 @@ export const SearchInput = () => {
 
   const fetchSuggestions = async (searchQuery: string) => {
     try {
-      const response = await fetch(`${EVENTS_API}?search=${searchQuery}&limit=1000`);
+      const response = await fetch(
+        `${EVENTS_API}?search=${searchQuery}&limit=1000`
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch event suggestions');
       }
@@ -38,12 +45,17 @@ export const SearchInput = () => {
       setSuggestions(filteredSuggestions);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
   const fetchEventCoordinates = async (eventTitle: string) => {
+    setLoading(true);
     try {
-      const response = await fetch(`${EVENTS_API}?search=${eventTitle}&limit=1`);
+      const response = await fetch(
+        `${EVENTS_API}?search=${eventTitle}&limit=1`
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch event coordinates');
       }
@@ -70,6 +82,8 @@ export const SearchInput = () => {
       }
     } catch (error) {
       console.error('Error fetching event coordinates:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -103,7 +117,13 @@ export const SearchInput = () => {
         )}
       </div>
 
-      {query && suggestions.length > 0 && (
+      {loading && (
+        <div className="loading-container text-center text-darkLight dark:text-lightDark">
+          <p>Loading data, please wait...</p>
+        </div>
+      )}
+
+      {query && suggestions.length > 0 && !loading && (
         <ul className="w-full border rounded max-h-40 overflow-y-auto backdrop-blur-md bg-lightDark/90 dark:bg-darkDark/90 text-darkDark dark:text-lightLight shadow-lg">
           {suggestions.map((title, index) => (
             <li
@@ -112,7 +132,7 @@ export const SearchInput = () => {
               onClick={() => {
                 setQuery(title);
                 setSuggestions([]);
-                setSelectionMade(true); 
+                setSelectionMade(true);
                 fetchEventCoordinates(title);
               }}
             >
