@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLandmark, faUtensils, faBed, faShoppingBag, faRunning } from '@fortawesome/free-solid-svg-icons';
 import { eventIcon } from './EventIcon';
 
-const categoryIcons = {
+export const categoryIcons = {
   'Kultur & historia': { icon: faLandmark, colors: ['#8E44AD', '#D2B4DE'], border: '#6C3483' },
   'Mat & dryck': { icon: faUtensils, colors: ['#E67E22', '#F5B041'], border: '#D35400' },
   'Boende': { icon: faBed, colors: ['#3498DB', '#85C1E9'], border: '#2E86C1' },
@@ -115,5 +115,3 @@ export const getPlaceIcon = (category: string): L.DivIcon => {
   iconCache[mainCategory] = categoryIcon;
   return categoryIcon;
 };
-
-export { categoryIcons };

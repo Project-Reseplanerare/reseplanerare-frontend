@@ -6,20 +6,21 @@ import { faChevronDown, faChevronUp, faTicket } from '@fortawesome/free-solid-sv
 // utils Imports
 import { fetchCategories } from '../../utils/api/fetchCategories';
 import { fetchEvents } from '../../utils/api/fetchEventsAndProducts';
+import { normalizeCoordinates } from '../../utils/mapUtils/normalizeCoordinates';
 // import icons
+import { categoryIcons, subcategoryToMainCategory } from '../Map/PlaceIcons';
+import { eventIcon } from '../Map/EventIcon';
+// interface import
+import ActivityListProps from '../../interfaces/ActivityInterfaces/ActivityList_interfaces';
+
 // import cultureIcon from '../../assets/culture.svg';
 // import foodIcon from '../../assets/food.svg';
 // import houseIcon from '../../assets/house.svg';
 // import shoppingIcon from '../../assets/shopping.svg';
 // import sportCurlingIcon from '../../assets/sport-curling.svg';
 // import ticketIcon from '../../assets/ticket.svg';
-import { categoryIcons, subcategoryToMainCategory } from '../Map/PlaceIcons';
-import { eventIcon } from '../Map/EventIcon';
-// interface import
-import ActivityListProps from '../../interfaces/ActivityInterfaces/ActivityList_interfaces';
 //type import
 // import { IconCategory } from '../../types/ActivityListTypes/ActivityList_types';
-
 // const iconMapping: Record<IconCategory, string> = {
 //   'Kultur & historia': cultureIcon,
 //   'Mat & dryck': foodIcon,
@@ -28,15 +29,6 @@ import ActivityListProps from '../../interfaces/ActivityInterfaces/ActivityList_
 //   'Aktiviteter': sportCurlingIcon,
 //   'Evenemang': ticketIcon,
 // };
-
-// Move to utility
-const normalizeCoordinates = (lat: any, lng: any) => {
-  const parsedLat = parseFloat(lat);
-  const parsedLng = parseFloat(lng);
-  return isNaN(parsedLat) || isNaN(parsedLng)
-    ? null
-    : { lat: parsedLat, lng: parsedLng };
-};
 
 export function ActivityList({ setSelectedCategory }: ActivityListProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -58,10 +50,12 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
         setCategories(data);
         setLoadingCategories(false);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error("Error fetching categories:", error);
         setLoadingCategories(false);
       });
   }, []);
+  
 
   //move to hooks (pagination)
   useEffect(() => {
@@ -89,21 +83,23 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
       const response = await fetch(
         `https://turid.visitvarmland.com/api/v8/products?categories=${subCategory.toLowerCase()}`
       );
+      if (!response.ok) throw new Error("Failed to fetch products");
+  
       const data = await response.json();
       const products = Array.isArray(data.data) ? data.data : [];
-      const filteredProducts = products.filter((product: any) =>
-        product.categories.some((category: any) => category.title === subCategory)
-      );
- 
-      const allPlaces = filteredProducts.flatMap((product: any) =>
-        (product.places || []).map((place: any) => {
-          const coords = normalizeCoordinates(place.latitude, place.longitude);
-          return coords ? { ...place, ...coords, category: subCategory } : null;
-        })
-      ).filter((place) => place && place.lat !== 0 && place.lng !== 0);
+  
+      const allPlaces = products
+        .flatMap((product: any) =>
+          (product.places || []).map((place: any) => {
+            const coords = normalizeCoordinates(place.latitude, place.longitude);
+            return coords ? { ...place, ...coords, category: subCategory } : null;
+          })
+        )
+        .filter((place) => place && place.lat !== 0 && place.lng !== 0);
+  
       setSelectedCategory(allPlaces);
     } catch (error) {
-      console.error('Fel vid hämtning av platser:', error);
+      console.error("Error fetching places:", error);
     }
   };
 
@@ -131,12 +127,11 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
             <div
               className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border
                 ${isActive
-                ? 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-                : 'bg-lightLight text-darkDark border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+                  ? 'bg-[#D3D3D3] bg-opacity-80 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+                  : 'bg-lightLight text-darkDark border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
                 }`}
-
               onClick={() => handleItemClick(category.id)}
-              >
+            >
               <FontAwesomeIcon
                 icon={categoryData?.icon}
                 style={{ fontSize: '16px', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }}
@@ -148,22 +143,24 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
 
             {isActive && category.subCategory.length > 0 && (
               <div className="grid gap-2">
-                {category.subCategory.map((subCategory: string, index: number) => (
-                  <div
-                    key={index}
-                    className={`p-3 rounded-md border cursor-pointer transition-all
-                      ${selectedSubCategory === subCategory
-                      ? 'bg-[#D3D3D3] bg-opacity-80 border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
-                      : 'bg-white border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
-                      }`}
-                    onClick={() => handleSubCategoryClick(subCategory)}
-                  >
-                    <span className="text-xs">{subCategory}</span>
-                  </div>
-                ))}
+                {category.subCategory.map((subCategory: string, index: number) => {
+
+                  return (
+                    <div
+                      key={index}
+                      className={`p-3 rounded-md border cursor-pointer transition-all
+                        ${selectedSubCategory === subCategory
+                          ? 'bg-[#D3D3D3] bg-opacity-80 border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
+                          : 'bg-white border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
+                        }`}
+                      onClick={() => handleSubCategoryClick(subCategory)}
+                    >
+                      <span className="text-xs">{subCategory}</span>
+                    </div>
+                  );
+                })}
               </div>
-            )
-            }
+            )}
           </div>
         );
       })}
@@ -176,14 +173,13 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
               ? 'bg-gray-300 text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-[#444]'
               : 'bg-white text-black border-lightlightBorder dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
             }`}
-
-            onClick={() => {
-              setActiveIndex(activeIndex === -1 ? null : -1);
-            }}>
-            <FontAwesomeIcon 
-              icon={faTicket} 
-              style={{ fontSize: '16px', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }} 
-            />
+          onClick={() => {
+            setActiveIndex(activeIndex === -1 ? null : -1);
+          }}>
+          <FontAwesomeIcon 
+            icon={faTicket} 
+            style={{ fontSize: '16px', textShadow: '1px 1px 2px rgba(0,0,0,0.3)' }} 
+          />
 
           <span>Evenemang</span>
           <FontAwesomeIcon
@@ -218,7 +214,7 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
                 {totalPages ? ` av ${totalPages}` : ''}
               </span>
               <button
-                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50  dark:text-darkDark"
+                className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50 dark:text-darkDark"
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={
                   totalPages
@@ -231,6 +227,6 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
           </div>
         )}
       </div>
-    </div >
+    </div>
   );
 }
