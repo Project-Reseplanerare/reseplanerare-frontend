@@ -51,6 +51,7 @@ function Map({ places, events }: MapProps) {
   const [filteredEvents, setFilteredEvents] = useState<any[]>([]);
   const [stops, setStops] = useState<any[]>([]);
   const [filteredPlaces, setFilteredPlaces] = useState<any[]>(places);
+  const [firstSegmentLength, setFirstSegmentLength] = useState(0);
 
   const {
     setToLocation,
@@ -80,32 +81,34 @@ function Map({ places, events }: MapProps) {
       if (from && markers.length > 0 && lineDrawn) {
         let routeData: LatLngExpression[] = [];
 
-        // Convert 'from' string ("lat, lng") into a LatLngExpression [lat, lng]
         const fromLatLng: LatLngExpression | null = from
           ? (from.split(', ').map(Number) as [number, number])
           : null;
-
         if (!fromLatLng) return;
+  
+        const computedFirstSegment = await getRoute(fromLatLng, markers[0], setLoading);
 
-        const firstSegment = await getRoute(fromLatLng, markers[0], setLoading);
-        routeData = [...routeData, ...firstSegment];
+        const firstSegmentLength = computedFirstSegment.length;
+        routeData = [...computedFirstSegment];
+  
 
         for (let i = 0; i < markers.length - 1; i++) {
-          const segmentRoute = await getRoute(
-            markers[i],
-            markers[i + 1],
-            setLoading
-          );
+          const segmentRoute = await getRoute(markers[i], markers[i + 1], setLoading);
           routeData = [...routeData, ...segmentRoute];
         }
+
         setRoute(routeData);
+
+        setFirstSegmentLength(firstSegmentLength);
       } else {
         setRoute([]);
+        setFirstSegmentLength(0);
       }
     };
-
+  
     updateRoute();
   }, [from, markers, lineDrawn]);
+  
 
   //make this a utility function
   const calculatePolylineDistance = (route: LatLngExpression[]): number => {
@@ -196,7 +199,7 @@ function Map({ places, events }: MapProps) {
 
       <TempMapCenterUpdater />
       <MapCenterUpdater />
-      <MapClickHandler disabled={stopsCoords.length > 0} />
+      <MapClickHandler disabled={stopsCoords.length > 0 || (route.length > 0 && lineDrawn && stopsCoords.length === 0)} />
 
       <FilterEventsByBounds
         events={eventss}
@@ -416,12 +419,48 @@ function Map({ places, events }: MapProps) {
         );
       })}
 
-      {route.length > 0 && lineDrawn && stopsCoords.length === 0 && (
-        <>
-          <Polyline positions={route} color="#0089e7" weight={5} opacity={1} />
-          <div>Total distance: {calculatePolylineDistance(route)} km</div>
-        </>
+  {route.length > 0 && lineDrawn && stopsCoords.length === 0 && (
+    <>
+      {/* Gray segment */}
+      {firstSegmentLength > 0 && (
+        <Polyline
+          positions={route.slice(0, firstSegmentLength)}
+          color="gray"
+          weight={5}
+          opacity={1}
+        />
       )}
+      
+      {/* Colored segment */}
+      <Polyline
+        positions={route.slice(firstSegmentLength - 1)}
+        color="#0089e7"
+        weight={5}
+        opacity={1}
+      />
+      {markers
+      .filter((marker) => 
+        !(route.length > firstSegmentLength && 
+          (
+            (marker[0] === route[firstSegmentLength - 1][0] && marker[1] === route[firstSegmentLength - 1][1]) || 
+            (marker[0] === route[route.length - 1][0] && marker[1] === route[route.length - 1][1])
+          )
+        )
+      )
+      .map((position, idx, filteredMarkers) => (
+        <Marker key={`marker-${idx}`} position={position}>
+          <Tooltip permanent>
+            {idx === 0
+              ? "START"
+              : idx === filteredMarkers.length - 1
+              ? "STOP"
+              : `Marker ${idx + 1}`}
+          </Tooltip>
+        </Marker>
+      ))}
+      <div>Total distance: {calculatePolylineDistance(route)} km</div>
+    </>
+  )}
 
       {route.length > 0 && stopsCoords.length > 0 && lineDrawn && (
         <>
