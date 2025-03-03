@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLandmark, faUtensils, faBed, faShoppingBag, faRunning } from '@fortawesome/free-solid-svg-icons';
-import { eventIcon } from './eventIcon';
+import { eventIcon } from './EventIcon';
 
 const categoryIcons = {
   'Kultur & historia': { icon: faLandmark, colors: ['#8E44AD', '#D2B4DE'], border: '#6C3483' },
@@ -115,3 +115,5 @@ export const getPlaceIcon = (category: string): L.DivIcon => {
   iconCache[mainCategory] = categoryIcon;
   return categoryIcon;
 };
+
+export { categoryIcons };
