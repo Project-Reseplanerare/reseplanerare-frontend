@@ -4,7 +4,7 @@ import { useLocationStore } from '../../store/useLocationStore';
 import { fetchAddress } from '../../utils/api/fetchAdress';
 
 // events API endpoint
-const EVENTS_API = 'https://turid.visitvarmland.com/api/v8/events';
+const EVENTS_API = import.meta.env.VITE_EVENTS_API
 
 export const SearchInput = () => {
   const [query, setQuery] = useState('');
