@@ -206,52 +206,6 @@ function Map({ places }: MapProps) {
         setFilteredEvents={setFilteredEvents}
       />
 
-      {/*TEMP TEMP TEMP*/}
-      {/* <MarkerClusterGroup>
-        {filteredEvents.map((event, index) => {
-          const { lat, lng, title, image } = event;
-          return (
-            <Marker
-              key={index}
-              position={[lat, lng]}
-              icon={L.divIcon({
-                className: 'fa-marker',
-                html: `<i class="fas fa-map-marker-alt" style="color: purple; font-size: 24px;"></i>`,
-                iconSize: [30, 30],
-                iconAnchor: [15, 30],
-              })}
-              eventHandlers={{
-                click: () => handleLocationMarkerClick(lat, lng),
-              }}
-            >
-              <Popup className="text-center max-w-[150px]">
-                <div className="flex flex-col items-start w-full">
-                  {image?.large || image?.medium || image?.small ? (
-                    <div className="w-full overflow-hidden rounded-md mb-1">
-                      <img
-                        src={image}
-                        alt={title}
-                        className="w-full h-[60px] object-cover rounded-md"
-                      />
-                    </div>
-                  ) : (
-                    <p className="text-darkDark text-xs mb-1">
-                      No image available
-                    </p>
-                  )}
-
-                  <div className="flex flex-col m-1 w-full">
-                    <strong className="text-darkDark text-xs font-semibold p-0 m-0">
-                      {title}
-                    </strong>
-                  </div>
-                </div>
-              </Popup>
-            </Marker>
-          );
-        })}
-      </MarkerClusterGroup> */}
-
       <MarkerClusterGroup>
         {[...filteredEvents]
           .filter((event) => !isNaN(Number(event.lat)) && !isNaN(Number(event.lng)))
@@ -291,7 +245,6 @@ function Map({ places }: MapProps) {
             );
           })}
       </MarkerClusterGroup>
-
 
       {/* Places markers */}
       {(places ?? [])

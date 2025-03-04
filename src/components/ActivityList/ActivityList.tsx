@@ -13,23 +13,6 @@ import { eventIcon } from '../Map/EventIcon';
 // interface import
 import ActivityListProps from '../../interfaces/ActivityInterfaces/ActivityList_interfaces';
 
-// import cultureIcon from '../../assets/culture.svg';
-// import foodIcon from '../../assets/food.svg';
-// import houseIcon from '../../assets/house.svg';
-// import shoppingIcon from '../../assets/shopping.svg';
-// import sportCurlingIcon from '../../assets/sport-curling.svg';
-// import ticketIcon from '../../assets/ticket.svg';
-//type import
-// import { IconCategory } from '../../types/ActivityListTypes/ActivityList_types';
-// const iconMapping: Record<IconCategory, string> = {
-//   'Kultur & historia': cultureIcon,
-//   'Mat & dryck': foodIcon,
-//   'Design & shopping': shoppingIcon,
-//   'Boende': houseIcon,
-//   'Aktiviteter': sportCurlingIcon,
-//   'Evenemang': ticketIcon,
-// };
-
 export function ActivityList({ setSelectedCategory }: ActivityListProps) {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [categories, setCategories] = useState<any[]>([]);
