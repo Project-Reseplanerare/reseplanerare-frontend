@@ -42,7 +42,7 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
   const [events, setEvents] = useState<any[]>([]);
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [loadingEvents, setLoadingEvents] = useState<boolean>(true);
-  const [selectedSubItem, setSelectedSubItem] = useState<string | null>(null);
+  const [selectedSubCategory, setSelectedSubCategory] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
   const itemsPerPage = 10;
@@ -80,40 +80,29 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
       });
   }, [currentPage]);
 
-  const handleSubItemClick = async (subItem: string) => {
+  const handleSubCategoryClick = async (subCategory: string) => {
     try {
-      setSelectedSubItem(subItem);
-      if (subItem === 'Evenemang') {
-        const validEvents = events
-          .map((event: any) => {
-            const coords = normalizeCoordinates(event.lat, event.lng);
-            return coords ? { ...event, ...coords } : null;
+      setSelectedSubCategory(subCategory);
+      const response = await fetch(
+        `https://turid.visitvarmland.com/api/v8/products?categories=${subCategory.toLowerCase()}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch products");
+  
+      const data = await response.json();
+      const products = Array.isArray(data.data) ? data.data : [];
+  
+      const allPlaces = products
+        .flatMap((product: any) =>
+          (product.places || []).map((place: any) => {
+            const coords = normalizeCoordinates(place.latitude, place.longitude);
+            return coords ? { ...place, ...coords, category: subCategory } : null;
           })
-          .filter((event) => event && event.lat !== 0 && event.lng !== 0);
-        setSelectedCategory(validEvents);
-      } else {
-        const response = await fetch(
-          `https://turid.visitvarmland.com/api/v8/products?categories=${subItem.toLowerCase()}`
-        );
-        const data = await response.json();
-        const products = Array.isArray(data.data) ? data.data : [];
-        const filteredProducts = products.filter((product: any) =>
-          product.categories.some((category: any) => category.title === subItem)
-        );
-        const allPlaces = filteredProducts
-          .flatMap((product: any) => product.places || [])
-          .map((place: any) => {
-            const coords = normalizeCoordinates(
-              place.latitude,
-              place.longitude
-            );
-            return coords ? { ...place, ...coords } : null;
-          })
-          .filter((place) => place && place.lat !== 0 && place.lng !== 0);
-        setSelectedCategory(allPlaces);
-      }
+        )
+        .filter((place) => place && place.lat !== 0 && place.lng !== 0);
+  
+      setSelectedCategory(allPlaces);
     } catch (error) {
-      console.error('Fel vid hämtning av platser:', error);
+      console.error("Error fetching places:", error);
     }
   };
 
@@ -159,19 +148,19 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
               <FontAwesomeIcon icon={isActive ? faChevronUp : faChevronDown} />
             </div>
 
-            {isActive && category.subItems.length > 0 && (
+            {isActive && category.subCategory.length > 0 && (
               <div className="grid gap-2">
-                {category.subItems.map((subItem: string, index: number) => (
+                {category.subCategory.map((subCategory: string, index: number) => (
                   <div
                     key={index}
                     className={`p-3 rounded-md cursor-pointer transition-all border ${
-                      selectedSubItem === subItem
+                      selectedSubCategory === subCategory
                         ? 'bg-[#D3D3D3] bg-opacity-80 dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
                         : 'bg-white dark:bg-darkDark dark:text-lightLight border-none'
                     } border-lightlightBorder dark:border-lightlight`}
-                    onClick={() => handleSubItemClick(subItem)}
+                    onClick={() => handleSubCategoryClick(subCategory)}
                   >
-                    <span className="text-xs">{subItem}</span>
+                    <span className="text-xs">{subCategory}</span>
                   </div>
                 ))}
               </div>
@@ -180,7 +169,7 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
         );
       })}
 
-      {/* Evenemang section */}
+      {/* Event section */}
       <div className="w-full">
         <div
           className={`grid grid-cols-[auto_1fr_auto] items-center gap-2 p-3 rounded-md cursor-pointer transition-all mb-2 border 
@@ -209,13 +198,13 @@ export function ActivityList({ setSelectedCategory }: ActivityListProps) {
               <div
                 key={index}
                 className={`p-3 rounded-md cursor-pointer transition-all border ${
-                  selectedSubItem === event.title
+                  selectedSubCategory=== event.title
                     ? 'bg-[#D3D3D3] bg-opacity-80 dark:bg-darkDark dark:text-lightLight dark:border-lightlight'
                     : 'bg-white dark:bg-darkDark dark:text-lightLight border-none'
                 } border-lightlightBorder dark:border-lightlight`}
                 onClick={() => {
                   setSelectedCategory([event]);
-                  setSelectedSubItem(event.title);
+                  setSelectedSubCategory(event.title);
                 }}
               >
                 <span className="text-xs">{event.title}</span>

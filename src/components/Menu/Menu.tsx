@@ -64,7 +64,7 @@ export const Menu: React.FC = () => {
         )}
         {activeComponent === 'karta' && (
           <div className="rounded-md grid grid-cols-1 h-80">
-            <Map places={selectedLocations} events={[]} />
+            <Map places={selectedLocations} />
           </div>
         )}
       </div>
