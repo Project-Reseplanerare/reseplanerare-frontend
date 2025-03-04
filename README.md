@@ -47,7 +47,7 @@ Plattformen kommer att erbjuda:
 
 Projektet har utvecklats inom ramen för Lärande i Arbete (LIA), 50 YH-poäng, som en del av utbildningen JavaScript- och Frontendutvecklare vid Folkuniversitetet Göteborg, 2025.
 
-## Unimplemented and notes
+## Oimplementerat och övriga anteckningar
 
 - För coola kartikoner gå till exempelbranch: example/map-icons (notera att de är hårdkodat)
 - Vi har inte hunnit implementera byten med buss och tåg.
