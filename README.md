@@ -39,8 +39,6 @@ Plattformen kommer att erbjuda:
 
 ## Mål
 
-Målet är att:
-
 - Utveckla en intuitiv och användarvänlig digital plattform för reseplanering inom Värmland.
 - Stärka Värmlands attraktionskraft som resmål.
 - Underlätta för både turister och lokala aktörer att planera och genomföra reseupplevelser.
@@ -48,3 +46,10 @@ Målet är att:
 ## Utveckling
 
 Projektet har utvecklats inom ramen för Lärande i Arbete (LIA), 50 YH-poäng, som en del av utbildningen JavaScript- och Frontendutvecklare vid Folkuniversitetet Göteborg, 2025.
+
+## Unimplemented and notes
+
+- För coola kartikoner gå till exempelbranch: example/map-icons (notera att de är hårdkodat)
+- Vi har inte hunnit implementera byten med buss och tåg.
+- popup buggit
+- Gåpunkt är ej komplett
