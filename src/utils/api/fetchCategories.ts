@@ -20,7 +20,7 @@ export const fetchCategories = async () => {
     const formattedCategories = mainCategories.map((category: any) => ({
       id: category.id,
       label: category.title,
-      subItems: category.children?.map((child: any) => child.title) || [],
+      subCategory: category.children?.map((child: any) => child.title) || [],
     }));
 
     return formattedCategories;
