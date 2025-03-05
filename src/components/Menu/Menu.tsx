@@ -10,7 +10,8 @@ import Map from '../Map/Map';
 import { motion } from 'framer-motion';
 
 export const Menu: React.FC = () => {
-  const [activeComponent, setActiveComponent] = useState<string>('resealternativ');
+  const [activeComponent, setActiveComponent] =
+    useState<string>('resealternativ');
   const [selectedLocations, setSelectedLocations] = useState<any[]>([]);
 
   const toggleComponent = (component: string) => {
@@ -50,7 +51,7 @@ export const Menu: React.FC = () => {
         ))}
       </nav>
 
-      <div className="grid grid-cols-1">
+      <div className="grid grid-cols-1 ">
         {activeComponent === 'resealternativ' && <TravelOptions />}
         {activeComponent === 'besoksmal' && (
           <div className="grid grid-cols-1">
@@ -63,7 +64,7 @@ export const Menu: React.FC = () => {
           </div>
         )}
         {activeComponent === 'karta' && (
-          <div className="rounded-md grid grid-cols-1 h-80">
+          <div className="border  grid grid-cols-1 h-80">
             <Map places={selectedLocations} />
           </div>
         )}
