@@ -1,3 +1,5 @@
+import { motion } from 'framer-motion';
+
 // react imports
 import { useEffect, useState } from 'react';
 // store imports
@@ -29,114 +31,115 @@ export const RouteOptionsDropdown = () => {
   );
   const { selectedOption } = useTravelOptionsStore();
 
-    useEffect(() => {
-      if (!isButtonClicked || !fromStopId || !toStopId) return;
-    
-      const fetchRoutes = async () => {
-        try {
-          const fromResponse = await fetch(
-            `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
-          );
-          if (!fromResponse.ok) throw new Error(`Error: ${fromResponse.status}`);
-    
-          const fromData: ResponseData<Departure> = await fromResponse.json();
-          if (!fromData.Departure) {
-            setRouteNames([]);
-            setTravelTimes([]);
-            return;
-          }
-    
-          const toResponse = await fetch(
-            `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
-          );
-          if (!toResponse.ok) throw new Error(`Error: ${toResponse.status}`);
-    
-          const toData: ResponseData<Arrival> = await toResponse.json();
-          if (!toData.Arrival) {
-            setRouteNames([]);
-            setTravelTimes([]);
-            return;
-          }
-    
-          const validJourneyRefs = new Map<string, string>();
-          toData.Arrival.forEach((arrival) => {
-            validJourneyRefs.set(arrival.JourneyDetailRef.ref, arrival.time);
-          });
-    
-          let filteredDepartures: Departure[] = [];
-    
-          if (selectedOption === 'buss') {
-            filteredDepartures = fromData.Departure.filter(
-              (departure) =>
-                validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
-                departure.ProductAtStop?.catOut === 'BLT'
-            );
-          } else if (selectedOption === 'tåg') {
-            filteredDepartures = fromData.Departure.filter(
-              (departure) =>
-                validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
-                departure.ProductAtStop?.catOut === 'JLT'
-            );
-          }
-    
-          if (filteredDepartures.length === 0) {
-            setRouteNames([]);
-            setTravelTimes([]);
-            return;
-          }
-    
-          const limitedDepartures = filteredDepartures.slice(0, 8);
-    
-          const names = limitedDepartures.map((departure) => {
-            const departureTime = departure.time;
-            const arrivalTime =
-              validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
-            return `${
-              departure.ProductAtStop?.name || 'N/A'
-            } — ${formatTravelTime(departureTime)} - ${formatTravelTime(
-              arrivalTime
-            )}`;
-          });
-    
-          const times = limitedDepartures.map((departure) => {
-            const arrivalTime =
-              validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
-            return calculateTravelDuration(departure.time, arrivalTime);
-          });
-    
-          setRouteNames(names);
-          setTravelTimes(times);
-        } catch (err) {
-          setError((err as Error).message);
-        }
-      };
-    
-      fetchRoutes();
-    }, [fromStopId, toStopId, isButtonClicked, selectedOption]);
-    
-    const handleRouteClick = (index: number) => {
-      if (selectedRouteIndex === index) {
-        setSelectedRouteIndex(null);
-      } else {
-        setSelectedRouteIndex(index);
-        
-        const selectedRoute = routeNames[index];
-        const departureTime = selectedRoute.split(' — ')[1]?.split(' - ')[0] || '';
-        const arrivalTime = selectedRoute.split(' — ')[1]?.split(' - ')[1] || '';
-        
-        fetchRouteStopsForRoute(
-          index,
-          fromStopId,
-          toStopId,
-          apiKey,
-          selectedOption,
-          setRouteStops,
-          setError,
-          departureTime,
-          arrivalTime
+  useEffect(() => {
+    if (!isButtonClicked || !fromStopId || !toStopId) return;
+
+    const fetchRoutes = async () => {
+      try {
+        const fromResponse = await fetch(
+          `https://api.resrobot.se/v2.1/departureBoard?id=${fromStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
         );
+        if (!fromResponse.ok) throw new Error(`Error: ${fromResponse.status}`);
+
+        const fromData: ResponseData<Departure> = await fromResponse.json();
+        if (!fromData.Departure) {
+          setRouteNames([]);
+          setTravelTimes([]);
+          return;
+        }
+
+        const toResponse = await fetch(
+          `https://api.resrobot.se/v2.1/arrivalBoard?id=${toStopId}&format=json&accessId=${apiKey}&maxJourneys=300&duration=300`
+        );
+        if (!toResponse.ok) throw new Error(`Error: ${toResponse.status}`);
+
+        const toData: ResponseData<Arrival> = await toResponse.json();
+        if (!toData.Arrival) {
+          setRouteNames([]);
+          setTravelTimes([]);
+          return;
+        }
+
+        const validJourneyRefs = new Map<string, string>();
+        toData.Arrival.forEach((arrival) => {
+          validJourneyRefs.set(arrival.JourneyDetailRef.ref, arrival.time);
+        });
+
+        let filteredDepartures: Departure[] = [];
+
+        if (selectedOption === 'buss') {
+          filteredDepartures = fromData.Departure.filter(
+            (departure) =>
+              validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
+              departure.ProductAtStop?.catOut === 'BLT'
+          );
+        } else if (selectedOption === 'tåg') {
+          filteredDepartures = fromData.Departure.filter(
+            (departure) =>
+              validJourneyRefs.has(departure.JourneyDetailRef.ref) &&
+              departure.ProductAtStop?.catOut === 'JLT'
+          );
+        }
+
+        if (filteredDepartures.length === 0) {
+          setRouteNames([]);
+          setTravelTimes([]);
+          return;
+        }
+
+        const limitedDepartures = filteredDepartures.slice(0, 8);
+
+        const names = limitedDepartures.map((departure) => {
+          const departureTime = departure.time;
+          const arrivalTime =
+            validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
+          return `${
+            departure.ProductAtStop?.name || 'N/A'
+          } — ${formatTravelTime(departureTime)} - ${formatTravelTime(
+            arrivalTime
+          )}`;
+        });
+
+        const times = limitedDepartures.map((departure) => {
+          const arrivalTime =
+            validJourneyRefs.get(departure.JourneyDetailRef.ref) || '';
+          return calculateTravelDuration(departure.time, arrivalTime);
+        });
+
+        setRouteNames(names);
+        setTravelTimes(times);
+      } catch (err) {
+        setError((err as Error).message);
       }
     };
+
+    fetchRoutes();
+  }, [fromStopId, toStopId, isButtonClicked, selectedOption]);
+
+  const handleRouteClick = (index: number) => {
+    if (selectedRouteIndex === index) {
+      setSelectedRouteIndex(null);
+    } else {
+      setSelectedRouteIndex(index);
+
+      const selectedRoute = routeNames[index];
+      const departureTime =
+        selectedRoute.split(' — ')[1]?.split(' - ')[0] || '';
+      const arrivalTime = selectedRoute.split(' — ')[1]?.split(' - ')[1] || '';
+
+      fetchRouteStopsForRoute(
+        index,
+        fromStopId,
+        toStopId,
+        apiKey,
+        selectedOption,
+        setRouteStops,
+        setError,
+        departureTime,
+        arrivalTime
+      );
+    }
+  };
 
   const formatTravelTime = (time) => {
     const [hours, minutes] = time.split(':').map(Number);
@@ -212,7 +215,7 @@ export const RouteOptionsDropdown = () => {
 
                         <div className="grid grid-cols-2 text-sm border rounded-lg p-4 transition border-lightlightBorder dark:border-[#444] bg-white bg-opacity-100 text-darkDark dark:bg-[#1E1E1E] dark:bg-opacity-100 dark:text-lightDark items-center">
                           <span className="flex items-center gap-2">
-                            <span
+                            <motion.span
                               className={`w-2.5 h-2.5 rounded-full ${
                                 sIndex === 0
                                   ? 'bg-blueLight'
@@ -220,7 +223,21 @@ export const RouteOptionsDropdown = () => {
                                   ? 'bg-red-500'
                                   : 'bg-gray-600'
                               }`}
-                            ></span>{' '}
+                              animate={
+                                sIndex === 0
+                                  ? { opacity: [1, 0.5, 1], scale: [1, 1.2, 1] }
+                                  : {}
+                              }
+                              transition={
+                                sIndex === 0
+                                  ? {
+                                      duration: 1,
+                                      repeat: Infinity,
+                                      ease: 'easeInOut',
+                                    }
+                                  : {}
+                              }
+                            />{' '}
                             {stop.name}
                           </span>
                           <span className="text-right">
