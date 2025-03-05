@@ -3,7 +3,7 @@ name: Deploy React app
 on:
   push:
     branches:
-      - dev
+      - main
 
 permissions:
   contents: read
