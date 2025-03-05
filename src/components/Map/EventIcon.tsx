@@ -3,7 +3,7 @@ import ReactDOMServer from 'react-dom/server';
 import { faTicket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-// Eventikon
+// Eventicon for the map
 export const EventIcon = L.divIcon({
     className: 'custom-marker',
     html: ReactDOMServer.renderToString(

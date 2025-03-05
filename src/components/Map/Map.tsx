@@ -319,7 +319,7 @@ function Map({ places }: MapProps) {
           ))}
       </MarkerClusterGroup>
 
-      {/* Tåg (Train) markers */}
+      {/* Train markers */}
       <MarkerClusterGroup>
         {selectedOption === 'Tåg' &&
           stops.map((stop, index) => (
