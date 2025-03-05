@@ -1,3 +1,4 @@
+'use client';
 // React imorts
 import { Link } from 'react-router-dom';
 // (svg) Logo import
